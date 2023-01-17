@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\World.cs" />
+    <Compile Include="Assets\Scripts\Miner.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

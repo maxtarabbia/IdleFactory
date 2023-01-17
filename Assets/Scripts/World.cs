@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
-    Dictionary<Vector2, Cell> map = new Dictionary<Vector2, Cell>();
+    public Dictionary<Vector2, Cell> map = new Dictionary<Vector2, Cell>();
     int Spawnsize = 10;
-    float scale = 3f;
+    public float scale = 1f;
     public Sprite ground;
-    public Sprite Smeltery;
+    public Sprite ground2;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,15 +29,15 @@ public class World : MonoBehaviour
     {
         Cell newcell = new Cell();
         newcell.direction = 0;
-        if (Random.value > 0.3)
+        if (Random.value > 0.5)
         {
             newcell.ID = 0;
-            newcell.name = "Empty";
+            newcell.name = "Ground1";
         }
         else
         {
             newcell.ID = 1;
-            newcell.name = "Smeltery";
+            newcell.name = "Ground2";
         }
         map.Add(position, newcell);
         GenerateCell(position);
@@ -63,10 +63,9 @@ public class World : MonoBehaviour
                 SR.sprite = ground; 
                 break;
             case 1:
-                SR.sprite = Smeltery;
+                SR.sprite = ground2;
                 break;
         }
-
         return cell;
     }
     public void RefreshCells()
