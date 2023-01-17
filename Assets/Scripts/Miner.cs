@@ -22,6 +22,7 @@ public class Miner : MonoBehaviour
 
         gameObject.transform.localScale = Vector3.one * world.scale;
         SR.sprite = sprite;
+        SR.sortingOrder = 1;
         pos = gameObject.transform.position / world.scale;
         coveredTileID = world.map[pos].ID;
     }

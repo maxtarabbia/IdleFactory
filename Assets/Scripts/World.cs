@@ -5,7 +5,7 @@ using UnityEngine;
 public class World : MonoBehaviour
 {
     public Dictionary<Vector2, Cell> map = new Dictionary<Vector2, Cell>();
-    int Spawnsize = 10;
+    int Spawnsize = 30;
     public float scale = 1f;
     public Sprite ground;
     public Sprite ground2;

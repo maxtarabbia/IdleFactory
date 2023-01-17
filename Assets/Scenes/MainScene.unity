@@ -314,9 +314,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46cc4d1dba30a8f4b8b564f82871818a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scale: 1
-  ground: {fileID: 21300000, guid: e88d04c24627b384db77a5949c91599d, type: 3}
-  ground2: {fileID: 21300000, guid: 88d20d7e8c4ab064b98c1b15c420be2c, type: 3}
+  scale: 2
+  ground: {fileID: 21300000, guid: 5d9709f8ace65ad4294ba5ffbd0ac49f, type: 3}
+  ground2: {fileID: 21300000, guid: 24078f45d1085004d82bfaf63a91d35f, type: 3}
 --- !u!1 &2105242954
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,7 +357,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2105242954}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 1, z: -1}
+  m_LocalPosition: {x: 4, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
