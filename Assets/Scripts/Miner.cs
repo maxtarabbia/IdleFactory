@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Miner : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class Miner : MonoBehaviour
     public Sprite sprite;
     public Vector2 pos;
     public int coveredTileID = -1;
+    SpriteRenderer spriteRenderer;
+    VisualEffect effect;
+    World world;
+    float miningProgress;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,13 +21,17 @@ public class Miner : MonoBehaviour
     }
     void Initialize()
     {
-        World world = FindObjectOfType<World>();
+        world = FindObjectOfType<World>();
         worldmap = world.map;
-        SpriteRenderer SR = gameObject.AddComponent<SpriteRenderer>();
-
         gameObject.transform.localScale = Vector3.one * world.scale;
-        SR.sprite = sprite;
-        SR.sortingOrder = 1;
+
+        effect = GetComponent<VisualEffect>();
+        
+
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = sprite;
+        spriteRenderer.sortingOrder = 1;
+
         pos = gameObject.transform.position / world.scale;
         coveredTileID = world.map[pos].ID;
     }
@@ -34,6 +43,23 @@ public class Miner : MonoBehaviour
         {
             Initialize();
         }
-        print(coveredTileID);
+        
+    }
+    private void FixedUpdate()
+    {
+        if (miningProgress >= 1)
+        {
+            MineItem();
+            miningProgress = 0;
+        }
+        if (coveredTileID != 0)
+        {
+            miningProgress += 0.01f;
+        }
+        print(miningProgress);
+    }
+    void MineItem()
+    {
+        effect.Play();
     }
 }
