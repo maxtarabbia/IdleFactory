@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class World : MonoBehaviour
+public class WorldGeneration : MonoBehaviour
 {
     public Dictionary<Vector2, Cell> map = new Dictionary<Vector2, Cell>();
     int Spawnsize = 100;
 
     public int Seed = 42;
 
-    public float scale = 1f;
     public Sprite Blank;
     public Sprite Iron_Ore;
     public Sprite Copper_Ore;
-    // Start is called before the first frame update
+
+    public GameObject selectedObject;
+
+    public Inventory inv;
     void Start()
     {
+        inv = new Inventory(3);
+
         Initialize(Spawnsize);
     }
     public void Initialize(int size)
@@ -56,19 +60,25 @@ public class World : MonoBehaviour
 
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-
+        if(Time.frameCount % 50 == 0)
+        {
+            print("\nIron Ore: " + inv.items[0].count + "\nCopper Ore " + inv.items[1].count);
+        }
     }
     GameObject GenerateCell(Vector2 position)
     {
         GameObject cell = new GameObject();
-        cell.transform.position = position * scale;
-        cell.transform.localScale = new Vector3(scale,scale,scale);
+        cell.transform.position = position;
+        cell.transform.localScale = Vector3.one;
         cell.transform.parent = gameObject.transform;
         cell.name = map[position].name;
         int ID = map[position].ID;
         SpriteRenderer SR = cell.AddComponent<SpriteRenderer>();
+        cell.AddComponent<ObjectPlacement>();
+        BoxCollider2D boxCol = cell.AddComponent<BoxCollider2D>();
+        boxCol.size = new Vector2(1f,1f);
         SR.sortingLayerName = "Ores";
 
         switch(ID)

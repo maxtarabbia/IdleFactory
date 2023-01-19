@@ -14,12 +14,14 @@ public class Miner : MonoBehaviour
     Vector3 basePos;
 
     VisualEffect effect;
-    World world;
+    WorldGeneration world;
 
     Transform[] transforms;
 
     int miningProgress;
     int ticksToMine = 100;
+
+    bool isOnOre = false;
 
      public Sprite[] OreSprites;
      //Start is called before the first frame update
@@ -32,18 +34,20 @@ public class Miner : MonoBehaviour
     }
     void Initialize()
     {
-        world = FindObjectOfType<World>();
+        world = FindObjectOfType<WorldGeneration>();
         worldmap = world.map;
-        gameObject.transform.localScale = Vector3.one * world.scale;
+        gameObject.transform.localScale = Vector3.one;
 
         effect = GetComponent<VisualEffect>();
         
 
-        pos = gameObject.transform.position / world.scale;
+        pos = gameObject.transform.position;
         coveredTileID[0] = world.map[pos].ID;
         coveredTileID[1] = world.map[pos + new Vector2(0,1)].ID;
         coveredTileID[2] = world.map[pos + new Vector2(1,0)].ID;
         coveredTileID[3] = world.map[pos + new Vector2(1,1)].ID;
+
+        checkForOre();
 
     }
 
@@ -58,13 +62,17 @@ public class Miner : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (miningProgress >= ticksToMine)
+        if (isOnOre)
         {
-            MineItem();
-            miningProgress = 0;
+            if (miningProgress >= ticksToMine)
+            {
+                MineItem();
+                miningProgress = 0;
+            }
+            MiningAnimation();
+            miningProgress += 1;
         }
-        MiningAnimation();
-        miningProgress += 1;
+        
     }
     void MiningAnimation()
     {
@@ -83,12 +91,23 @@ public class Miner : MonoBehaviour
             case 1: //iron ore
                 effect.SetTexture("spriteTex", OreSprites[0].texture);
                 effect.Play();
+                world.inv.AddItem(1, 1);
                 break;
             case 2: //copper ore
                 effect.SetTexture("spriteTex", OreSprites[1].texture);
                 effect.Play();
+                world.inv.AddItem(2, 1);
                 break;
         }
         
+    }
+    void checkForOre()
+    {
+        foreach (int tile in coveredTileID)
+        {
+            if (tile != 0)
+                isOnOre= true;
+            
+        }
     }
 }
