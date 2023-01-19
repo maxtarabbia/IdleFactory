@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
 public class WorldGeneration : MonoBehaviour
 {
-    public Dictionary<Vector2, Cell> map = new Dictionary<Vector2, Cell>();
+    public Dictionary<Vector2, Cell> oreMap = new Dictionary<Vector2, Cell>();
     int Spawnsize = 100;
 
     public int Seed = 42;
@@ -14,14 +16,42 @@ public class WorldGeneration : MonoBehaviour
     public Sprite Iron_Ore;
     public Sprite Copper_Ore;
 
-    public GameObject selectedObject;
+    [SerializeField]
+    public Buildable[] buildables;
+    public int selectedBuildableIndex;
+
+    public Canvas UICanvas;
 
     public Inventory inv;
+
+    public Dictionary<Vector2, bool> OccupiedCells = new Dictionary<Vector2, bool>();
+
+
+
     void Start()
     {
         inv = new Inventory(3);
+        inv.PopulateItemIDs();
+
+        //setBuildingPrices();
 
         Initialize(Spawnsize);
+    }
+    public void setBuildingPrices()
+    {
+        foreach (var building in buildables)
+        {
+            Vector2[] costs = new Vector2[1];
+            if (building.size == 1)
+            {
+                costs[0] = new Vector2(1, 5);
+            }
+            else
+            {
+                costs[0] = new Vector2 (2, 5);
+            }
+            building.costs = costs;
+        }
     }
     public void Initialize(int size)
     {
@@ -54,7 +84,7 @@ public class WorldGeneration : MonoBehaviour
             newcell.ID = 0;
             newcell.name = "Air";
         }
-        map.Add(position, newcell);
+        oreMap.Add(position, newcell);
         GenerateCell(position);
 
 
@@ -64,8 +94,14 @@ public class WorldGeneration : MonoBehaviour
     {
         if(Time.frameCount % 50 == 0)
         {
-            print("\nIron Ore: " + inv.items[0].count + "\nCopper Ore " + inv.items[1].count);
+            print("\n" + inv.IdNames[inv.items[0].ID] + ": " + inv.items[0].count + "\n" + inv.IdNames[inv.items[1].ID] + ": " + inv.items[1].count);
         }
+        UpdateUI();
+    }
+    void UpdateUI()
+    {
+        var tmpUI = UICanvas.GetComponentInChildren<TextMeshProUGUI>();
+        tmpUI.text = inv.IdNames[inv.items[0].ID] + ": " + inv.items[0].count + "\n" + inv.IdNames[inv.items[1].ID] + ": " + inv.items[1].count;
     }
     GameObject GenerateCell(Vector2 position)
     {
@@ -73,8 +109,8 @@ public class WorldGeneration : MonoBehaviour
         cell.transform.position = position;
         cell.transform.localScale = Vector3.one;
         cell.transform.parent = gameObject.transform;
-        cell.name = map[position].name;
-        int ID = map[position].ID;
+        cell.name = oreMap[position].name;
+        int ID = oreMap[position].ID;
         SpriteRenderer SR = cell.AddComponent<SpriteRenderer>();
         cell.AddComponent<ObjectPlacement>();
         BoxCollider2D boxCol = cell.AddComponent<BoxCollider2D>();
@@ -94,6 +130,20 @@ public class WorldGeneration : MonoBehaviour
                 break;
         }
         return cell;
+    }
+}
+[Serializable]
+public class Buildable
+{
+    public GameObject objectToInstance;
+    public Vector2[] costs = new Vector2[1];
+    public int size;
+
+    public Buildable(GameObject gameObject, Vector2[] IDcosts, int size)
+    {
+        this.size= size;
+        this.objectToInstance = gameObject;
+        IDcosts = costs;
     }
 }
 

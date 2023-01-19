@@ -16,6 +16,7 @@ public class Miner : MonoBehaviour
     VisualEffect effect;
     WorldGeneration world;
 
+
     Transform[] transforms;
 
     int miningProgress;
@@ -35,17 +36,17 @@ public class Miner : MonoBehaviour
     void Initialize()
     {
         world = FindObjectOfType<WorldGeneration>();
-        worldmap = world.map;
+        worldmap = world.oreMap;
         gameObject.transform.localScale = Vector3.one;
 
         effect = GetComponent<VisualEffect>();
         
 
         pos = gameObject.transform.position;
-        coveredTileID[0] = world.map[pos].ID;
-        coveredTileID[1] = world.map[pos + new Vector2(0,1)].ID;
-        coveredTileID[2] = world.map[pos + new Vector2(1,0)].ID;
-        coveredTileID[3] = world.map[pos + new Vector2(1,1)].ID;
+        coveredTileID[0] = world.oreMap[pos].ID;
+        coveredTileID[1] = world.oreMap[pos + new Vector2(0,1)].ID;
+        coveredTileID[2] = world.oreMap[pos + new Vector2(1,0)].ID;
+        coveredTileID[3] = world.oreMap[pos + new Vector2(1,1)].ID;
 
         checkForOre();
 
