@@ -1,14 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class World : MonoBehaviour
 {
     public Dictionary<Vector2, Cell> map = new Dictionary<Vector2, Cell>();
-    int Spawnsize = 30;
+    int Spawnsize = 100;
+
+    public int Seed = 42;
+
     public float scale = 1f;
-    public Sprite ground;
-    public Sprite ground2;
+    public Sprite Blank;
+    public Sprite Iron_Ore;
+    public Sprite Copper_Ore;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,20 +32,28 @@ public class World : MonoBehaviour
     }
     public void SetDefaultCell(Vector2 position)
     {
+        float scale = 0.1f;
         Cell newcell = new Cell();
-        newcell.direction = 0;
-        if (Random.value > 0.5)
+        if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.5)
         {
-            newcell.ID = 0;
-            newcell.name = "Ground1";
+            newcell.ID = 1;
+            newcell.name = "Iron Ore";
+            
+        }
+        else if (noise.cnoise(new Vector2(Seed *20, Seed - 85) + position * scale) > 0.6)
+        {
+            newcell.ID = 2;
+            newcell.name = "Copper Ore";
         }
         else
         {
-            newcell.ID = 1;
-            newcell.name = "Ground2";
+            newcell.ID = 0;
+            newcell.name = "Air";
         }
         map.Add(position, newcell);
         GenerateCell(position);
+
+
     }
     // Update is called once per frame
     void Update()
@@ -56,27 +69,26 @@ public class World : MonoBehaviour
         cell.name = map[position].name;
         int ID = map[position].ID;
         SpriteRenderer SR = cell.AddComponent<SpriteRenderer>();
+        SR.sortingLayerName = "Ores";
 
         switch(ID)
         {
             case 0:
-                SR.sprite = ground; 
+                SR.sprite = Blank; 
                 break;
             case 1:
-                SR.sprite = ground2;
+                SR.sprite = Iron_Ore;
+                break;
+            case 2:
+                SR.sprite = Copper_Ore;
                 break;
         }
         return cell;
-    }
-    public void RefreshCells()
-    { 
-        
     }
 }
 
 public class Cell
 {
-    public int direction;
     public int ID;
     public string name;
 }

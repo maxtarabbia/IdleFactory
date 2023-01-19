@@ -17,9 +17,9 @@ MonoBehaviour:
   categories: []
   uiBounds:
     serializedVersion: 2
-    x: 663
+    x: 656
     y: -190
-    width: 702
+    width: 709
     height: 1630
 --- !u!114 &114350483966674976
 MonoBehaviour:
@@ -46,8 +46,8 @@ MonoBehaviour:
   m_UISuperCollapsed: 0
   m_UIInfos: {fileID: 114340500867371532}
   m_ParameterInfo:
-  - name: New Texture2D
-    path: New Texture2D
+  - name: spriteTex
+    path: spriteTex
     tooltip: 
     sheetType: m_NamedObject
     realType: Texture2D
@@ -546,7 +546,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 2.5
+      m_SerializableObject: 1
     m_Space: 2147483647
   m_Property:
     name: A
@@ -580,7 +580,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 3
+      m_SerializableObject: 0.8
     m_Space: 2147483647
   m_Property:
     name: B
@@ -812,7 +812,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.AnimationCurve, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"frames":[{"time":0.0,"value":0.08673095703125,"inTangent":1.4430880546569825,"outTangent":1.4430880546569825,"tangentMode":0,"leftTangentMode":1,"rightTangentMode":1,"broken":false},{"time":0.15902143716812135,"value":0.31621289253234866,"inTangent":0.6052157282829285,"outTangent":0.6052157282829285,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false},{"time":1.0,"value":0.489593505859375,"inTangent":0.0,"outTangent":0.0,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false}],"preWrapMode":8,"postWrapMode":8,"version":1}'
+      m_SerializableObject: '{"frames":[{"time":0.0,"value":0.08673095703125,"inTangent":2.551774024963379,"outTangent":2.551774024963379,"tangentMode":0,"leftTangentMode":1,"rightTangentMode":1,"broken":false},{"time":0.15426486730575562,"value":0.48038002848625185,"inTangent":0.6052157282829285,"outTangent":0.6052157282829285,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false},{"time":0.9952434301376343,"value":0.790566623210907,"inTangent":0.0,"outTangent":0.0,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false}],"preWrapMode":8,"postWrapMode":8,"version":1}'
     m_Space: 2147483647
   m_Property:
     name: Size
@@ -1199,7 +1199,7 @@ MonoBehaviour:
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661614607}
-  m_ExposedName: New Texture2D
+  m_ExposedName: spriteTex
   m_Exposed: 1
   m_Order: 0
   m_Category: 
@@ -1220,7 +1220,7 @@ MonoBehaviour:
     linkedSlots:
     - outputSlot: {fileID: 8926484042661614607}
       inputSlot: {fileID: 8926484042661614586}
-    position: {x: 663.00006, y: 783.8501}
+    position: {x: 656, y: 994}
     expandedSlots: []
     expanded: 0
 --- !u!114 &8926484042661614607
@@ -1312,7 +1312,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":0.0,"y":0.5,"z":0.0}}'
+      m_SerializableObject: '{"vector":{"x":0.0,"y":3.0,"z":0.0}}'
     m_Space: 0
   m_Property:
     name: Velocity
@@ -1536,7 +1536,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614664}
   - {fileID: 8926484042661614668}
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_MasterSlot: {fileID: 8926484042661614663}
   m_MasterData:
@@ -1545,7 +1545,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.AABox, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"center":{"x":0.0,"y":0.0,"z":0.0},"size":{"x":1.0,"y":1.0,"z":1.0}}'
+      m_SerializableObject: '{"center":{"x":1.0,"y":1.0,"z":-2.0},"size":{"x":0.699999988079071,"y":0.699999988079071,"z":0.699999988079071}}'
     m_Space: 0
   m_Property:
     name: Box
