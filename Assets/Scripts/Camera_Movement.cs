@@ -46,18 +46,6 @@ public class Camera_Movement : MonoBehaviour
         {
             MoveCam(3);
         }
-        if (Input.GetKey(KeyCode.Alpha1))
-        {
-            FindObjectOfType<WorldGeneration>().selectedBuildableIndex = 0;
-        }
-        if (Input.GetKey(KeyCode.Alpha2))
-        {
-            FindObjectOfType<WorldGeneration>().selectedBuildableIndex = 1;
-        }
-        if (Input.GetKey(KeyCode.Alpha3))
-        {
-            FindObjectOfType<WorldGeneration>().selectedBuildableIndex = 2;
-        }
 
 
 

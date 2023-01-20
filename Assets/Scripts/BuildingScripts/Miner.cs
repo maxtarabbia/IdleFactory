@@ -31,7 +31,7 @@ public class Miner : MonoBehaviour
         coveredTileID = Enumerable.Repeat(-1, 4).ToArray();
         transforms = GetComponentsInChildren<Transform>();
         basePos = transforms[1].localPosition;
-        gameObject.transform.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+        //gameObject.transform.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
     }
     void Initialize()
     {
@@ -40,9 +40,10 @@ public class Miner : MonoBehaviour
         gameObject.transform.localScale = Vector3.one;
 
         effect = GetComponent<VisualEffect>();
-        
+
 
         pos = gameObject.transform.position;
+        pos += new Vector2(-0.5f,-0.5f);
         coveredTileID[0] = world.oreMap[pos].ID;
         coveredTileID[1] = world.oreMap[pos + new Vector2(0,1)].ID;
         coveredTileID[2] = world.oreMap[pos + new Vector2(1,0)].ID;
@@ -50,6 +51,30 @@ public class Miner : MonoBehaviour
 
         checkForOre();
 
+    }
+    // On Hover Events
+    private void OnMouseOver()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+        }
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+        }
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            Buildings builds = FindObjectOfType<Buildings>();
+            world.inv.AddItem((int)builds.AllBuildings[0].cost[0].x, (int)builds.AllBuildings[0].cost[0].y);
+
+            world.OccupiedCells.Remove(pos);
+            world.OccupiedCells.Remove(pos + new Vector2(0,1));
+            world.OccupiedCells.Remove(pos + new Vector2(1,0));
+            world.OccupiedCells.Remove(pos + new Vector2(1,1));
+
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame

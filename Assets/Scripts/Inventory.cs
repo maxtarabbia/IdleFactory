@@ -64,17 +64,43 @@ public class Inventory
         }
         
     }
-    public bool RemoveItem(int ID, int count)
+    public bool RemoveItem(Vector2[] IDs)
     {
-        foreach (var item in items)
+        //check to make sure there are enough of each item;
+        bool[] foundItems = new bool[IDs.Length];
+        for (int i = 0; i < IDs.Length; i++)
         {
-            if (item.ID == ID && item.count >= count)
+            foreach (var item in items)
             {
-                item.count -= count;
-                return true;
+                if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y)
+                {
+                    foundItems[i] = true;
+                }
             }
         }
-        return false;
+        bool foundall = true;
+        foreach(bool found in foundItems)
+        {
+            if (!found)
+                foundall = false;
+        }
+
+        //subtract items if found spots for all
+        if (foundall)
+        {
+            for (int i = 0; i < IDs.Length; i++)
+            {
+                foreach (var item in items)
+                {
+                    if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y)
+                    {
+                        item.count -= (int)IDs[i].y;
+                    }
+                }
+            }
+        }
+
+        return foundall;
     }
     void refreshSpace()
     {

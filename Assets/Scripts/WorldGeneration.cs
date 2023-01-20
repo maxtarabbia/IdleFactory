@@ -17,7 +17,7 @@ public class WorldGeneration : MonoBehaviour
     public Sprite Copper_Ore;
 
     [SerializeField]
-    public Buildable[] buildables;
+    //public Buildable[] buildables;
     public int selectedBuildableIndex;
 
     public Canvas UICanvas;
@@ -36,7 +36,12 @@ public class WorldGeneration : MonoBehaviour
         //setBuildingPrices();
 
         Initialize(Spawnsize);
+        OccupiedCells.Add(new Vector2(5f, -2f), true);
+        OccupiedCells.Add(new Vector2(5f, -3f), true);
+        OccupiedCells.Add(new Vector2(6f, -2f), true);
+        OccupiedCells.Add(new Vector2(6f, -3f), true);
     }
+    /*
     public void setBuildingPrices()
     {
         foreach (var building in buildables)
@@ -53,6 +58,7 @@ public class WorldGeneration : MonoBehaviour
             building.costs = costs;
         }
     }
+    */
     public void Initialize(int size)
     {
         int offset = size/ 2;
@@ -92,16 +98,24 @@ public class WorldGeneration : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(Time.frameCount % 50 == 0)
-        {
-            print("\n" + inv.IdNames[inv.items[0].ID] + ": " + inv.items[0].count + "\n" + inv.IdNames[inv.items[1].ID] + ": " + inv.items[1].count);
-        }
         UpdateUI();
     }
     void UpdateUI()
     {
+        string UItext = new string("");
         var tmpUI = UICanvas.GetComponentInChildren<TextMeshProUGUI>();
-        tmpUI.text = inv.IdNames[inv.items[0].ID] + ": " + inv.items[0].count + "\n" + inv.IdNames[inv.items[1].ID] + ": " + inv.items[1].count;
+
+        foreach(var item in inv.items)
+        {
+            if (item.ID != -1)
+            {
+                UItext = UItext + "\n" + inv.IdNames[item.ID] + ": " + item.count;
+            }
+
+        }
+
+        tmpUI.text = UItext;
+       // tmpUI.text = inv.IdNames[inv.items[0].ID] + ": " + inv.items[0].count + "\n" + inv.IdNames[inv.items[1].ID] + ": " + inv.items[1].count;
     }
     GameObject GenerateCell(Vector2 position)
     {
