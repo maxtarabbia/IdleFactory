@@ -36,7 +36,7 @@ public class ObjectPlacement : MonoBehaviour
                 {
                     coord = new Vector2(transform.position.x + i, transform.position.y + j);
                     //if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)  coord += new Vector2(0.5f, 0.5f);
-                    if (world.OccupiedCells.ContainsKey(coord) && world.OccupiedCells[coord])
+                    if (world.OccupiedCells.ContainsKey(coord))
                     {
                         isClear = false; break;
                     }
@@ -62,7 +62,7 @@ public class ObjectPlacement : MonoBehaviour
         {
             for (int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
             {
-                world.OccupiedCells[new Vector2(gameObject.transform.position.x + i, gameObject.transform.position.y + j)] = true;
+                world.OccupiedCells[new Vector2(gameObject.transform.position.x + i, gameObject.transform.position.y + j)] = instancedObj;
             }
         }
     }

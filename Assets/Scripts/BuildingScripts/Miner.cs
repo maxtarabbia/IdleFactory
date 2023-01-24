@@ -115,14 +115,22 @@ public class Miner : MonoBehaviour
                 MineItem();
                 break;
             case 1: //iron ore
-                effect.SetTexture("spriteTex", OreSprites[0].texture);
-                effect.Play();
-                world.inv.AddItem(1, 1);
+
+                if (!OutputItem(1))
+                { 
+                    world.inv.AddItem(1, 1);
+                    effect.SetTexture("spriteTex", OreSprites[0].texture);
+                    effect.Play();
+                }
                 break;
             case 2: //copper ore
-                effect.SetTexture("spriteTex", OreSprites[1].texture);
-                effect.Play();
-                world.inv.AddItem(2, 1);
+
+                if (!OutputItem(2))
+                {
+                    world.inv.AddItem(2, 1);
+                    effect.SetTexture("spriteTex", OreSprites[1].texture);
+                    effect.Play();
+                }
                 break;
         }
         
@@ -135,5 +143,47 @@ public class Miner : MonoBehaviour
                 isOnOre= true;
             
         }
+    }
+    bool OutputItem(int itemID)
+    {
+        Vector2 outputCoord = new Vector2();
+        switch (gameObject.transform.rotation.eulerAngles.z)
+        {
+            case 0:
+                outputCoord = pos + new Vector2(0, -1);
+                break;
+            case 90:
+                outputCoord = pos + new Vector2(2, 0);
+                break;
+            case 180:
+                outputCoord = pos + new Vector2(1, 2);
+                break;
+            case 270:
+                outputCoord = pos + new Vector2(-1, 1);
+                break;
+        }
+        GameObject cellObj = null;
+        world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
+        if (cellObj != null)
+        {
+            Belt beltScript = cellObj.GetComponent<Belt>();
+            Refinery refineryScript = cellObj.GetComponent<Refinery>();
+            if (beltScript != null)
+            {
+                if (beltScript.inputItem(itemID, 1))
+                {
+                    return true;
+                }
+            }
+            else if(refineryScript != null)
+            {
+                if(refineryScript.InputItem(itemID,1))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+
     }
 }

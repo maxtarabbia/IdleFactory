@@ -19,19 +19,22 @@ public class Inventory
         {
             items[i] = new ItemStack();
         }
+        PopulateItemIDs();
     }
 
-    public void PopulateItemIDs()
+    void PopulateItemIDs()
     {
         IdNames.Add(0, "Air");
         IdNames.Add(1, "Iron Ore");
         IdNames.Add(2, "Copper Ore");
+        IdNames.Add(3, "Iron Ingot");
+        IdNames.Add(4, "Copper Ingot");
     }
 
     public bool AddItem(int ID, int count)
     {
         bool foundspot = false;
-        if(!isSpace)
+        if(!isSpace == isSpace)
         {
             return false;
         }
@@ -98,6 +101,7 @@ public class Inventory
                     }
                 }
             }
+            refreshSpace();
         }
 
         return foundall;

@@ -13,7 +13,7 @@ public class Controls : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()sd
+    void Update()
     {
         
         if (Input.GetKey(KeyCode.Alpha1))

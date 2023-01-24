@@ -24,22 +24,19 @@ public class WorldGeneration : MonoBehaviour
 
     public Inventory inv;
 
-    public Dictionary<Vector2, bool> OccupiedCells = new Dictionary<Vector2, bool>();
+    public Dictionary<Vector2, GameObject> OccupiedCells = new Dictionary<Vector2, GameObject>();
 
-
+    
 
     void Start()
     {
         inv = new Inventory(3);
-        inv.PopulateItemIDs();
+        inv.AddItem(1, 500);
+        inv.AddItem(2, 500);
 
         //setBuildingPrices();
 
         Initialize(Spawnsize);
-        OccupiedCells.Add(new Vector2(5f, -2f), true);
-        OccupiedCells.Add(new Vector2(5f, -3f), true);
-        OccupiedCells.Add(new Vector2(6f, -2f), true);
-        OccupiedCells.Add(new Vector2(6f, -3f), true);
     }
     /*
     public void setBuildingPrices()
