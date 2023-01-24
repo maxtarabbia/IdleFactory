@@ -31,8 +31,8 @@ public class WorldGeneration : MonoBehaviour
     void Start()
     {
         inv = new Inventory(3);
-        inv.AddItem(1, 500);
-        inv.AddItem(2, 500);
+        inv.AddItem(1, 20);
+        inv.AddItem(2, 0);
 
         //setBuildingPrices();
 

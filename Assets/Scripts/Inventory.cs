@@ -10,8 +10,8 @@ public class Inventory
 
 
     public ItemStack[] items;
-    public bool isSpace = true;
 
+    public int maxStackSize = int.MaxValue;
     public Inventory(int count)
     {
         this.items = new ItemStack[count];
@@ -34,38 +34,28 @@ public class Inventory
     public bool AddItem(int ID, int count)
     {
         bool foundspot = false;
-        if(!isSpace == isSpace)
+        foreach(var item in items)
         {
-            return false;
-        }
-        else
-        {
-            foreach(var item in items)
+            if(item.ID == ID && !foundspot && item.count + count < maxStackSize)
             {
-                if(item.ID == ID && !foundspot)
+                item.count += count;
+                foundspot = true;
+            }
+        }
+
+        if(!foundspot)
+        {
+            foreach (var item in items)
+            {
+                if(item.ID == -1 && !foundspot)
                 {
-                    item.count += count;
+                    item.ID = ID;
+                    item.count = count;
                     foundspot = true;
                 }
             }
-
-            if(!foundspot)
-            {
-                foreach (var item in items)
-                {
-                    if(item.ID == -1 && !foundspot)
-                    {
-                        item.ID = ID;
-                        item.count = count;
-                        foundspot = true;
-                        refreshSpace();
-                    }
-                }
-            }
-            return true;
-
         }
-        
+        return foundspot;
     }
     public bool RemoveItem(Vector2[] IDs)
     {
@@ -101,22 +91,9 @@ public class Inventory
                     }
                 }
             }
-            refreshSpace();
         }
 
         return foundall;
-    }
-    void refreshSpace()
-    {
-        isSpace = false;
-        foreach(var item in items)
-        {
-            if(item.count == 0)
-            {
-                isSpace= true;
-                return;
-            }
-        }
     }
 }
 public class ItemStack

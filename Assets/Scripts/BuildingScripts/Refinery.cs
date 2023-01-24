@@ -26,6 +26,9 @@ public class Refinery : MonoBehaviour
         pos += new Vector2(-0.5f, -0.5f);
         inputInv = new Inventory(1);
         outputInv = new Inventory(1);
+
+        inputInv.maxStackSize = 10;
+        outputInv.maxStackSize = 10;
     }
 
     void FixedUpdate()
@@ -133,7 +136,6 @@ public class Refinery : MonoBehaviour
     }
     public bool InputItem(int ID, int count)
     {
-        
         return inputInv.AddItem(ID, count);
     }
 }
