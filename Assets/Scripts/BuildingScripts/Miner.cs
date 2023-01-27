@@ -58,12 +58,14 @@ public class Miner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+            FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         }
         if(Input.GetKeyDown(KeyCode.E))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+            FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         }
-        if (Input.GetKeyDown(KeyCode.Delete))
+        if (Input.GetKey(KeyCode.Delete))
         {
             Buildings builds = FindObjectOfType<Buildings>();
             world.inv.AddItem((int)builds.AllBuildings[0].cost[0].x, (int)builds.AllBuildings[0].cost[0].y);
@@ -147,7 +149,7 @@ public class Miner : MonoBehaviour
     bool OutputItem(int itemID)
     {
         Vector2 outputCoord = new Vector2();
-        switch (gameObject.transform.rotation.eulerAngles.z)
+        switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
             case 0:
                 outputCoord = pos + new Vector2(0, -1);

@@ -12,6 +12,8 @@ public class Refinery : MonoBehaviour
     Inventory inputInv;
     Inventory outputInv;
 
+
+
     int RProgress;
     int RTime = 50;
 
@@ -41,7 +43,7 @@ public class Refinery : MonoBehaviour
     void OnTick()
     {
 
-        if (inputInv.items[0].ID == -1)
+        if (inputInv.items[0].ID == -1 || inputInv.items[0].count == 0)
             return;
 
         RProgress++;
@@ -73,12 +75,14 @@ public class Refinery : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+            FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+            FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         }
-        if (Input.GetKeyDown(KeyCode.Delete))
+        if (Input.GetKey(KeyCode.Delete))
         {
             Buildings builds = FindObjectOfType<Buildings>();
             world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, (int)builds.AllBuildings[2].cost[0].y);
@@ -96,7 +100,7 @@ public class Refinery : MonoBehaviour
     {
         int itemID = outputInv.items[0].ID;
         Vector2 outputCoord = new Vector2();
-        switch (gameObject.transform.rotation.eulerAngles.z)
+        switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
             case 0:
                 outputCoord = pos + new Vector2(-1, 0);

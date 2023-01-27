@@ -30,32 +30,14 @@ public class WorldGeneration : MonoBehaviour
 
     void Start()
     {
-        inv = new Inventory(3);
-        inv.AddItem(1, 20);
-        inv.AddItem(2, 0);
+        inv = new Inventory(4);
+        inv.AddItem(1, 500);
+        inv.AddItem(2, 500);
 
         //setBuildingPrices();
 
         Initialize(Spawnsize);
     }
-    /*
-    public void setBuildingPrices()
-    {
-        foreach (var building in buildables)
-        {
-            Vector2[] costs = new Vector2[1];
-            if (building.size == 1)
-            {
-                costs[0] = new Vector2(1, 5);
-            }
-            else
-            {
-                costs[0] = new Vector2 (2, 5);
-            }
-            building.costs = costs;
-        }
-    }
-    */
     public void Initialize(int size)
     {
         int offset = size/ 2;
@@ -90,7 +72,6 @@ public class WorldGeneration : MonoBehaviour
         oreMap.Add(position, newcell);
         GenerateCell(position);
 
-
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -106,7 +87,7 @@ public class WorldGeneration : MonoBehaviour
         {
             if (item.ID != -1)
             {
-                UItext = UItext + "\n" + inv.IdNames[item.ID] + ": " + item.count;
+                UItext = UItext + inv.IdNames[item.ID] + ": " + item.count + "\n";
             }
 
         }
@@ -125,6 +106,7 @@ public class WorldGeneration : MonoBehaviour
         SpriteRenderer SR = cell.AddComponent<SpriteRenderer>();
         cell.AddComponent<ObjectPlacement>();
         BoxCollider2D boxCol = cell.AddComponent<BoxCollider2D>();
+        boxCol.edgeRadius = 0.0f;
         boxCol.size = new Vector2(1f,1f);
         SR.sortingLayerName = "Ores";
 

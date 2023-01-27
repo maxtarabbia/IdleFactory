@@ -28,6 +28,14 @@ public class Controls : MonoBehaviour
         {
             Keystroke = 2;
         }
+        if (Input.GetKey(KeyCode.Alpha4))
+        {
+            Keystroke = 3;
+        }
+        if (Input.GetKey(KeyCode.Alpha5))
+        {
+            Keystroke = 4;
+        }
         FindObjectOfType<WorldGeneration>().selectedBuildableIndex = Keystroke;
         FindObjectOfType<Image>().sprite = FindObjectOfType<Buildings>().AllBuildings[Keystroke].prefab.GetComponent<SpriteRenderer>().sprite;
 

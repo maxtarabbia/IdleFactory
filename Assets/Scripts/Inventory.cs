@@ -92,8 +92,18 @@ public class Inventory
                 }
             }
         }
-
+        checkvoids();
         return foundall;
+    }
+    void checkvoids()
+    {
+        for(int i = 0; i < items.Length; i++)
+        {
+            if(items[i].count == 0)
+            {
+                items[i].ID = -1;
+            }
+        }
     }
 }
 public class ItemStack

@@ -38,6 +38,39 @@ public class ObjectPlacement : MonoBehaviour
                     //if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)  coord += new Vector2(0.5f, 0.5f);
                     if (world.OccupiedCells.ContainsKey(coord))
                     {
+                        isClear = false; 
+                        print("Cell is Occupied by " + world.OccupiedCells[coord].gameObject.name);
+                        break;
+                    }
+                }
+            }
+
+            if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost))
+                placeObject();
+        }
+    }
+    private void OnMouseEnter()
+    {
+        if (Input.GetMouseButton(0))
+        {
+
+            Vector3 Transposition = gameObject.transform.position;
+
+            if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
+                Transposition += new Vector3(0.5f, 0.5f, 0f);
+
+
+            bool isClear = true;
+            Vector2 coord;
+
+            for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
+            {
+                for (int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
+                {
+                    coord = new Vector2(transform.position.x + i, transform.position.y + j);
+                    //if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)  coord += new Vector2(0.5f, 0.5f);
+                    if (world.OccupiedCells.ContainsKey(coord))
+                    {
                         isClear = false; break;
                     }
                 }
@@ -55,8 +88,10 @@ public class ObjectPlacement : MonoBehaviour
         
 
         GameObject instancedObj = Instantiate(buildings.AllBuildings[world.selectedBuildableIndex].prefab);
-        instancedObj.transform.position = Transposition;
+        instancedObj.transform.position = Transposition + new Vector3(0,0,-1);
         instancedObj.transform.parent = null;
+        instancedObj.transform.Rotate(0, 0, buildings.AllBuildings[world.selectedBuildableIndex].rotation);
+        
 
         for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
         {
