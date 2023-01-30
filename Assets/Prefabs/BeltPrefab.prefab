@@ -51,6 +51,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6a567ab51f18e4c408630d2fc227782b, type: 3}
   - {fileID: 21300000, guid: 2be8e2e0f299ea247a325b78a1c32924, type: 3}
   - {fileID: 21300000, guid: c07a3d83028318b4a94848eb0e3e65f8, type: 3}
+  BeltRotations:
+  - {fileID: 21300000, guid: b7893a3a18d111b49818c004aa215faa, type: 3}
+  - {fileID: 21300000, guid: 006de6b81006ebb458c6c66c15e17355, type: 3}
+  - {fileID: 21300000, guid: 4b25072d6bc3ab44bb513ec6ea9ec01b, type: 3}
 --- !u!61 &5891399416402255133
 BoxCollider2D:
   m_ObjectHideFlags: 0

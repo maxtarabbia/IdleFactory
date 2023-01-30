@@ -123,7 +123,7 @@ public class Refinery : MonoBehaviour
             Refinery refineryScript = cellObj.GetComponent<Refinery>();
             if (beltScript != null)
             {
-                if (beltScript.inputItem(itemID, 1))
+                if (beltScript.inputItem(itemID, 0.5f))
                 {
                     return true;
                 }

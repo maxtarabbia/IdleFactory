@@ -717,6 +717,7 @@ MonoBehaviour:
   Copper_Ore: {fileID: 21300000, guid: b94f91d27ae00e5459338999e3aaedbd, type: 3}
   selectedBuildableIndex: 0
   UICanvas: {fileID: 232368677}
+  GodMode: 1
 --- !u!114 &1298894906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,7 +758,7 @@ MonoBehaviour:
       type: 3}
     size: 1
     cost:
-    - {x: 2, y: 5}
+    - {x: 3, y: 5}
     rotation: 0
   - name: Core
     prefab: {fileID: 6711552444269863392, guid: a899b54d98dd5054c9c348f974e33d64,

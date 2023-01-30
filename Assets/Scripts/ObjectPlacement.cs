@@ -89,7 +89,8 @@ public class ObjectPlacement : MonoBehaviour
 
         GameObject instancedObj = Instantiate(buildings.AllBuildings[world.selectedBuildableIndex].prefab);
         instancedObj.transform.position = Transposition + new Vector3(0,0,-1);
-        instancedObj.transform.parent = null;
+        instancedObj.transform.parent = transform.parent;
+        instancedObj.isStatic= true;
         instancedObj.transform.Rotate(0, 0, buildings.AllBuildings[world.selectedBuildableIndex].rotation);
         
 

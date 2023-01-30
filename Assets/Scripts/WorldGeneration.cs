@@ -26,15 +26,23 @@ public class WorldGeneration : MonoBehaviour
 
     public Dictionary<Vector2, GameObject> OccupiedCells = new Dictionary<Vector2, GameObject>();
 
-    
+    public bool GodMode;
 
     void Start()
     {
         inv = new Inventory(4);
-        inv.AddItem(1, 500);
-        inv.AddItem(2, 500);
-
-        //setBuildingPrices();
+        if (GodMode)
+        {
+            inv.AddItem(1, 500);
+            inv.AddItem(2, 500);
+            inv.AddItem(3, 500);
+            inv.AddItem(4, 500);
+        }
+        else
+        {
+            inv.AddItem(1, 5);
+            inv.AddItem(2, 0);
+        }
 
         Initialize(Spawnsize);
     }
