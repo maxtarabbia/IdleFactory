@@ -16,7 +16,8 @@ public class Belt : MonoBehaviour
 
     public Sprite[] spriteAssets;
 
-     public Sprite[] BeltRotations;
+    public Sprite[] BeltRotations;
+    int BeltRotationState = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -123,15 +124,18 @@ public class Belt : MonoBehaviour
             if (rightOcc) 
             {
                 gameObject.GetComponent<SpriteRenderer>().sprite = BeltRotations[1];
+                BeltRotationState = 1;
             }
             else
             {
                 gameObject.GetComponent<SpriteRenderer>().sprite = BeltRotations[2];
+                BeltRotationState = 2;
             }
         }
         else
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = BeltRotations[0];
+            BeltRotationState = 0;
         }
 
 
@@ -142,17 +146,41 @@ public class Belt : MonoBehaviour
     }
     void UpdateSpritePositions(bool moveForward)
     {
+        //progress forward
         if (itemID.x != -1)
         {
             if (moveForward)
                 itemID.y += Time.fixedDeltaTime;
             sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x - 1];
-            sprite.transform.localPosition = new Vector3(0.5f - (itemID.y / timeTotravel), 0, itemID.y);
+
+            float xVal = 0;
+            float yVal = 0;
+
+
+            switch (BeltRotationState)
+            {
+                case 0:
+                    xVal = 0.5f - (itemID.y / timeTotravel);
+                    yVal = 0;
+
+                    break;
+                case 1:
+                    xVal = Mathf.Clamp((0.5f - (itemID.y / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
+                    yVal = Mathf.Clamp(0.5f - (itemID.y / timeTotravel), 0, 0.5f);
+
+                    break;
+                case 2:
+                    xVal = Mathf.Clamp((0.5f - (itemID.y / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
+                    yVal = Mathf.Clamp(0.5f - (itemID.y / timeTotravel), 0, 0.5f) * -1;
+
+                    break;
+            }
+            sprite.transform.localPosition = new Vector3(xVal, yVal, itemID.y);
+
+
         }
-        else
-        {
-            sprite.GetComponent<SpriteRenderer>().sprite = null;
-        }
+
+        //check to output
         if (itemID.y >= timeTotravel)
         {
             if (OutputItem((int)itemID.x))
@@ -196,7 +224,7 @@ public class Belt : MonoBehaviour
                 float spot = 0;
                 if(Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 90 || Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 270)
                 {
-                    spot = 0.3f;
+                    spot = 0f;
                 }
                 else if(Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 180)
                 {
