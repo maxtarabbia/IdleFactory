@@ -12,7 +12,8 @@ public class Refinery : MonoBehaviour
     Inventory inputInv;
     Inventory outputInv;
 
-
+    Vector2 outputCoord = new Vector2();
+    Vector2 inputCoord= new Vector2();
 
     int RProgress;
     int RTime = 50;
@@ -31,6 +32,7 @@ public class Refinery : MonoBehaviour
 
         inputInv.maxStackSize = 10;
         outputInv.maxStackSize = 10;
+        SetOutput();
     }
 
     void FixedUpdate()
@@ -39,6 +41,28 @@ public class Refinery : MonoBehaviour
 
         inCount = inputInv.items[0].count;
         outCount = outputInv.items[0].count;
+    }
+    void SetOutput()
+    {
+        switch ((int)gameObject.transform.rotation.eulerAngles.z)
+        {
+            case 0:
+                outputCoord = pos + new Vector2(-1, 0);
+                inputCoord = pos + new Vector2(2, 1);
+                break;
+            case 90:
+                outputCoord = pos + new Vector2(1, -1);
+                inputCoord =  pos + new Vector2(0, 2);
+                break;
+            case 180:
+                outputCoord = pos + new Vector2(2, 1);
+                inputCoord = pos + new Vector2(-1, 0);
+                break;
+            case 270:
+                outputCoord = pos + new Vector2(0, 2);
+                inputCoord = pos + new Vector2(1, -1);
+                break;
+        }
     }
     void OnTick()
     {
@@ -75,11 +99,13 @@ public class Refinery : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+            SetOutput();
             FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+            SetOutput();
             FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         }
         if (Input.GetKey(KeyCode.Delete))
@@ -99,22 +125,7 @@ public class Refinery : MonoBehaviour
     bool OutputItem()
     {
         int itemID = outputInv.items[0].ID;
-        Vector2 outputCoord = new Vector2();
-        switch ((int)gameObject.transform.rotation.eulerAngles.z)
-        {
-            case 0:
-                outputCoord = pos + new Vector2(-1, 0);
-                break;
-            case 90:
-                outputCoord = pos + new Vector2(1, -1);
-                break;
-            case 180:
-                outputCoord = pos + new Vector2(2, 1);
-                break;
-            case 270:
-                outputCoord = pos + new Vector2(0, 2);
-                break;
-        }
+
         GameObject cellObj = null;
         world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
         if (cellObj != null)
@@ -130,7 +141,7 @@ public class Refinery : MonoBehaviour
             }
             else if (refineryScript != null)
             {
-                if (refineryScript.InputItem(itemID, 1))
+                if (refineryScript.InputItem(itemID, 1,pos))
                 {
                     return true;
                 }
@@ -138,8 +149,15 @@ public class Refinery : MonoBehaviour
         }
         return false;
     }
-    public bool InputItem(int ID, int count)
+    public bool InputItem(int ID, int count, Vector2 inPos)
     {
-        return inputInv.AddItem(ID, count);
+        if ((inPos - inputCoord).sqrMagnitude <= 0.05f)
+        {
+            return inputInv.AddItem(ID, count);
+        }
+        else
+        {
+            return false;
+        }
     }
 }

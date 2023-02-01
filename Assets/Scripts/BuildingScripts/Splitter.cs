@@ -158,7 +158,7 @@ public class Splitter : MonoBehaviour
             }
             else if (refineryScript != null)
             {
-                if (refineryScript.InputItem(itemID, 1))
+                if (refineryScript.InputItem(itemID, 1, pos))
                 {
                     return true;
                 }
