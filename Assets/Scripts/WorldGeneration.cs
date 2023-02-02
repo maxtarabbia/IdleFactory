@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.ObjectChangeEventStream;
 
 public class WorldGeneration : MonoBehaviour
 {
@@ -86,16 +87,38 @@ public class WorldGeneration : MonoBehaviour
     {
         UpdateUI();
     }
+    Vector2[] CountCosts()
+    {
+        Buildings builds = GetComponent<Buildings>();
+        Vector2[] costs = new Vector2[builds.AllBuildings[selectedBuildableIndex].cost.Length];
+        
+        for(int i = 0; i < builds.AllBuildings[selectedBuildableIndex].cost.Length; i++)
+        {
+            costs[i].x = builds.AllBuildings[selectedBuildableIndex].cost[i].x;
+            costs[i].y = builds.AllBuildings[selectedBuildableIndex].cost[i].y * (builds.AllBuildings[selectedBuildableIndex].count + 1);
+        }
+        return costs;
+    }
     void UpdateUI()
     {
         string UItext = new string("");
         var tmpUI = UICanvas.GetComponentInChildren<TextMeshProUGUI>();
 
+        Vector2[] costs = CountCosts();
+
         foreach(var item in inv.items)
         {
             if (item.ID != -1)
             {
-                UItext = UItext + inv.IdNames[item.ID] + ": " + item.count + "\n";
+                UItext = UItext + inv.IdNames[item.ID] + ": " + item.count;
+                for(int i = 0; i < costs.Length; i++)
+                {
+                    if (costs[i].x == item.ID)
+                    {
+                        UItext = UItext + " - " + costs[i].y;
+                    }
+                }
+                UItext = UItext + "\n";
             }
 
         }

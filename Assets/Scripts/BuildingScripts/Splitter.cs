@@ -195,6 +195,8 @@ public class Splitter : MonoBehaviour
 
             world.OccupiedCells.Remove(pos);
 
+            builds.AllBuildings[3].count--;
+
             Destroy(gameObject);
         }
     }

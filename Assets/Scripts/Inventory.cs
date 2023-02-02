@@ -57,7 +57,7 @@ public class Inventory
         }
         return foundspot;
     }
-    public bool RemoveItem(Vector2[] IDs)
+    public bool RemoveItem(Vector2[] IDs, float multiplier)
     {
         //check to make sure there are enough of each item;
         bool[] foundItems = new bool[IDs.Length];
@@ -65,7 +65,7 @@ public class Inventory
         {
             foreach (var item in items)
             {
-                if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y)
+                if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y * multiplier)
                 {
                     foundItems[i] = true;
                 }
@@ -85,9 +85,9 @@ public class Inventory
             {
                 foreach (var item in items)
                 {
-                    if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y)
+                    if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y * multiplier)
                     {
-                        item.count -= (int)IDs[i].y;
+                        item.count -= (int)(IDs[i].y * multiplier);
                     }
                 }
             }

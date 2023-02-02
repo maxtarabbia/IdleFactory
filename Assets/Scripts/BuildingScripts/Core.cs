@@ -22,12 +22,14 @@ public class Core : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Delete))
         {
             Buildings builds = FindObjectOfType<Buildings>();
-            world.inv.AddItem((int)builds.AllBuildings[4].cost[0].x, (int)builds.AllBuildings[4].cost[0].y);
+            //world.inv.AddItem((int)builds.AllBuildings[4].cost[0].x, (int)builds.AllBuildings[4].cost[0].y);
 
             world.OccupiedCells.Remove(pos);
             world.OccupiedCells.Remove(pos + new Vector2(0, 1));
             world.OccupiedCells.Remove(pos + new Vector2(1, 0));
             world.OccupiedCells.Remove(pos + new Vector2(1, 1));
+
+            builds.AllBuildings[4].count--;
 
             Destroy(gameObject);
         }

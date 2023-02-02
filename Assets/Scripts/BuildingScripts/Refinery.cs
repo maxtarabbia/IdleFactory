@@ -78,7 +78,7 @@ public class Refinery : MonoBehaviour
             if (outputInv.AddItem(outID, 1))
             {
 
-                inputInv.RemoveItem(new Vector2[] {new Vector2 (inputInv.items[0].ID, 1)});
+                inputInv.RemoveItem(new Vector2[] {new Vector2 (inputInv.items[0].ID, 1)}, 1.0f);
                 RProgress = 0;
             }
             else
@@ -90,7 +90,7 @@ public class Refinery : MonoBehaviour
         {
             if (OutputItem())
             {
-                outputInv.RemoveItem(new Vector2[] { new Vector2(outputInv.items[0].ID, 1) });
+                outputInv.RemoveItem(new Vector2[] { new Vector2(outputInv.items[0].ID, 1) },1.0f);
             }
         }
     }
@@ -118,6 +118,8 @@ public class Refinery : MonoBehaviour
             world.OccupiedCells.Remove(pos + new Vector2(0, 1));
             world.OccupiedCells.Remove(pos + new Vector2(1, 0));
             world.OccupiedCells.Remove(pos + new Vector2(1, 1));
+
+            builds.AllBuildings[2].count--;
 
             Destroy(gameObject);
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,6 +21,7 @@ public class Camera_Movement : MonoBehaviour
 
     public Vector2 minMaxSpeed;
 
+    public Vector2 MinMaxSize;
 
     void Start()
     {
@@ -65,9 +67,24 @@ public class Camera_Movement : MonoBehaviour
     void ZoomCam(float dist)
     {
         Camera cam = GetComponent<Camera>();
-        cam.orthographicSize *= 1+dist;
-        Transform background = gameObject.transform.GetChild(0);
-        background.localScale *= 1+dist;
+
+        if (cam.orthographicSize * 1 + dist < MinMaxSize.y && cam.orthographicSize * 1 + dist > MinMaxSize.x)
+        {
+            cam.orthographicSize *= 1 + dist;
+            Transform background = gameObject.transform.GetChild(0);
+            background.localScale *= 1 + dist;
+        }
+        else
+        {
+            if(cam.orthographicSize * 1 + dist >= MinMaxSize.y)
+            {
+                cam.orthographicSize = MinMaxSize.y;
+            }
+            else
+            {
+                cam.orthographicSize = MinMaxSize.x;
+            }
+        }
     }
     void MoveCam (int direction) 
     {

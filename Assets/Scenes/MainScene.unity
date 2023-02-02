@@ -457,6 +457,7 @@ MonoBehaviour:
   movementSpeed: 0.02
   zoomSpeed: 3
   minMaxSpeed: {x: 0.4, y: 1}
+  MinMaxSize: {x: 0.5, y: 50}
 --- !u!1 &645610958
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,6 +739,7 @@ MonoBehaviour:
     cost:
     - {x: 1, y: 5}
     rotation: 0
+    count: 0
   - name: Belt
     prefab: {fileID: 7357262922707060930, guid: 4ab8a7cc70430d441ad9c495a6f46ffb,
       type: 3}
@@ -745,6 +747,7 @@ MonoBehaviour:
     cost:
     - {x: 2, y: 2}
     rotation: 0
+    count: 0
   - name: Refinery
     prefab: {fileID: 4639877332619864522, guid: 0e4bba82046b6bd47b6f486694542374,
       type: 3}
@@ -753,6 +756,7 @@ MonoBehaviour:
     - {x: 1, y: 5}
     - {x: 2, y: 5}
     rotation: 0
+    count: 0
   - name: Splitter
     prefab: {fileID: 8158205345131185171, guid: 1da21e68ea99f964a92af651b3f05228,
       type: 3}
@@ -760,13 +764,14 @@ MonoBehaviour:
     cost:
     - {x: 3, y: 5}
     rotation: 0
+    count: 0
   - name: Core
     prefab: {fileID: 6711552444269863392, guid: a899b54d98dd5054c9c348f974e33d64,
       type: 3}
     size: 2
-    cost:
-    - {x: 1, y: 0}
+    cost: []
     rotation: 0
+    count: 0
 --- !u!114 &1298894907
 MonoBehaviour:
   m_ObjectHideFlags: 0

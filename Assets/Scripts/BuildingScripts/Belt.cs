@@ -286,6 +286,8 @@ public class Belt : MonoBehaviour
 
             world.OccupiedCells.Remove(pos);
 
+            builds.AllBuildings[1].count--;
+
             Destroy(gameObject);
         }
     }

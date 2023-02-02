@@ -45,7 +45,7 @@ public class ObjectPlacement : MonoBehaviour
                 }
             }
 
-            if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost))
+            if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
                 placeObject();
         }
     }
@@ -76,7 +76,7 @@ public class ObjectPlacement : MonoBehaviour
                 }
             }
 
-            if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost))
+            if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost,1.0f))
                 placeObject();
         }
     }
@@ -85,7 +85,8 @@ public class ObjectPlacement : MonoBehaviour
 
         Vector3 Transposition = gameObject.transform.position;
         if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0) Transposition += new Vector3(0.5f, 0.5f, 0f);
-        
+
+        buildings.AllBuildings[world.selectedBuildableIndex].count++;
 
         GameObject instancedObj = Instantiate(buildings.AllBuildings[world.selectedBuildableIndex].prefab);
         instancedObj.transform.position = Transposition + new Vector3(0,0,-1);

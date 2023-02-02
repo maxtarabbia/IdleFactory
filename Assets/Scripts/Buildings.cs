@@ -20,6 +20,7 @@ public class Building
     public int size;
     public Vector2[] cost;
     public int rotation;
+    public int count;
     public Building(GameObject prefab, string name, int size, Vector2[] cost, int rotation)
     {
         this.prefab = prefab;
@@ -27,5 +28,6 @@ public class Building
         this.size = size;
         this.cost = cost;
         this.rotation = rotation;
+        count = 0;
     }
 }

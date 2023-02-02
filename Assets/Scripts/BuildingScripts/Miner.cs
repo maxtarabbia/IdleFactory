@@ -75,6 +75,8 @@ public class Miner : MonoBehaviour
             world.OccupiedCells.Remove(pos + new Vector2(1,0));
             world.OccupiedCells.Remove(pos + new Vector2(1,1));
 
+            builds.AllBuildings[0].count--;
+
             Destroy(gameObject);
         }
     }
