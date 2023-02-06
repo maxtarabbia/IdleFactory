@@ -16,6 +16,7 @@ public class Miner : MonoBehaviour
     VisualEffect effect;
     WorldGeneration world;
 
+    TickEvents tickEvents;
 
     Transform[] transforms;
 
@@ -28,6 +29,9 @@ public class Miner : MonoBehaviour
      //Start is called before the first frame update
     void Start()
     {
+        
+
+
         coveredTileID = Enumerable.Repeat(-1, 4).ToArray();
         transforms = GetComponentsInChildren<Transform>();
         basePos = transforms[1].localPosition;
@@ -50,6 +54,9 @@ public class Miner : MonoBehaviour
         coveredTileID[3] = world.oreMap[pos + new Vector2(1,1)].ID;
 
         checkForOre();
+
+        tickEvents = world.GetComponent<TickEvents>();
+        tickEvents.MyEvent += OnTick;
 
     }
     // On Hover Events
@@ -80,7 +87,10 @@ public class Miner : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    private void OnDestroy()
+    {
+        tickEvents.MyEvent -= OnTick;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -90,7 +100,12 @@ public class Miner : MonoBehaviour
         }
         
     }
+    
     private void FixedUpdate()
+    {
+        OnTick();
+    }
+    void OnTick()
     {
         if (isOnOre)
         {
@@ -102,7 +117,6 @@ public class Miner : MonoBehaviour
             MiningAnimation();
             miningProgress += 1;
         }
-        
     }
     void MiningAnimation()
     {

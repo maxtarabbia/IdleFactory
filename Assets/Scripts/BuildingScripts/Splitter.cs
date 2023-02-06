@@ -12,6 +12,7 @@ public class Splitter : MonoBehaviour
     Vector2[] OutputPos;
     int OutIter = 0;
 
+    TickEvents tickEvents;
 
     GameObject sprite;
 
@@ -35,6 +36,9 @@ public class Splitter : MonoBehaviour
         itemID = new Vector2(-1, 0);
         
         FixOutputs();
+
+        tickEvents = world.GetComponent<TickEvents>();
+        tickEvents.MyEvent += OnTick;
     }
     void FixOutputs()
     {
@@ -78,6 +82,10 @@ public class Splitter : MonoBehaviour
         }
     }
     private void FixedUpdate()
+    {
+        OnTick();
+    }
+    void OnTick()
     {
         UpdateSpritePositions(true);
     }
@@ -205,5 +213,9 @@ public class Splitter : MonoBehaviour
         FindObjectOfType<Buildings>().AllBuildings[3].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         sprite.transform.eulerAngles = (Vector3.zero);
         FixOutputs();
+    }
+    private void OnDestroy()
+    {
+        tickEvents.MyEvent -= OnTick;
     }
 }

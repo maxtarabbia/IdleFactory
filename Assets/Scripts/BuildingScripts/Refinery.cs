@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEditor.Progress;
 
 public class Refinery : MonoBehaviour
 {
@@ -14,6 +12,8 @@ public class Refinery : MonoBehaviour
 
     Vector2 outputCoord = new Vector2();
     Vector2 inputCoord= new Vector2();
+
+    TickEvents tickEvents;
 
     int RProgress;
     int RTime = 50;
@@ -33,14 +33,14 @@ public class Refinery : MonoBehaviour
         inputInv.maxStackSize = 10;
         outputInv.maxStackSize = 10;
         SetOutput();
+
+        tickEvents = world.GetComponent<TickEvents>();
+        tickEvents.MyEvent += OnTick;
     }
 
     void FixedUpdate()
     {
         OnTick();
-
-        inCount = inputInv.items[0].count;
-        outCount = outputInv.items[0].count;
     }
     void SetOutput()
     {
@@ -66,6 +66,8 @@ public class Refinery : MonoBehaviour
     }
     void OnTick()
     {
+        inCount = inputInv.items[0].count;
+        outCount = outputInv.items[0].count;
 
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count == 0)
             return;
@@ -161,5 +163,9 @@ public class Refinery : MonoBehaviour
         {
             return false;
         }
+    }
+    private void OnDestroy()
+    {
+        tickEvents.MyEvent -= OnTick;
     }
 }

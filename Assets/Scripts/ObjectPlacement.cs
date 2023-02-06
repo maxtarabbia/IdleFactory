@@ -11,8 +11,7 @@ public class ObjectPlacement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        world = FindObjectOfType<WorldGeneration>();
-        buildings= FindObjectOfType<Buildings>();
+
     }
 
     // Update is called once per frame
@@ -20,7 +19,11 @@ public class ObjectPlacement : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-
+            if (world == null)
+            {
+                world = FindObjectOfType<WorldGeneration>();
+                buildings = FindObjectOfType<Buildings>();
+            }
             Vector3 Transposition = gameObject.transform.position;
 
             if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
@@ -53,6 +56,11 @@ public class ObjectPlacement : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
+            if (world == null)
+            {
+                world = FindObjectOfType<WorldGeneration>();
+                buildings = FindObjectOfType<Buildings>();
+            }
 
             Vector3 Transposition = gameObject.transform.position;
 

@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEditor.ObjectChangeEventStream;
+using Unity.Profiling;
+using UnityEngine.Profiling;
 
 public class WorldGeneration : MonoBehaviour
 {
     public Dictionary<Vector2, Cell> oreMap = new Dictionary<Vector2, Cell>();
-    int Spawnsize = 100;
+    int Spawnsize = 12;
 
     public int Seed = 42;
 
@@ -24,6 +25,9 @@ public class WorldGeneration : MonoBehaviour
     public Canvas UICanvas;
 
     public Inventory inv;
+
+    public Vector2 CamCoord;
+    public Vector2 CamSize;
 
     public Dictionary<Vector2, GameObject> OccupiedCells = new Dictionary<Vector2, GameObject>();
 
@@ -45,7 +49,7 @@ public class WorldGeneration : MonoBehaviour
             inv.AddItem(2, 0);
         }
 
-        Initialize(Spawnsize);
+        //Initialize(Spawnsize);
     }
     public void Initialize(int size)
     {
@@ -58,17 +62,40 @@ public class WorldGeneration : MonoBehaviour
             }
         }
     }
+    public void UpdateNewBlocks()
+    {
+        Profiler.BeginSample("Chekcing For Now Blocks");
+
+        Vector2 startingcoord = CamCoord - (CamSize);
+        startingcoord = startingcoord + new Vector2(-1, -1);
+        startingcoord.x = Mathf.Round(startingcoord.x);
+        startingcoord.y = Mathf.Round(startingcoord.y);
+        for(int x = 0; x < (CamSize.x+1) * 2; x++)
+        {
+            for (int y = 0; y < (CamSize.y+1) * 2; y++)
+            {
+                if(!oreMap.ContainsKey(new Vector2(x,y)+startingcoord))
+                {
+                    Profiler.BeginSample("Making New Block");
+                    SetDefaultCell(new Vector2(x, y) + startingcoord);
+                    Profiler.EndSample();
+                }
+            }
+        }
+
+        Profiler.EndSample();
+    }
     public void SetDefaultCell(Vector2 position)
     {
         float scale = 0.1f;
         Cell newcell = new Cell();
-        if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.5)
+        if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.4)
         {
             newcell.ID = 1;
             newcell.name = "Iron Ore";
             
         }
-        else if (noise.cnoise(new Vector2(Seed *20, Seed - 85) + position * scale) > 0.6)
+        else if (noise.cnoise(new Vector2(Seed *20, Seed - 85) + position * scale) > 0.5)
         {
             newcell.ID = 2;
             newcell.name = "Copper Ore";
@@ -79,10 +106,16 @@ public class WorldGeneration : MonoBehaviour
             newcell.name = "Air";
         }
         oreMap.Add(position, newcell);
+        Profiler.BeginSample("Creating new Block GameObject");
         GenerateCell(position);
+        Profiler.EndSample();
 
     }
-    // Update is called once per frame
+    void Update()
+    {
+        //Check for revealed cells
+        //Generate cells revealed by cam
+    }
     void FixedUpdate()
     {
         UpdateUI();

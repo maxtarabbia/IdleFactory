@@ -25,7 +25,7 @@ public class Camera_Movement : MonoBehaviour
 
     void Start()
     {
-        
+        updateCamSize();
     }
 
     // Update is called once per frame
@@ -57,12 +57,28 @@ public class Camera_Movement : MonoBehaviour
         if (frameOffset.magnitude > 0)
         {
             timeMoving += Time.deltaTime;
+            updateCamSize();
         }
         else
         {
             timeMoving = 0;
         }
-        ZoomCam(Input.mouseScrollDelta.y * -0.01f * zoomSpeed);
+        if (Input.mouseScrollDelta.sqrMagnitude > 0)
+        {
+            updateCamSize();
+            ZoomCam(Input.mouseScrollDelta.y * -0.01f * zoomSpeed);
+        }
+    }
+    public void updateCamSize()
+    {
+        WorldGeneration world = FindObjectOfType<WorldGeneration>();
+        Vector2 Camsize = new Vector2();
+
+        Camsize.y = GetComponent<Camera>().orthographicSize;
+        Camsize.x = Camsize.y*GetComponent<Camera>().aspect;
+        world.CamSize= Camsize;
+        world.CamCoord = gameObject.transform.position;
+        world.UpdateNewBlocks();
     }
     void ZoomCam(float dist)
     {

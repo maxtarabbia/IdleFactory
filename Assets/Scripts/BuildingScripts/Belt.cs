@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class Belt : MonoBehaviour
 {
@@ -13,6 +12,8 @@ public class Belt : MonoBehaviour
     Vector2 outputCoord = new Vector2();
 
     GameObject sprite;
+
+    TickEvents tickEvents;
 
     public Sprite[] spriteAssets;
 
@@ -38,7 +39,8 @@ public class Belt : MonoBehaviour
         UpdateBeltInput();
         UpdateAdjacentBelts();
 
-       
+        tickEvents = world.GetComponent<TickEvents>();
+        tickEvents.MyEvent += OnTick;
     }
     public void UpdateAdjacentBelts()
     {
@@ -141,6 +143,10 @@ public class Belt : MonoBehaviour
 
     }
     private void FixedUpdate()
+    {
+        OnTick();
+    }
+    void OnTick()
     {
         UpdateSpritePositions(true);
     }
@@ -295,5 +301,9 @@ public class Belt : MonoBehaviour
     {
         FindObjectOfType<Buildings>().AllBuildings[1].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         sprite.transform.eulerAngles = (Vector3.zero);
+    }
+    private void OnDestroy()
+    {
+        tickEvents.MyEvent -= OnTick;
     }
 }

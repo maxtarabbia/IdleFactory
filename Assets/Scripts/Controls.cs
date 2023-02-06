@@ -5,11 +5,17 @@ using UnityEngine.UI;
 
 public class Controls : MonoBehaviour
 {
-    int Keystroke; 
+    int Keystroke;
+    WorldGeneration world;
+    Image UIsprite;
+    Buildings buildings;
     // Start is called before the first frame update
     void Start()
     {
-        Keystroke= 0;
+        world = FindObjectOfType<WorldGeneration>();
+        UIsprite = FindObjectOfType<Image>();
+        Keystroke = 0;
+        buildings = FindObjectOfType<Buildings>();
     }
 
     // Update is called once per frame
@@ -36,8 +42,13 @@ public class Controls : MonoBehaviour
         {
             Keystroke = 4;
         }
-        FindObjectOfType<WorldGeneration>().selectedBuildableIndex = Keystroke;
-        FindObjectOfType<Image>().sprite = FindObjectOfType<Buildings>().AllBuildings[Keystroke].prefab.GetComponent<SpriteRenderer>().sprite;
+        if (Input.GetKey(KeyCode.F))
+        {
+            TickEvents events = GetComponent<TickEvents>();
+            events.TickJam(10);
+        }
+        world.selectedBuildableIndex = Keystroke;
+        UIsprite.sprite = buildings.AllBuildings[Keystroke].prefab.GetComponent<SpriteRenderer>().sprite;
 
     }
 }
