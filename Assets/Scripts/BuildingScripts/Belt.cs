@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Belt : MonoBehaviour
 {
-    WorldGeneration world;
+    public WorldGeneration world;
     Vector2 pos;
     float timeTotravel = 0.3f;
-    Vector2 itemID;
+    public Vector2 itemID;
 
     Vector2 outputCoord = new Vector2();
 
@@ -27,21 +27,24 @@ public class Belt : MonoBehaviour
         //x is ID
         //y is time spent on belt
 
-
-        sprite = new GameObject("Sprite");
-        sprite.transform.position = pos + new Vector2(0, 0);
-        sprite.transform.parent = gameObject.transform;
-        sprite.transform.eulerAngles = (Vector3.zero);
+        if (sprite == null)
+        {
+            sprite = new GameObject("Sprite");
+            sprite.transform.position = pos + new Vector2(0, 0);
+            sprite.transform.parent = gameObject.transform;
+            sprite.transform.eulerAngles = (Vector3.zero);
+        }
         sprite.AddComponent<SpriteRenderer>();
         sprite.GetComponent<SpriteRenderer>().sortingLayerName = "Particles";
-
-        itemID = new Vector2(-1, 0);
+        if(itemID == Vector2.zero)
+            itemID = new Vector2(-1, 0);
         UpdateBeltInput();
         UpdateAdjacentBelts();
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
     }
+
     public void UpdateAdjacentBelts()
     {
         GameObject[] cells = new GameObject[4];
@@ -150,7 +153,7 @@ public class Belt : MonoBehaviour
     {
         UpdateSpritePositions(true);
     }
-    void UpdateSpritePositions(bool moveForward)
+    public void UpdateSpritePositions(bool moveForward)
     {
         //progress forward
         if (itemID.x != -1)

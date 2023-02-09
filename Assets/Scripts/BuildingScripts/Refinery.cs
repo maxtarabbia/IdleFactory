@@ -5,17 +5,19 @@ using UnityEngine;
 public class Refinery : MonoBehaviour
 {
     WorldGeneration world;
-    Vector2 pos;
+    public Vector2 pos;
 
-    Inventory inputInv;
-    Inventory outputInv;
+    [SerializeField]
+    public Inventory inputInv;
+    [SerializeField]
+    public Inventory outputInv;
 
     Vector2 outputCoord = new Vector2();
     Vector2 inputCoord= new Vector2();
 
     TickEvents tickEvents;
 
-    int RProgress;
+    public int RProgress;
     int RTime = 50;
 
     public int inCount;

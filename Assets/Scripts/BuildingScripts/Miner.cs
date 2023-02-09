@@ -20,14 +20,14 @@ public class Miner : MonoBehaviour
 
     Transform[] transforms;
 
-    int miningProgress;
+    public int miningProgress;
     int ticksToMine = 100;
 
     bool isOnOre = false;
 
      public Sprite[] OreSprites;
      //Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         
 

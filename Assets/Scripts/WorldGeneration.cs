@@ -9,8 +9,9 @@ using UnityEngine.Profiling;
 
 public class WorldGeneration : MonoBehaviour
 {
+    [SerializeField]
     public Dictionary<Vector2, Cell> oreMap = new Dictionary<Vector2, Cell>();
-    int Spawnsize = 12;
+    int Spawnsize = 20;
 
     public int Seed = 42;
 
@@ -18,8 +19,6 @@ public class WorldGeneration : MonoBehaviour
     public Sprite Iron_Ore;
     public Sprite Copper_Ore;
 
-    [SerializeField]
-    //public Buildable[] buildables;
     public int selectedBuildableIndex;
 
     public Canvas UICanvas;
@@ -29,11 +28,19 @@ public class WorldGeneration : MonoBehaviour
     public Vector2 CamCoord;
     public Vector2 CamSize;
 
+    public int OccCellcount;
+
+    [SerializeField]
     public Dictionary<Vector2, GameObject> OccupiedCells = new Dictionary<Vector2, GameObject>();
 
     public bool GodMode;
 
     void Start()
+    {
+        SetInventory();
+       // Initialize(Spawnsize);
+    }
+    public void SetInventory()
     {
         inv = new Inventory(4);
         if (GodMode)
@@ -48,11 +55,13 @@ public class WorldGeneration : MonoBehaviour
             inv.AddItem(1, 5);
             inv.AddItem(2, 0);
         }
-
-        //Initialize(Spawnsize);
     }
     public void Initialize(int size)
     {
+
+        OccupiedCells.Clear();
+        oreMap.Clear();
+        
         int offset = size/ 2;
         for (int x = 0; x < size; x++)
         {
@@ -61,10 +70,11 @@ public class WorldGeneration : MonoBehaviour
                 SetDefaultCell(new Vector2(x - offset, y - offset));
             }
         }
+        UpdateNewBlocks();
     }
     public void UpdateNewBlocks()
     {
-        Profiler.BeginSample("Chekcing For Now Blocks");
+        Profiler.BeginSample("Checking For Now Blocks");
 
         Vector2 startingcoord = CamCoord - (CamSize);
         startingcoord = startingcoord + new Vector2(-1, -1);
@@ -113,11 +123,15 @@ public class WorldGeneration : MonoBehaviour
     }
     void Update()
     {
-        //Check for revealed cells
-        //Generate cells revealed by cam
+        if(UICanvas == null)
+        {
+            UICanvas = FindObjectOfType<Canvas>();
+        }
+        print("oremapcount: " + oreMap.Count + "\nOccCellCount: " + OccupiedCells.Count);
     }
     void FixedUpdate()
     {
+        OccCellcount = OccupiedCells.Count;
         UpdateUI();
     }
     Vector2[] CountCosts()
@@ -157,14 +171,14 @@ public class WorldGeneration : MonoBehaviour
         }
 
         tmpUI.text = UItext;
-       // tmpUI.text = inv.IdNames[inv.items[0].ID] + ": " + inv.items[0].count + "\n" + inv.IdNames[inv.items[1].ID] + ": " + inv.items[1].count;
+       
     }
     GameObject GenerateCell(Vector2 position)
     {
         GameObject cell = new GameObject();
         cell.transform.position = position;
         cell.transform.localScale = Vector3.one;
-        cell.transform.parent = gameObject.transform;
+        cell.transform.parent = gameObject.transform.GetChild(1);
         cell.name = oreMap[position].name;
         int ID = oreMap[position].ID;
         SpriteRenderer SR = cell.AddComponent<SpriteRenderer>();

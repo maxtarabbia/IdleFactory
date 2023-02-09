@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+[System.Serializable]
 public class Inventory
 {
+    [SerializeField]
     public Dictionary<int,string> IdNames = new Dictionary<int,string>();
 
 

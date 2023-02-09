@@ -47,6 +47,14 @@ public class Controls : MonoBehaviour
             TickEvents events = GetComponent<TickEvents>();
             events.TickJam(10);
         }
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            GetComponent<StateSaveLoad>().Save();
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            GetComponent<StateSaveLoad>().Load();
+        }
         world.selectedBuildableIndex = Keystroke;
         UIsprite.sprite = buildings.AllBuildings[Keystroke].prefab.GetComponent<SpriteRenderer>().sprite;
 
