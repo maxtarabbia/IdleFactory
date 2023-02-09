@@ -127,7 +127,7 @@ public class WorldGeneration : MonoBehaviour
         {
             UICanvas = FindObjectOfType<Canvas>();
         }
-        print("oremapcount: " + oreMap.Count + "\nOccCellCount: " + OccupiedCells.Count);
+        //print("oremapcount: " + oreMap.Count + "\nOccCellCount: " + OccupiedCells.Count);
     }
     void FixedUpdate()
     {

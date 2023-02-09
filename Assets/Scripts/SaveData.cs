@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-[System.Serializable]
 public class SaveData : MonoBehaviour
 {
 
@@ -16,6 +15,8 @@ public class SaveData : MonoBehaviour
     public SplitterData[] splitterdata;
     public RefineryData[] refinerydata;
     public CoreData[] coredata;
+
+    public Inventory worldinv;
 
     public string SaveIntoJson()
     {
@@ -30,11 +31,12 @@ public class SaveData : MonoBehaviour
 
         datatoSave.CamCoord = CamCoord;
         datatoSave.CamScale= CamScale;
+        datatoSave.worldinv= worldinv;
 
         string savedString = string.Empty;
 
 
-        savedString += JsonUtility.ToJson(datatoSave);
+        savedString += JsonUtility.ToJson(datatoSave,true);
 
         print(savedString);
 
@@ -51,56 +53,57 @@ public class SaveData : MonoBehaviour
 
         CamScale= savedData.CamScale;
         CamCoord= savedData.CamCoord;
+        worldinv = savedData.worldinv;
+        worldinv.PopulateItemIDs();
     }
-
-
 }
-[System.Serializable]
 public struct DatatoSave
 {
-    [SerializeField] public MinerData[] minerdata;
-    [SerializeField] public BeltData[] beltdata;
-    [SerializeField] public SplitterData[] splitterdata;
-    [SerializeField] public RefineryData[] refinerydata;
-    [SerializeField] public CoreData[] coredata;
+    public MinerData[] minerdata;
+    public BeltData[] beltdata;
+    public SplitterData[] splitterdata;
+    public RefineryData[] refinerydata;
+    public CoreData[] coredata;
 
     public Vector2 CamCoord;
     public float CamScale;
+    [SerializeField]
+    public Inventory worldinv;
 }
 [System.Serializable]
 public class MinerData
 {
-    [SerializeField] public Vector2 Position;
-    [SerializeField] public int Rotation;
-    [SerializeField] public int Progress;
+    public Vector2 Position;
+    public int Rotation;
+    public int Progress;
 }
 [System.Serializable]
 public class BeltData
 {
-    [SerializeField] public Vector2 Position;
-    [SerializeField] public int Rotation;
-    [SerializeField] public float Progress;
-    [SerializeField] public int itemID;
+    public Vector2 Position;
+    public int Rotation;
+    public float Progress;
+    public int itemID;
 }
 [System.Serializable]
 public class RefineryData
 {
-    [SerializeField] public Vector2 Position;
-    [SerializeField] public int Rotation;
-    [SerializeField] public float Progress;
-    [SerializeField] public Inventory inv1;
-    [SerializeField] public Inventory inv2;
+    public Vector2 Position;
+    public int Rotation;
+    public float Progress;
+    public Inventory inv1;
+    public Inventory inv2;
 }
 [System.Serializable]
 public class SplitterData
 {
-    [SerializeField] public Vector2 Position;
-    [SerializeField] public int Rotation;
-    [SerializeField] public float Progress;
-    [SerializeField] public int itemID;
+    public Vector2 Position;
+    public int Rotation;
+    public float Progress;
+    public int itemID;
 }
 [System.Serializable]
 public class CoreData
 {
-    [SerializeField] public Vector2 Position;
+    public Vector2 Position;
 }

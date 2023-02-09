@@ -9,9 +9,9 @@ public class Inventory
     [SerializeField]
     public Dictionary<int,string> IdNames = new Dictionary<int,string>();
 
-
+    [SerializeField]
     public ItemStack[] items;
-
+    [SerializeField]
     public int maxStackSize = int.MaxValue;
     public Inventory(int count)
     {
@@ -22,9 +22,9 @@ public class Inventory
         }
         PopulateItemIDs();
     }
-
-    void PopulateItemIDs()
+    public void PopulateItemIDs()
     {
+        IdNames = new Dictionary<int,string>();
         IdNames.Add(0, "Air");
         IdNames.Add(1, "Iron Ore");
         IdNames.Add(2, "Copper Ore");
@@ -107,6 +107,7 @@ public class Inventory
         }
     }
 }
+[System.Serializable]
 public class ItemStack
 {
     public int ID = -1;

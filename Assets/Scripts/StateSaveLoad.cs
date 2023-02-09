@@ -46,6 +46,8 @@ public class StateSaveLoad : MonoBehaviour
         }
         SaveData data = SerializeBuilding(childObjects.ToArray());
 
+        data.worldinv = FindObjectOfType<WorldGeneration>().inv;
+
         Camera cam = FindObjectOfType<Camera>();
         data.CamScale = cam.orthographicSize;
         data.CamCoord = cam.gameObject.transform.localPosition;
@@ -167,12 +169,12 @@ public class StateSaveLoad : MonoBehaviour
         }
         foreach (CoreData coreData in saveData.coredata)
         {
-            GameObject newCore = PlaceObjectManual(coreData.Position, 4, 0);
+            GameObject newCore = PlaceObjectManual(coreData.Position + new Vector2(-.5f,-.5f), 4, 0);
         }
         FindObjectOfType<Camera>().transform.position = new Vector3(saveData.CamCoord.x, saveData.CamCoord.y, -10);
         FindObjectOfType<Camera>().orthographicSize = saveData.CamScale;
 
-
+        FindObjectOfType<WorldGeneration>().inv = saveData.worldinv;
 
 
     }

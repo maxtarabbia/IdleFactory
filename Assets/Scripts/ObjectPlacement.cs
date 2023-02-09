@@ -84,7 +84,7 @@ public class ObjectPlacement : MonoBehaviour
                 }
             }
 
-            if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost,1.0f))
+            if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
                 placeObject();
         }
     }
