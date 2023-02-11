@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 6000394235719926256}
   - component: {fileID: 8799806321794726531}
   - component: {fileID: 7427830111449972129}
+  - component: {fileID: -4118159357335922493}
   m_Layer: 0
   m_Name: MinerPrefab
   m_TagString: Untagged
@@ -389,6 +390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0}
   coveredTileID: 
+  miningProgress: 0
   OreSprites:
   - {fileID: 21300000, guid: 1166c45cd8faced4eb7f954116d407c1, type: 3}
   - {fileID: 21300000, guid: 6a567ab51f18e4c408630d2fc227782b, type: 3}
@@ -489,3 +491,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-4118159357335922493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8220867538285562738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45facc88a0f2684428b3caacfa268835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size:
+    x: 2
+    y: 2
+  CornerSprite: {fileID: 21300000, guid: 7963305473174ea43b70c1abb3349fe3, type: 3}

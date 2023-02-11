@@ -43,6 +43,7 @@ public class Belt : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
+        FindObjectOfType<StateSaveLoad>().Save();
     }
 
     public void UpdateAdjacentBelts()
@@ -147,7 +148,7 @@ public class Belt : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        OnTick();
+        //OnTick();
     }
     void OnTick()
     {

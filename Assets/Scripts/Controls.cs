@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,13 +8,15 @@ public class Controls : MonoBehaviour
 {
     int Keystroke;
     WorldGeneration world;
-    Image UIsprite;
+    public Image UIsprite;
+    public TextMeshProUGUI UIText;
     Buildings buildings;
     // Start is called before the first frame update
     void Start()
     {
         world = FindObjectOfType<WorldGeneration>();
-        UIsprite = FindObjectOfType<Image>();
+        //UIsprite = GameObject.Find("InventoryDisplay").GetComponent<Image>();
+        //UIText = GameObject.Find("SelectedBuildingText").GetComponent<TextMeshPro>();
         Keystroke = 0;
         buildings = FindObjectOfType<Buildings>();
     }
@@ -53,10 +56,11 @@ public class Controls : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
-            GetComponent<StateSaveLoad>().Load();
+            //GetComponent<StateSaveLoad>().Load();
         }
         world.selectedBuildableIndex = Keystroke;
         UIsprite.sprite = buildings.AllBuildings[Keystroke].prefab.GetComponent<SpriteRenderer>().sprite;
+        UIText.text = buildings.AllBuildings[Keystroke].name;
 
     }
 }

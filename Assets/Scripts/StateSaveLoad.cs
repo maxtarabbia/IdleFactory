@@ -1,17 +1,19 @@
+using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Unity.Mathematics;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class StateSaveLoad : MonoBehaviour
 {
     GameObject objectToSave;
-    string path = "Assets/save1.dat";
+    string path = "Assets/Saves";
     // Start is called before the first frame update
 
     public List<MinerData> minerData = new List<MinerData>();
@@ -23,11 +25,18 @@ public class StateSaveLoad : MonoBehaviour
     Buildings buildings;
     WorldGeneration world;
 
+    int ticksToJam;
+
     SaveData saveData;
     void Start()
     {
         buildings = GetComponent<Buildings>();
         world = GetComponent<WorldGeneration>();
+        path = Application.persistentDataPath + path;
+        if(System.IO.File.Exists(path + "/Save1.dat"))
+        {
+            Load();
+        }
     }
 
     public void Save()
@@ -52,11 +61,14 @@ public class StateSaveLoad : MonoBehaviour
         data.CamScale = cam.orthographicSize;
         data.CamCoord = cam.gameObject.transform.localPosition;
 
+        data.time = Gettime();
+
         stringdata = JsonUtility.ToJson(data);
 
       //  data = "Assets/Prefabs/" + objectToSave.name + ".prefab";
 
-        System.IO.File.WriteAllText(path, stringdata);
+        Directory.CreateDirectory(path);
+        System.IO.File.WriteAllText(path + "/Save1.dat", stringdata);
     }
     public SaveData SerializeBuilding(GameObject[] go)
     {
@@ -129,7 +141,7 @@ public class StateSaveLoad : MonoBehaviour
     public void Load()
     {
         saveData = GetComponent<SaveData>();
-        saveData.LoadFromJson(System.IO.File.ReadAllText(path));
+        saveData.LoadFromJson(System.IO.File.ReadAllText(path + "/Save1.dat"));
 
         if (saveData.minerdata == null)
         {
@@ -158,6 +170,7 @@ public class StateSaveLoad : MonoBehaviour
             GameObject newSplitter = PlaceObjectManual(splitterData.Position,3, splitterData.Rotation);
             newSplitter.GetComponent<Splitter>().itemID.x = splitterData.itemID;
             newSplitter.GetComponent<Splitter>().itemID.y = splitterData.Progress;
+            newSplitter.GetComponent<Splitter>().world = FindObjectOfType<WorldGeneration>();
 
         }
         foreach (RefineryData refineryData in saveData.refinerydata)
@@ -176,7 +189,18 @@ public class StateSaveLoad : MonoBehaviour
 
         FindObjectOfType<WorldGeneration>().inv = saveData.worldinv;
 
-
+        int oldtime = saveData.time;
+        int ticks = (Gettime() - oldtime);
+        if (ticks < 0)
+        {
+            ticks += 216000;
+            print("boosted time by 216000");
+        }
+        ticksToJam = ticks * 50;
+    }
+    int Gettime()
+    {
+        return DateTime.Now.Second + DateTime.Now.Minute * 60 + DateTime.Now.Hour * 3600;
     }
     void clearMap()
     {
@@ -205,6 +229,22 @@ public class StateSaveLoad : MonoBehaviour
         }
 
 
+    }
+    private void LateUpdate()
+    {
+        if(ticksToJam != 0)
+        {
+            if (ticksToJam > 100)
+            {
+                FindObjectOfType<TickEvents>().TickJam(100);
+                ticksToJam -= 100;
+            }
+            else
+            {
+                FindObjectOfType<TickEvents>().TickJam(ticksToJam);
+                ticksToJam= 0;
+            }
+        }
     }
     public GameObject PlaceObjectManual(Vector3 pos, int BuildableIndex, int Rotation)
     {

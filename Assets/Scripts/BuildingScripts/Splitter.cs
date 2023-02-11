@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Splitter : MonoBehaviour
 {
-    WorldGeneration world;
+    public WorldGeneration world;
     Vector2 pos;
     float timeTotravel = 0.3f;
     public Vector2 itemID;
@@ -39,6 +39,7 @@ public class Splitter : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
+        FindObjectOfType<StateSaveLoad>().Save();
     }
     void FixOutputs()
     {
@@ -83,7 +84,7 @@ public class Splitter : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        OnTick();
+        //OnTick();
     }
     void OnTick()
     {
@@ -131,7 +132,6 @@ public class Splitter : MonoBehaviour
     }
     bool OutputItem(int itemID)
     {
-       // OutIter += (int)Random.Range(-0.5f, 1.49999f);
         if(OutIter >= 3)
         {
             OutIter -= 3;

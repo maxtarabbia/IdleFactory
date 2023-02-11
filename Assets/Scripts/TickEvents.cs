@@ -10,12 +10,8 @@ public class TickEvents : MonoBehaviour
     public event MyEventHandler MyEvent;
     void FixedUpdate()
     {
-        /*
-        if (MyEvent != null && Time.frameCount%10 == 0)
-        {
+        if(MyEvent != null)
             MyEvent();
-        }
-        */
     }
     public void TickJam(int iterations)
     {

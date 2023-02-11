@@ -1,11 +1,13 @@
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 public class SaveData : MonoBehaviour
 {
+    public int time;
 
     public Vector2 CamCoord;
     public float CamScale;
@@ -23,6 +25,8 @@ public class SaveData : MonoBehaviour
 
         DatatoSave datatoSave = new DatatoSave();
 
+        datatoSave.time = time;
+
         datatoSave.minerdata= minerdata;
         datatoSave.beltdata= beltdata;
         datatoSave.splitterdata= splitterdata;
@@ -32,6 +36,8 @@ public class SaveData : MonoBehaviour
         datatoSave.CamCoord = CamCoord;
         datatoSave.CamScale= CamScale;
         datatoSave.worldinv= worldinv;
+
+        
 
         string savedString = string.Empty;
 
@@ -51,6 +57,8 @@ public class SaveData : MonoBehaviour
         refinerydata= savedData.refinerydata;
         coredata= savedData.coredata;
 
+        time = savedData.time;
+
         CamScale= savedData.CamScale;
         CamCoord= savedData.CamCoord;
         worldinv = savedData.worldinv;
@@ -59,6 +67,8 @@ public class SaveData : MonoBehaviour
 }
 public struct DatatoSave
 {
+    public int time;
+
     public MinerData[] minerdata;
     public BeltData[] beltdata;
     public SplitterData[] splitterdata;

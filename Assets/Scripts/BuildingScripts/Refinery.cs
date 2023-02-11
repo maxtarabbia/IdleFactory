@@ -7,9 +7,7 @@ public class Refinery : MonoBehaviour
     WorldGeneration world;
     public Vector2 pos;
 
-    [SerializeField]
     public Inventory inputInv;
-    [SerializeField]
     public Inventory outputInv;
 
     Vector2 outputCoord = new Vector2();
@@ -29,7 +27,9 @@ public class Refinery : MonoBehaviour
         world = FindObjectOfType<WorldGeneration>();
         pos = gameObject.transform.position;
         pos += new Vector2(-0.5f, -0.5f);
+        if(inputInv == null || inputInv.items.Length == 0)
         inputInv = new Inventory(1);
+        if(outputInv == null || outputInv.items.Length == 0)
         outputInv = new Inventory(1);
 
         inputInv.maxStackSize = 10;
@@ -38,11 +38,12 @@ public class Refinery : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
+        FindObjectOfType<StateSaveLoad>().Save();
     }
 
     void FixedUpdate()
     {
-        OnTick();
+       // OnTick();
     }
     void SetOutput()
     {

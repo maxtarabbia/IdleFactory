@@ -29,9 +29,6 @@ public class Miner : MonoBehaviour
      //Start is called before the first frame update
     void Awake()
     {
-        
-
-
         coveredTileID = Enumerable.Repeat(-1, 4).ToArray();
         transforms = GetComponentsInChildren<Transform>();
         basePos = transforms[1].localPosition;
@@ -48,15 +45,37 @@ public class Miner : MonoBehaviour
 
         pos = gameObject.transform.position;
         pos += new Vector2(-0.5f,-0.5f);
-        coveredTileID[0] = world.oreMap[pos].ID;
-        coveredTileID[1] = world.oreMap[pos + new Vector2(0,1)].ID;
-        coveredTileID[2] = world.oreMap[pos + new Vector2(1,0)].ID;
-        coveredTileID[3] = world.oreMap[pos + new Vector2(1,1)].ID;
-
+        try
+        {
+            coveredTileID[0] = world.oreMap[pos].ID;
+            coveredTileID[1] = world.oreMap[pos + new Vector2(0, 1)].ID;
+            coveredTileID[2] = world.oreMap[pos + new Vector2(1, 0)].ID;
+            coveredTileID[3] = world.oreMap[pos + new Vector2(1, 1)].ID;
+        }
+        catch 
+        {
+            if(!world.oreMap.ContainsKey(pos))
+            {
+                world.SetDefaultCell(pos);
+            }
+            if (!world.oreMap.ContainsKey(pos + new Vector2(0, 1)))
+            {
+                world.SetDefaultCell(pos + new Vector2(0, 1));
+            }
+            if (!world.oreMap.ContainsKey(pos + new Vector2(1, 0)))
+            {
+                world.SetDefaultCell(pos + new Vector2(1, 0));
+            }
+            if (!world.oreMap.ContainsKey(pos + new Vector2(1, 1)))
+            {
+                world.SetDefaultCell(pos + new Vector2(1, 1));
+            }
+        }
         checkForOre();
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
+        FindObjectOfType<StateSaveLoad>().Save();
 
     }
     // On Hover Events
@@ -103,7 +122,7 @@ public class Miner : MonoBehaviour
     
     private void FixedUpdate()
     {
-        OnTick();
+        //OnTick();
     }
     void OnTick()
     {

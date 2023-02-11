@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5317116801753572214}
   - component: {fileID: 5891399416402255133}
   - component: {fileID: 2555554900948256933}
+  - component: {fileID: 5137627015894068009}
   m_Layer: 0
   m_Name: BeltPrefab
   m_TagString: Untagged
@@ -46,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2adb1d6f45b6b1d4bb43aa2f1ec3233a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  world: {fileID: 0}
+  itemID: {x: 0, y: 0}
   spriteAssets:
   - {fileID: 21300000, guid: 1166c45cd8faced4eb7f954116d407c1, type: 3}
   - {fileID: 21300000, guid: 6a567ab51f18e4c408630d2fc227782b, type: 3}
@@ -152,3 +155,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5137627015894068009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7357262922707060930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45facc88a0f2684428b3caacfa268835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size:
+    x: 1
+    y: 1
+  CornerSprite: {fileID: 21300000, guid: 7963305473174ea43b70c1abb3349fe3, type: 3}

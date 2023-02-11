@@ -15,6 +15,7 @@ public class SceneLoader : MonoBehaviour
 
 
         SceneManager.LoadScene(SceneToLoad);
+
         SceneManager.UnloadSceneAsync("MenuScene");
     }
     private void OnMouseDown()

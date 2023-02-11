@@ -45,10 +45,10 @@ public class WorldGeneration : MonoBehaviour
         inv = new Inventory(4);
         if (GodMode)
         {
-            inv.AddItem(1, 500);
-            inv.AddItem(2, 500);
-            inv.AddItem(3, 500);
-            inv.AddItem(4, 500);
+            inv.AddItem(1, 5000);
+            inv.AddItem(2, 5000);
+            inv.AddItem(3, 5000);
+            inv.AddItem(4, 5000);
         }
         else
         {

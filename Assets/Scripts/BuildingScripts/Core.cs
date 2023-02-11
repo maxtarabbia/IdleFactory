@@ -12,6 +12,7 @@ public class Core : MonoBehaviour
         pos = gameObject.transform.position;
         pos += new Vector2(-0.5f, -0.5f);
         world = FindObjectOfType<WorldGeneration>();
+        FindObjectOfType<StateSaveLoad>().Save();
     }
     public void InputItem(int ID)
     {
