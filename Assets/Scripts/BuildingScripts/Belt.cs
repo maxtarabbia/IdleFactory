@@ -43,7 +43,7 @@ public class Belt : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
-        FindObjectOfType<StateSaveLoad>().Save();
+         
     }
 
     public void UpdateAdjacentBelts()
@@ -272,15 +272,43 @@ public class Belt : MonoBehaviour
         return false;
 
     }
+    public void RotateCW()
+    {
+        gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+        FixRotations();
+        UpdateBeltInput();
+        UpdateAdjacentBelts();
+         
+    }
+    public void RotateCCW()
+    {
+        gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+        FixRotations();
+        UpdateBeltInput();
+        UpdateAdjacentBelts();
+         
+    }
+    public void DeleteThis()
+    {
+        Buildings builds = FindObjectOfType<Buildings>();
+        world.inv.AddItem((int)builds.AllBuildings[1].cost[0].x, (int)builds.AllBuildings[1].cost[0].y);
+
+        world.OccupiedCells.Remove(pos);
+
+        builds.AllBuildings[1].count--;
+         
+        Destroy(gameObject);
+    }
     private void OnMouseOver()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.R))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
             FixRotations();
             UpdateBeltInput();
             UpdateAdjacentBelts();
-
+             
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -288,6 +316,7 @@ public class Belt : MonoBehaviour
             FixRotations();
             UpdateBeltInput();
             UpdateAdjacentBelts();
+             
         }
         if (Input.GetKey(KeyCode.Delete))
         {
@@ -297,9 +326,11 @@ public class Belt : MonoBehaviour
             world.OccupiedCells.Remove(pos);
 
             builds.AllBuildings[1].count--;
-
+             
             Destroy(gameObject);
+
         }
+        */
     }
     void FixRotations()
     {

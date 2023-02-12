@@ -38,7 +38,7 @@ public class Refinery : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
-        FindObjectOfType<StateSaveLoad>().Save();
+         
     }
 
     void FixedUpdate()
@@ -101,17 +101,20 @@ public class Refinery : MonoBehaviour
     }
     private void OnMouseOver()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.R))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
             SetOutput();
             FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+             
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
             SetOutput();
             FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+             
         }
         if (Input.GetKey(KeyCode.Delete))
         {
@@ -125,11 +128,41 @@ public class Refinery : MonoBehaviour
             world.OccupiedCells.Remove(pos + new Vector2(1, 1));
 
             builds.AllBuildings[2].count--;
-
+             
             Destroy(gameObject);
         }
+        */
     }
-    bool OutputItem()
+    public void RotateCW()
+    {
+        gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+        SetOutput();
+        FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+         
+    }
+    public void RotateCCW()
+    {
+        gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+        SetOutput();
+        FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+         
+    }
+    public void Delete()
+    {
+        Buildings builds = FindObjectOfType<Buildings>();
+        world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, (int)builds.AllBuildings[2].cost[0].y);
+        world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, (int)builds.AllBuildings[2].cost[1].y);
+
+        world.OccupiedCells.Remove(pos);
+        world.OccupiedCells.Remove(pos + new Vector2(0, 1));
+        world.OccupiedCells.Remove(pos + new Vector2(1, 0));
+        world.OccupiedCells.Remove(pos + new Vector2(1, 1));
+
+        builds.AllBuildings[2].count--;
+         
+        Destroy(gameObject);
+    }
+        bool OutputItem()
     {
         int itemID = outputInv.items[0].ID;
 

@@ -7,7 +7,7 @@ using UnityEngine.VFX;
 
 public class Miner : MonoBehaviour
 {
-    public Dictionary<Vector2,Cell> worldmap;
+    public Dictionary<Vector2, Cell> worldmap;
     public Vector2 pos;
     public int[] coveredTileID;
 
@@ -25,8 +25,8 @@ public class Miner : MonoBehaviour
 
     bool isOnOre = false;
 
-     public Sprite[] OreSprites;
-     //Start is called before the first frame update
+    public Sprite[] OreSprites;
+    //Start is called before the first frame update
     void Awake()
     {
         coveredTileID = Enumerable.Repeat(-1, 4).ToArray();
@@ -44,7 +44,7 @@ public class Miner : MonoBehaviour
 
 
         pos = gameObject.transform.position;
-        pos += new Vector2(-0.5f,-0.5f);
+        pos += new Vector2(-0.5f, -0.5f);
         try
         {
             coveredTileID[0] = world.oreMap[pos].ID;
@@ -52,9 +52,9 @@ public class Miner : MonoBehaviour
             coveredTileID[2] = world.oreMap[pos + new Vector2(1, 0)].ID;
             coveredTileID[3] = world.oreMap[pos + new Vector2(1, 1)].ID;
         }
-        catch 
+        catch
         {
-            if(!world.oreMap.ContainsKey(pos))
+            if (!world.oreMap.ContainsKey(pos))
             {
                 world.SetDefaultCell(pos);
             }
@@ -81,12 +81,12 @@ public class Miner : MonoBehaviour
     // On Hover Events
     private void OnMouseOver()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+       /* if (Input.GetKeyDown(KeyCode.R))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
             FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         }
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
             FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
@@ -97,14 +97,39 @@ public class Miner : MonoBehaviour
             world.inv.AddItem((int)builds.AllBuildings[0].cost[0].x, (int)builds.AllBuildings[0].cost[0].y);
 
             world.OccupiedCells.Remove(pos);
-            world.OccupiedCells.Remove(pos + new Vector2(0,1));
-            world.OccupiedCells.Remove(pos + new Vector2(1,0));
-            world.OccupiedCells.Remove(pos + new Vector2(1,1));
+            world.OccupiedCells.Remove(pos + new Vector2(0, 1));
+            world.OccupiedCells.Remove(pos + new Vector2(1, 0));
+            world.OccupiedCells.Remove(pos + new Vector2(1, 1));
 
             builds.AllBuildings[0].count--;
 
             Destroy(gameObject);
         }
+       */
+    }
+    public void RotateCW()
+    {
+        gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+        FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+    }
+    public void RotateCCW()
+    {
+        gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+        FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+    }
+    public void Delete()
+    {
+        Buildings builds = FindObjectOfType<Buildings>();
+        world.inv.AddItem((int)builds.AllBuildings[0].cost[0].x, (int)builds.AllBuildings[0].cost[0].y);
+
+        world.OccupiedCells.Remove(pos);
+        world.OccupiedCells.Remove(pos + new Vector2(0, 1));
+        world.OccupiedCells.Remove(pos + new Vector2(1, 0));
+        world.OccupiedCells.Remove(pos + new Vector2(1, 1));
+
+        builds.AllBuildings[0].count--;
+
+        Destroy(gameObject);
     }
     private void OnDestroy()
     {

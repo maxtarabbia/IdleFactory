@@ -25,7 +25,9 @@ public class StateSaveLoad : MonoBehaviour
     Buildings buildings;
     WorldGeneration world;
 
-    int ticksToJam;
+    public int totalTicks;
+    public int ticksToJam;
+    int ticksAtATime = 20;
 
     SaveData saveData;
     void Start()
@@ -65,10 +67,11 @@ public class StateSaveLoad : MonoBehaviour
 
         stringdata = JsonUtility.ToJson(data);
 
-      //  data = "Assets/Prefabs/" + objectToSave.name + ".prefab";
 
         Directory.CreateDirectory(path);
         System.IO.File.WriteAllText(path + "/Save1.dat", stringdata);
+
+        //print("Game Saved to: " + path);
     }
     public SaveData SerializeBuilding(GameObject[] go)
     {
@@ -189,6 +192,9 @@ public class StateSaveLoad : MonoBehaviour
 
         FindObjectOfType<WorldGeneration>().inv = saveData.worldinv;
 
+        FindObjectOfType<Camera_Movement>().updateCamSize();
+        //FindObjectOfType<WorldGeneration>().Initialize(24);
+
         int oldtime = saveData.time;
         int ticks = (Gettime() - oldtime);
         if (ticks < 0)
@@ -197,6 +203,7 @@ public class StateSaveLoad : MonoBehaviour
             print("boosted time by 216000");
         }
         ticksToJam = ticks * 50;
+        totalTicks = ticksToJam;
     }
     int Gettime()
     {
@@ -234,10 +241,10 @@ public class StateSaveLoad : MonoBehaviour
     {
         if(ticksToJam != 0)
         {
-            if (ticksToJam > 100)
+            if (ticksToJam > ticksAtATime)
             {
-                FindObjectOfType<TickEvents>().TickJam(100);
-                ticksToJam -= 100;
+                FindObjectOfType<TickEvents>().TickJam(ticksAtATime);
+                ticksToJam -= ticksAtATime;
             }
             else
             {
@@ -268,5 +275,9 @@ public class StateSaveLoad : MonoBehaviour
             }
         }
         return instancedObj;
+    }
+    public void DeleteSave()
+    {
+        System.IO.File.Delete(path + "/Save1.dat");
     }
 }

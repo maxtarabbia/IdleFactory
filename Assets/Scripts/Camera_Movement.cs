@@ -31,6 +31,9 @@ public class Camera_Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PlayerPrefs.GetInt("isLoaded") == 0)
+            return;
+
         frameOffset = Vector3.zero;
         if (Input.GetKey(Up))
         {

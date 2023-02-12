@@ -39,7 +39,7 @@ public class Splitter : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
-        FindObjectOfType<StateSaveLoad>().Save();
+ 
     }
     void FixOutputs()
     {
@@ -185,16 +185,18 @@ public class Splitter : MonoBehaviour
         return false;
     }
     private void OnMouseOver()
-    {
+    {/*
         if (Input.GetKeyDown(KeyCode.R))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
             FixRotations();
+     
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
             FixRotations();
+     
         }
         if (Input.GetKey(KeyCode.Delete))
         {
@@ -204,9 +206,33 @@ public class Splitter : MonoBehaviour
             world.OccupiedCells.Remove(pos);
 
             builds.AllBuildings[3].count--;
-
+     
             Destroy(gameObject);
         }
+        */
+    }
+    public void RotateCW()
+    {
+        gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+        FixRotations();
+ 
+    }
+    public void RotateCCW()
+    {
+        gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+        FixRotations();
+ 
+    }
+    public void Delete()
+    {
+        Buildings builds = FindObjectOfType<Buildings>();
+        world.inv.AddItem((int)builds.AllBuildings[3].cost[0].x, (int)builds.AllBuildings[3].cost[0].y);
+
+        world.OccupiedCells.Remove(pos);
+
+        builds.AllBuildings[3].count--;
+ 
+        Destroy(gameObject);
     }
     void FixRotations()
     {

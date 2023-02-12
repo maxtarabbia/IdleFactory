@@ -22,7 +22,7 @@ public class TickEvents : MonoBehaviour
                 MyEvent();
                 
             }
-            print("Tick jammed "+ iterations+ " times.");
+            //print("Tick jammed "+ iterations+ " times.");
         }
     }
 }

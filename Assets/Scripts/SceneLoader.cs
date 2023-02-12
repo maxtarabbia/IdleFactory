@@ -6,20 +6,27 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-
-    public string SceneToLoad;
+    [SerializeField]
+    public string SceneString;
+    public static string SceneToLoad; 
+    private void Start()
+    {
+        SceneToLoad = SceneString;
+    }
     public void LoadMainScene()
     {
 
         print("attempting to Launch: " + SceneToLoad);
+        PlayerPrefs.SetString("Level", SceneToLoad);
 
-
-        SceneManager.LoadScene(SceneToLoad);
+        SceneManager.LoadScene("LoadingScene");
 
         SceneManager.UnloadSceneAsync("MenuScene");
     }
-    private void OnMouseDown()
+    public void NewGame()
     {
-            LoadMainScene();
+        string path = Application.persistentDataPath + "Assets/Saves";
+        System.IO.File.Delete(path + "/Save1.dat");
+        LoadMainScene();
     }
 }
