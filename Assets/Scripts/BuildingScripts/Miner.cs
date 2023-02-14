@@ -182,7 +182,8 @@ public class Miner : MonoBehaviour
                 { 
                     world.inv.AddItem(1, 1);
                     effect.SetTexture("spriteTex", OreSprites[0].texture);
-                    effect.Play();
+                    if (PlayerPrefs.GetInt("isLoaded") == 1)
+                        effect.Play();
                 }
                 break;
             case 2: //copper ore
@@ -191,7 +192,8 @@ public class Miner : MonoBehaviour
                 {
                     world.inv.AddItem(2, 1);
                     effect.SetTexture("spriteTex", OreSprites[1].texture);
-                    effect.Play();
+                    if(PlayerPrefs.GetInt("isLoaded") == 1)
+                        effect.Play();
                 }
                 break;
         }
@@ -230,6 +232,8 @@ public class Miner : MonoBehaviour
         {
             Belt beltScript = cellObj.GetComponent<Belt>();
             Refinery refineryScript = cellObj.GetComponent<Refinery>();
+            Core corescript = cellObj.GetComponent<Core>();
+            Splitter splitterscript = cellObj.GetComponent<Splitter>();
             if (beltScript != null)
             {
                 if (beltScript.inputItem(itemID, 0.5f))
@@ -243,6 +247,22 @@ public class Miner : MonoBehaviour
                 {
                     return true;
                 }
+            }
+            else if (corescript != null)
+            {
+                corescript.InputItem(itemID);
+                return true;
+            }
+            else if (splitterscript != null)
+            {
+                if (Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 0)
+                {
+                    if (splitterscript.inputItem(itemID, 0))
+                    {
+                        return true;
+                    }
+                }
+
             }
         }
         return false;

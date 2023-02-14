@@ -22,25 +22,48 @@ public class hoveringSprites : MonoBehaviour
     public float BarOffset;
 
     float timeHeld;
-    bool isSelected;
+
+    public int2[] inputCoords;
+    public int2 outputCoord;
 
     float THDelSave;
+    float BracketOffset;
     // Start is called before the first frame update
     void Start()
     {
+        BracketOffset = 0.1f;
         InitializeMaterial();
         AlignDeletingBar();
         for(int i = 0; i < 4; i++)
         {
             InitializeSprite(i);
-            sprites[i].transform.Rotate(new Vector3(0,0,i*90));
+            sprites[i].transform.localEulerAngles = (new Vector3(0,0,i*90));
             sprites[i].isStatic= true;
         }
-        sprites[0].transform.position += new Vector3((size.x - 1) / -2, (size.y - 1)/2,0);
-        sprites[1].transform.position += new Vector3((size.x - 1) / -2, (size.y - 1) / -2, 0);
-        sprites[2].transform.position += new Vector3((size.x-1) / 2, (size.y - 1) / -2, 0);
-        sprites[3].transform.position += new Vector3((size.x-1) / 2,( size.y - 1)/ 2, 0);
-        
+
+        SetTranforms();
+    }
+    private void Update()
+    {
+        if (BracketOffset >= 0)
+        {
+            BracketOffset -= 0.004f;
+            SetTranforms();
+            //print("BracketOffset:" + BracketOffset);
+        }
+    }
+    void SetTranforms()
+    {
+        float ydist = (size.y - 1) / 2;
+        float xdist = (size.x - 1) / 2;
+
+        xdist += BracketOffset * size.x;
+        ydist += BracketOffset * size.y;
+
+        sprites[0].transform.localPosition = new Vector3(-xdist, ydist, 0);
+        sprites[1].transform.localPosition = new Vector3(-xdist, -ydist, 0);
+        sprites[2].transform.localPosition = new Vector3(xdist, -ydist, 0);
+        sprites[3].transform.localPosition = new Vector3(xdist, ydist, 0);
     }
     void InitializeMaterial()
     {
@@ -72,7 +95,7 @@ public class hoveringSprites : MonoBehaviour
         foreach(GameObject sprite in sprites)
         {
             sprite.SetActive(true);
-            isSelected= true;
+            BracketOffset = 0.1f;
         }
     }
     private void OnMouseExit()
@@ -80,7 +103,6 @@ public class hoveringSprites : MonoBehaviour
         foreach (GameObject sprite in sprites)
         {
             sprite.SetActive(false);
-            isSelected= false;
         }
         DeletingBarMaterial.SetFloat("_Value", 0);
         timeHeld = 0;
@@ -122,8 +144,8 @@ public class hoveringSprites : MonoBehaviour
             DeletingBarMaterial.SetFloat("_Value",timeHeld/0.5f);
             if(timeHeld > 0.5f)
             {
-                FindObjectOfType<StateSaveLoad>().Save();
                 Delete?.Invoke();
+                FindObjectOfType<StateSaveLoad>().LateSave();
             }
         }
         else

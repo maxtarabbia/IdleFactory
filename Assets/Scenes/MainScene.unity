@@ -792,6 +792,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIsprite: {fileID: 806666827}
   UIText: {fileID: 2061852761}
+  PauseMenu: {fileID: 5252251340578030313, guid: 92358d8470893344cb971ea0a670756c,
+    type: 3}
 --- !u!114 &1298894908
 MonoBehaviour:
   m_ObjectHideFlags: 0

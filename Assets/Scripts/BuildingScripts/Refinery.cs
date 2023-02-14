@@ -157,7 +157,7 @@ public class Refinery : MonoBehaviour
         world.OccupiedCells.Remove(pos + new Vector2(0, 1));
         world.OccupiedCells.Remove(pos + new Vector2(1, 0));
         world.OccupiedCells.Remove(pos + new Vector2(1, 1));
-
+            
         builds.AllBuildings[2].count--;
          
         Destroy(gameObject);
@@ -172,6 +172,8 @@ public class Refinery : MonoBehaviour
         {
             Belt beltScript = cellObj.GetComponent<Belt>();
             Refinery refineryScript = cellObj.GetComponent<Refinery>();
+            Splitter splitterscript = cellObj.GetComponent<Splitter>();
+            Core corescript = cellObj.GetComponent<Core>();
             if (beltScript != null)
             {
                 if (beltScript.inputItem(itemID, 0.5f))
@@ -185,6 +187,18 @@ public class Refinery : MonoBehaviour
                 {
                     return true;
                 }
+            }
+            else if(splitterscript != null)
+            {
+                if(splitterscript.inputItem(itemID,0.5f))
+                {
+                    return true;
+                }
+            }
+            else if(corescript != null)
+            {
+                corescript.InputItem(itemID);
+                return true;
             }
         }
         return false;

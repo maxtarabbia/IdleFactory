@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoaderButton : MonoBehaviour
 {
     [SerializeField]
     public string SceneString;
@@ -16,12 +16,11 @@ public class SceneLoader : MonoBehaviour
     public void LoadMainScene()
     {
 
-        print("attempting to Launch: " + SceneToLoad);
+        //print("attempting to Launch: " + SceneToLoad);
         PlayerPrefs.SetString("Level", SceneToLoad);
 
         SceneManager.LoadScene("LoadingScene");
 
-        SceneManager.UnloadSceneAsync("MenuScene");
     }
     public void NewGame()
     {

@@ -148,6 +148,7 @@ public class Splitter : MonoBehaviour
             Belt beltscript = cellObj.GetComponent<Belt>();
             Refinery refineryScript = cellObj.GetComponent<Refinery>();
             Splitter splitter = cellObj.GetComponent<Splitter>();
+            Core corescript = cellObj.GetComponent<Core>();
             if (beltscript != null)
             {
                 float spot = 0;
@@ -180,6 +181,11 @@ public class Splitter : MonoBehaviour
                         return true;
                     }
                 }
+            }
+            else if (corescript != null)
+            {
+                corescript.InputItem(itemID);
+                return true;
             }
         }
         return false;

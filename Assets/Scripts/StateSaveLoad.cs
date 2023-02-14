@@ -16,6 +16,8 @@ public class StateSaveLoad : MonoBehaviour
     string path = "Assets/Saves";
     // Start is called before the first frame update
 
+    bool SaveNext = false;
+
     public List<MinerData> minerData = new List<MinerData>();
     public List<BeltData> beltData = new List<BeltData>();
     public List<RefineryData> refineryData = new List<RefineryData>();
@@ -27,7 +29,7 @@ public class StateSaveLoad : MonoBehaviour
 
     public int totalTicks;
     public int ticksToJam;
-    int ticksAtATime = 20;
+    int ticksAtATime = 5000;
 
     SaveData saveData;
     void Start()
@@ -39,6 +41,10 @@ public class StateSaveLoad : MonoBehaviour
         {
             Load();
         }
+    }
+    public void LateSave()
+    {
+        SaveNext = true;
     }
 
     public void Save()
@@ -241,6 +247,11 @@ public class StateSaveLoad : MonoBehaviour
     {
         if(ticksToJam != 0)
         {
+            if (ticksAtATime != Mathf.RoundToInt(MathF.Ceiling(totalTicks / 5000f)) * 50)
+            {
+                ticksAtATime = Mathf.RoundToInt(MathF.Ceiling(totalTicks / 5000f)) * 50;
+                //print("ticks At a time: "+ ticksAtATime);
+            }
             if (ticksToJam > ticksAtATime)
             {
                 FindObjectOfType<TickEvents>().TickJam(ticksAtATime);
@@ -251,6 +262,10 @@ public class StateSaveLoad : MonoBehaviour
                 FindObjectOfType<TickEvents>().TickJam(ticksToJam);
                 ticksToJam= 0;
             }
+        }
+        if(SaveNext)
+        {
+            Save();
         }
     }
     public GameObject PlaceObjectManual(Vector3 pos, int BuildableIndex, int Rotation)

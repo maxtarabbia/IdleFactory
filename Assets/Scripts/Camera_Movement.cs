@@ -33,6 +33,8 @@ public class Camera_Movement : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("isLoaded") == 0)
             return;
+        if (GameObject.Find("PauseMenu(Clone)"))
+            return;
 
         frameOffset = Vector3.zero;
         if (Input.GetKey(Up))

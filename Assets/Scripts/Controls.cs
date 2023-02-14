@@ -11,6 +11,7 @@ public class Controls : MonoBehaviour
     public Image UIsprite;
     public TextMeshProUGUI UIText;
     Buildings buildings;
+    public GameObject PauseMenu;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +58,18 @@ public class Controls : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             //GetComponent<StateSaveLoad>().Load();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameObject PM = GameObject.Find("PauseMenu(Clone)");
+            if (PM == null)
+            {
+                Instantiate(PauseMenu);
+            }
+            else
+            {
+                GameObject.Find("ResumeButton").GetComponent<ResumeButton>().DestroyMenu();
+            }
         }
         world.selectedBuildableIndex = Keystroke;
         UIsprite.sprite = buildings.AllBuildings[Keystroke].prefab.GetComponent<SpriteRenderer>().sprite;

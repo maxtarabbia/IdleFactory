@@ -63,5 +63,5 @@ Material:
     m_Colors:
     - _MainColor: {r: 0.9, g: 0.9, b: 0.9, a: 0}
     - _OutlineColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
-    - _Size: {r: 0.4, g: 0.19, b: 0, a: 0}
+    - _Size: {r: 0.4, g: 0.15, b: 0, a: 0}
   m_BuildTextureStacks: []
