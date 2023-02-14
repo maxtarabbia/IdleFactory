@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class SetCanvasCam : MonoBehaviour
 {
+    bool FoundCam;
     // Start is called before the first frame update
     void Start()
     {
-        FindObjectOfType<Canvas>().worldCamera = FindObjectOfType<Camera>();
+        GetComponentInChildren<Canvas>().worldCamera = FindObjectOfType<Camera>();
     }
+    private void Update()
+    {
+        
+    }
+
 
 }

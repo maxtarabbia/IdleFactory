@@ -721,6 +721,8 @@ MonoBehaviour:
   inv:
     items: []
     maxStackSize: 0
+  CurrencyRates: 01000000010000000200000003000000
+  Currency: 0
   CamCoord: {x: 0, y: 0}
   CamSize: {x: 0, y: 0}
   OccCellcount: 0
@@ -794,6 +796,8 @@ MonoBehaviour:
   UIText: {fileID: 2061852761}
   PauseMenu: {fileID: 5252251340578030313, guid: 92358d8470893344cb971ea0a670756c,
     type: 3}
+  InventoryMenu: {fileID: 1014948220717433351, guid: 3fafd88a74c249f4dba13c6ac3176a3a,
+    type: 3}
 --- !u!114 &1298894908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,6 +844,7 @@ MonoBehaviour:
   time: 0
   CamCoord: {x: 0, y: 0}
   CamScale: 0
+  Currency: 0
   minerdata: []
   beltdata: []
   splitterdata: []
@@ -945,8 +950,9 @@ MonoBehaviour:
 
     item 3'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6e6cd2d86ee75424eab335b600149b5b, type: 2}
+  m_sharedMaterial: {fileID: -1310213380022959455, guid: 6e6cd2d86ee75424eab335b600149b5b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1080,8 +1086,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6e6cd2d86ee75424eab335b600149b5b, type: 2}
+  m_sharedMaterial: {fileID: -1310213380022959455, guid: 6e6cd2d86ee75424eab335b600149b5b,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

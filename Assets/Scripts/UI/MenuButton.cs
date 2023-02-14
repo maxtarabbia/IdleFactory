@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.U2D;
 
-public class MenuButton : MonoBehaviour
+public class MenuButtons : MonoBehaviour
 {
     public UnityEvent OnClick;
     SpriteRenderer SR;

@@ -24,6 +24,8 @@ public class WorldGeneration : MonoBehaviour
     public Canvas UICanvas;
 
     public Inventory inv;
+    public int[] CurrencyRates;
+    public int Currency;
 
     public Vector2 CamCoord;
     public Vector2 CamSize;
@@ -169,6 +171,7 @@ public class WorldGeneration : MonoBehaviour
             }
 
         }
+        UItext += "\n$" + Currency;
 
         tmpUI.text = UItext;
        

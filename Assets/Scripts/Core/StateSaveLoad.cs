@@ -70,6 +70,7 @@ public class StateSaveLoad : MonoBehaviour
         data.CamCoord = cam.gameObject.transform.localPosition;
 
         data.time = Gettime();
+        data.Currency = world.Currency;
 
         stringdata = JsonUtility.ToJson(data);
 
@@ -197,6 +198,7 @@ public class StateSaveLoad : MonoBehaviour
         FindObjectOfType<Camera>().orthographicSize = saveData.CamScale;
 
         FindObjectOfType<WorldGeneration>().inv = saveData.worldinv;
+        FindObjectOfType<WorldGeneration>().Currency = saveData.Currency;
 
         FindObjectOfType<Camera_Movement>().updateCamSize();
         //FindObjectOfType<WorldGeneration>().Initialize(24);
@@ -247,9 +249,9 @@ public class StateSaveLoad : MonoBehaviour
     {
         if(ticksToJam != 0)
         {
-            if (ticksAtATime != Mathf.RoundToInt(MathF.Ceiling(totalTicks / 5000f)) * 50)
+            if (ticksAtATime != Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50)
             {
-                ticksAtATime = Mathf.RoundToInt(MathF.Ceiling(totalTicks / 5000f)) * 50;
+                ticksAtATime = Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50;
                 //print("ticks At a time: "+ ticksAtATime);
             }
             if (ticksToJam > ticksAtATime)

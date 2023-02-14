@@ -12,6 +12,8 @@ public class SaveData : MonoBehaviour
     public Vector2 CamCoord;
     public float CamScale;
 
+    public int Currency;
+
     public MinerData[] minerdata;
     public BeltData[] beltdata;
     public SplitterData[] splitterdata;
@@ -32,7 +34,7 @@ public class SaveData : MonoBehaviour
         datatoSave.splitterdata= splitterdata;
         datatoSave.coredata= coredata;
         datatoSave.refinerydata= refinerydata;
-
+        datatoSave.Currency= Currency;
         datatoSave.CamCoord = CamCoord;
         datatoSave.CamScale= CamScale;
         datatoSave.worldinv= worldinv;
@@ -62,6 +64,7 @@ public class SaveData : MonoBehaviour
         CamScale= savedData.CamScale;
         CamCoord= savedData.CamCoord;
         worldinv = savedData.worldinv;
+        Currency = savedData.Currency;
         worldinv.PopulateItemIDs();
     }
 }
@@ -77,6 +80,9 @@ public struct DatatoSave
 
     public Vector2 CamCoord;
     public float CamScale;
+
+    public int Currency;
+
     [SerializeField]
     public Inventory worldinv;
 }

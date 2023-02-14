@@ -12,6 +12,7 @@ public class Controls : MonoBehaviour
     public TextMeshProUGUI UIText;
     Buildings buildings;
     public GameObject PauseMenu;
+    public GameObject InventoryMenu;
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +70,18 @@ public class Controls : MonoBehaviour
             else
             {
                 GameObject.Find("ResumeButton").GetComponent<ResumeButton>().DestroyMenu();
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            GameObject IM = GameObject.Find("World Inv(Clone)");
+            if(IM == null)
+            {
+                Instantiate(InventoryMenu);
+            }
+            else
+            {
+                Destroy(IM);
             }
         }
         world.selectedBuildableIndex = Keystroke;
