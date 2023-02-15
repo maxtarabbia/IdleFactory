@@ -8,18 +8,20 @@ public class ObjectPlacement : MonoBehaviour
     WorldGeneration world;
     Buildings buildings;
 
-    bool isOccupied;
+    public bool isHovered;
     GameObject SpriteGhost;
     int LastBuildableIndex;
-    // Start is called before the first frame update
     void Start()
     {
 
     }
     private void OnMouseExit()
     {
-        if(SpriteGhost!= null)
-        Destroy(SpriteGhost);
+        isHovered = false;
+        if (SpriteGhost != null)
+        {
+            DestroyImmediate(SpriteGhost);
+        }
     }
     // Update is called once per frame
     void OnMouseDown()
@@ -61,6 +63,7 @@ public class ObjectPlacement : MonoBehaviour
     }
     private void OnMouseEnter()
     {
+        isHovered= true;
         if (world == null)
         {
             world = FindObjectOfType<WorldGeneration>();
@@ -89,7 +92,6 @@ public class ObjectPlacement : MonoBehaviour
                     }
                 }
             }
-
             if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
                 placeObject();
         }
@@ -105,6 +107,7 @@ public class ObjectPlacement : MonoBehaviour
         if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
             Transposition += new Vector3(0.5f, 0.5f, 0f);
         SpriteGhost = new GameObject();
+        SpriteGhost.name = "SpriteGhost";
         SpriteGhost.AddComponent<SpriteRenderer>();
         SpriteGhost.GetComponent<SpriteRenderer>().sprite = buildings.AllBuildings[world.selectedBuildableIndex].prefab.GetComponent<SpriteRenderer>().sprite;
         SpriteGhost.GetComponent<SpriteRenderer>().material = buildings.AllBuildings[world.selectedBuildableIndex].prefab.GetComponent<SpriteRenderer>().sharedMaterial;
@@ -126,7 +129,7 @@ public class ObjectPlacement : MonoBehaviour
             {
                 ResetSprite();
             }
-         if(Input.GetKeyDown(KeyCode.R) && SpriteGhost != null)
+            if(Input.GetKeyDown(KeyCode.R) && SpriteGhost != null)
             {
                 if(Input.GetKey(KeyCode.LeftShift))
                 {
@@ -140,14 +143,14 @@ public class ObjectPlacement : MonoBehaviour
                 buildings.AllBuildings[world.selectedBuildableIndex].rotation = (int)SpriteGhost.transform.rotation.eulerAngles.z;
                 ResetSprite();
             }
-         
+            
         }
     }
     public void ResetSprite()
     {
         if (SpriteGhost != null)
         {
-            Destroy(SpriteGhost);
+            DestroyImmediate(SpriteGhost);
             InitializeSpriteGhost();
         }
     }
