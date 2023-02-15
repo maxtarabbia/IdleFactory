@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-1378659490631578718
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Button_SG_Material
-  m_Shader: {fileID: -6465566751694194690, guid: 87bef3f6fea46f042bb1248e15b90403,
+  m_Name: Shader Graphs_GenericSpriteShader
+  m_Shader: {fileID: -6465566751694194690, guid: c8c2ba8069585fe44976ad06328913c4,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -55,13 +42,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Bevel: 0.05
-    - _OutlineDepth: 0.02
+    - _IsGhost: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ShadowDist: 0.03
-    m_Colors:
-    - _MainColor: {r: 0.9, g: 0.9, b: 0.9, a: 0}
-    - _OutlineColor: {r: 0.2, g: 0.2, b: 0.2, a: 0}
-    - _Size: {r: 0.44, g: 0.15, b: 0, a: 0}
+    m_Colors: []
   m_BuildTextureStacks: []
+--- !u!114 &7689672804175860996
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7

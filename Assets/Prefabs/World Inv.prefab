@@ -346,8 +346,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sell items
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6e6cd2d86ee75424eab335b600149b5b, type: 2}
-  m_sharedMaterial: {fileID: -1310213380022959455, guid: 6e6cd2d86ee75424eab335b600149b5b,
+  m_fontAsset: {fileID: 11400000, guid: 8a39be6695a7baf47a966c3355855a07, type: 2}
+  m_sharedMaterial: {fileID: -5530275386899717260, guid: 8a39be6695a7baf47a966c3355855a07,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

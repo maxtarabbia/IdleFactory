@@ -8,12 +8,19 @@ public class ObjectPlacement : MonoBehaviour
     WorldGeneration world;
     Buildings buildings;
 
+    bool isOccupied;
+    GameObject SpriteGhost;
+    int LastBuildableIndex;
     // Start is called before the first frame update
     void Start()
     {
 
     }
-
+    private void OnMouseExit()
+    {
+        if(SpriteGhost!= null)
+        Destroy(SpriteGhost);
+    }
     // Update is called once per frame
     void OnMouseDown()
     {
@@ -54,14 +61,13 @@ public class ObjectPlacement : MonoBehaviour
     }
     private void OnMouseEnter()
     {
+        if (world == null)
+        {
+            world = FindObjectOfType<WorldGeneration>();
+            buildings = FindObjectOfType<Buildings>();
+        }
         if (Input.GetMouseButton(0))
         {
-            if (world == null)
-            {
-                world = FindObjectOfType<WorldGeneration>();
-                buildings = FindObjectOfType<Buildings>();
-            }
-
             Vector3 Transposition = gameObject.transform.position;
 
             if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
@@ -87,10 +93,67 @@ public class ObjectPlacement : MonoBehaviour
             if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
                 placeObject();
         }
+        else
+        {
+            InitializeSpriteGhost();
+        }
     }
+    public void InitializeSpriteGhost()
+    {
+        Vector3 Transposition = gameObject.transform.position;
+
+        if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
+            Transposition += new Vector3(0.5f, 0.5f, 0f);
+        SpriteGhost = new GameObject();
+        SpriteGhost.AddComponent<SpriteRenderer>();
+        SpriteGhost.GetComponent<SpriteRenderer>().sprite = buildings.AllBuildings[world.selectedBuildableIndex].prefab.GetComponent<SpriteRenderer>().sprite;
+        SpriteGhost.GetComponent<SpriteRenderer>().material = buildings.AllBuildings[world.selectedBuildableIndex].prefab.GetComponent<SpriteRenderer>().sharedMaterial;
+        SpriteGhost.GetComponent<SpriteRenderer>().material.SetFloat("_IsGhost", 0.8f);
+        SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", new Color(0.5f,1,0.8f));
+        SpriteGhost.GetComponent<SpriteRenderer>().sortingLayerName = "UI";
+        SpriteGhost.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        SpriteGhost.transform.position = Transposition + new Vector3(0, 0, -1);
+        SpriteGhost.transform.parent = gameObject.transform;
+        SpriteGhost.isStatic = true;
+        SpriteGhost.transform.Rotate(0, 0, buildings.AllBuildings[world.selectedBuildableIndex].rotation);
+        LastBuildableIndex = world.selectedBuildableIndex;
+    }
+    private void Update()
+    {
+        if (world != null)
+        {
+            if (world.selectedBuildableIndex != LastBuildableIndex)
+            {
+                ResetSprite();
+            }
+         if(Input.GetKeyDown(KeyCode.R) && SpriteGhost != null)
+            {
+                if(Input.GetKey(KeyCode.LeftShift))
+                {
+                    SpriteGhost.transform.Rotate(new Vector3(0f, 0f, 90f));
+                }
+                else
+                {
+                    SpriteGhost.transform.Rotate(new Vector3(0f, 0f, -90f));
+                }
+
+                buildings.AllBuildings[world.selectedBuildableIndex].rotation = (int)SpriteGhost.transform.rotation.eulerAngles.z;
+                ResetSprite();
+            }
+         
+        }
+    }
+    public void ResetSprite()
+    {
+        if (SpriteGhost != null)
+        {
+            Destroy(SpriteGhost);
+            InitializeSpriteGhost();
+        }
+    }
+    
     void placeObject()
     {
-
         Vector3 Transposition = gameObject.transform.position;
         if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0) Transposition += new Vector3(0.5f, 0.5f, 0f);
 

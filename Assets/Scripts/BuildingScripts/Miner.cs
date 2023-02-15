@@ -25,6 +25,8 @@ public class Miner : MonoBehaviour
 
     bool isOnOre = false;
 
+    int calls;
+
     public Sprite[] OreSprites;
     //Start is called before the first frame update
     void Awake()
@@ -170,14 +172,29 @@ public class Miner : MonoBehaviour
     }
     void MineItem()
     {
-        int minedItemID = coveredTileID[Mathf.FloorToInt(Random.value * 4)];
+        if(calls > 40)
+        {
+            checkForOre();
+        }
+        if(calls > 60)
+        {
+            isOnOre = false;
+            print("Broken Miner at:" + pos);
+            checkForOre();
+            calls = 0;
+            return;
+        }
+        float randfloat = Random.value;
+        int minedItemID = coveredTileID[Mathf.FloorToInt(randfloat * 4)];
         switch (minedItemID)
         {
             case 0: //blank tile
+                calls++;
                 MineItem();
+
                 break;
             case 1: //iron ore
-
+                calls = 0;
                 if (!OutputItem(1))
                 { 
                     world.inv.AddItem(1, 1);
@@ -187,7 +204,7 @@ public class Miner : MonoBehaviour
                 }
                 break;
             case 2: //copper ore
-
+                calls = 0;
                 if (!OutputItem(2))
                 {
                     world.inv.AddItem(2, 1);
@@ -201,6 +218,7 @@ public class Miner : MonoBehaviour
     }
     void checkForOre()
     {
+        isOnOre = false;
         foreach (int tile in coveredTileID)
         {
             if (tile != 0)
