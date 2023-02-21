@@ -114,7 +114,7 @@ public class ObjectPlacement : MonoBehaviour
         SpriteGhost.GetComponent<SpriteRenderer>().material.SetFloat("_IsGhost", 0.8f);
         SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", new Color(0.5f,1,0.8f));
         SpriteGhost.GetComponent<SpriteRenderer>().sortingLayerName = "UI";
-        SpriteGhost.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        SpriteGhost.GetComponent<SpriteRenderer>().sortingOrder = 1;
         SpriteGhost.transform.position = Transposition + new Vector3(0, 0, -1);
         SpriteGhost.transform.parent = gameObject.transform;
         SpriteGhost.isStatic = true;

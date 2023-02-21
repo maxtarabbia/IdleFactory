@@ -314,7 +314,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467132028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 12}
+  m_LocalPosition: {x: 0, y: 0, z: 50}
   m_LocalScale: {x: 200, y: 200, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -460,7 +460,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -726,6 +726,22 @@ MonoBehaviour:
   CamCoord: {x: 0, y: 0}
   CamSize: {x: 0, y: 0}
   OccCellcount: 0
+  speedstates:
+    MinerInfo:
+      speed: 3
+      cost: 1
+      speedScale: 1.05
+      costScale: 1.5
+    RefineryInfo:
+      speed: 4
+      cost: 1
+      speedScale: 1.05
+      costScale: 1.5
+    BeltInfo:
+      speed: 2
+      cost: 1
+      speedScale: 1.1
+      costScale: 1.5
   GodMode: 0
 --- !u!114 &1298894906
 MonoBehaviour:
@@ -850,6 +866,22 @@ MonoBehaviour:
   splitterdata: []
   refinerydata: []
   coredata: []
+  speedstates:
+    MinerInfo:
+      speed: 0
+      cost: 0
+      speedScale: 0
+      costScale: 0
+    RefineryInfo:
+      speed: 0
+      cost: 0
+      speedScale: 0
+      costScale: 0
+    BeltInfo:
+      speed: 0
+      cost: 0
+      speedScale: 0
+      costScale: 0
   worldinv:
     items: []
     maxStackSize: 0
@@ -921,7 +953,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 115.79999, y: -33.7}
+  m_AnchoredPosition: {x: 115.79999, y: -33.700012}
   m_SizeDelta: {x: 200, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1736114159

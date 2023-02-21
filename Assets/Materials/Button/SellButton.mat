@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Button_SG_Material Seller
+  m_Name: SellButton
   m_Shader: {fileID: -6465566751694194690, guid: 87bef3f6fea46f042bb1248e15b90403,
     type: 3}
   m_Parent: {fileID: 0}
@@ -56,12 +56,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _Bevel: 0.04
-    - _OutlineDepth: 0.01
+    - _OutlineDepth: 0.025
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ShadowDist: 0.02
+    - _ShadowDist: 0.03
     m_Colors:
     - _MainColor: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 0}
     - _OutlineColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
-    - _Size: {r: 0.45, g: 0.3, b: 0, a: 0}
+    - _Size: {r: 0.31, g: 0.28, b: 0, a: 0}
   m_BuildTextureStacks: []

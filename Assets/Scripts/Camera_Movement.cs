@@ -35,6 +35,8 @@ public class Camera_Movement : MonoBehaviour
             return;
         if (GameObject.Find("PauseMenu(Clone)"))
             return;
+        if (GameObject.Find("World Inv(Clone)"))
+            return;
 
         frameOffset = Vector3.zero;
         if (Input.GetKey(Up))

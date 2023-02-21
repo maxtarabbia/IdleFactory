@@ -13,22 +13,27 @@ public class InventorySeller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Camera cam = FindObjectOfType<Camera>();
+        gameObject.transform.position = new Vector3(cam.gameObject.transform.position.x, cam.gameObject.transform.position.y, transform.position.z);
+        gameObject.transform.localScale *= cam.orthographicSize;
         inv = FindObjectOfType<WorldGeneration>().inv;
         stacks = new int[inv.items.Length];
         itemSprites= new GameObject[inv.items.Length];
         SellerButtons = new ItemSeller[inv.items.Length];
         for(int i = 0; i < inv.items.Length; i++)
         {
+            if (inv.items[i].ID == -1)
+                continue;
             stacks[i] = inv.items[i].count;
             itemSprites[i] = new GameObject();
             itemSprites[i].AddComponent<SpriteRenderer>();
             itemSprites[i].GetComponent<SpriteRenderer>().sprite = spriteAssets[inv.items[i].ID - 1];
             itemSprites[i].GetComponent<SpriteRenderer>().sortingLayerID = gameObject.GetComponent<SpriteRenderer>().sortingLayerID;
-            itemSprites[i].GetComponent<SpriteRenderer>().sortingOrder = 5;
+            itemSprites[i].GetComponent<SpriteRenderer>().sortingOrder = 3;
             //itemSprites[i].transform.parent = transform;
-            itemSprites[i].transform.parent = transform.parent.transform;
-            itemSprites[i].transform.localPosition = new Vector3(-270, 110 - i * 90,-30);
-            itemSprites[i].transform.localScale = Vector3.one * 60;
+            itemSprites[i].transform.parent = transform;
+            itemSprites[i].transform.localPosition = new Vector3(-4.6f, 2.8f - i * 1.1f, -0.5f) * 0.08f;
+            itemSprites[i].transform.localScale = Vector3.one * 0.08f;
 
             SellerButtons[i] = new ItemSeller();
             SellerButtons[i].ButtonPrefab = SellerButtonPrefab;
@@ -48,7 +53,7 @@ public class InventorySeller : MonoBehaviour
         public int ID;
         public GameObject[] SellButtons;
         public GameObject ButtonPrefab;
-        int buttoncount = 5;
+        int buttoncount = 7;
         public GameObject parent;
 
         public void SetButtons()
@@ -58,9 +63,9 @@ public class InventorySeller : MonoBehaviour
             {
                 SellButtons[i] = Instantiate(ButtonPrefab);
                 SellButtons[i].transform.parent = parent.transform;
-                SellButtons[i].transform.localPosition = new Vector3(1.4f + i * 1.8f, 0);
+                SellButtons[i].transform.localPosition = new Vector3(1.4f + i * 1.2f, 0);
                 SellButtons[i].transform.localScale = Vector3.one * 1.7f;
-                SellButtons[i].GetComponent<SpriteRenderer>().sortingOrder = 5;
+                SellButtons[i].GetComponent<SpriteRenderer>().sortingOrder = 3;
                 SellButtons[i].GetComponent<SpriteRenderer>().sortingLayerName = "UI";
                 SellButtons[i].GetComponent<ItemSellButton>().ID = ID;
                 SellButtons[i].GetComponent<ItemSellButton>().count = (int)Mathf.Pow(10, i);

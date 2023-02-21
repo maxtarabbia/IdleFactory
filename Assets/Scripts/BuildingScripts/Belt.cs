@@ -6,7 +6,7 @@ public class Belt : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
-    float timeTotravel = 0.3f;
+    public float timeTotravel = 2f;
     public Vector2 itemID;
 
     Vector2 outputCoord = new Vector2();
@@ -41,6 +41,8 @@ public class Belt : MonoBehaviour
         UpdateBeltInput();
         UpdateAdjacentBelts();
 
+        timeTotravel = world.speedstates.BeltInfo.speed;
+
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
          
@@ -70,7 +72,7 @@ public class Belt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // UpdateSprites();
+
     }
     public void UpdateBeltInput()
     {

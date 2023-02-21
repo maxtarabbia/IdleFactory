@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   world: {fileID: 0}
+  timeTotravel: 2
   itemID: {x: 0, y: 0}
   spriteAssets:
   - {fileID: 21300000, guid: 1166c45cd8faced4eb7f954116d407c1, type: 3}

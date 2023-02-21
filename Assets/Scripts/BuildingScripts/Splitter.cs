@@ -6,7 +6,7 @@ public class Splitter : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
-    float timeTotravel = 0.3f;
+    public float timeTotravel = 0.3f;
     public Vector2 itemID;
 
     Vector2[] OutputPos;
@@ -34,7 +34,9 @@ public class Splitter : MonoBehaviour
         sprite.GetComponent<SpriteRenderer>().sortingLayerName = "Particles";
 
         itemID = new Vector2(-1, 0);
-        
+
+        timeTotravel = world.speedstates.BeltInfo.speed;
+
         FixOutputs();
 
         tickEvents = world.GetComponent<TickEvents>();

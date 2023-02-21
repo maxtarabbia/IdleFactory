@@ -26,7 +26,15 @@ public class Controls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        GameObject PM = GameObject.Find("PauseMenu(Clone)");
+        if (PM != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                GameObject.Find("ResumeButton").GetComponent<ResumeButton>().DestroyMenu();
+            }
+            return;
+        }
         if (Input.GetKey(KeyCode.Alpha1))
         {
             Keystroke= 0;
@@ -62,15 +70,7 @@ public class Controls : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            GameObject PM = GameObject.Find("PauseMenu(Clone)");
-            if (PM == null)
-            {
-                Instantiate(PauseMenu);
-            }
-            else
-            {
-                GameObject.Find("ResumeButton").GetComponent<ResumeButton>().DestroyMenu();
-            }
+            Instantiate(PauseMenu);
         }
         if(Input.GetKeyDown(KeyCode.E))
         {

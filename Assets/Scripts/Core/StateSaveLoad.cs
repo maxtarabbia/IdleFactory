@@ -1,14 +1,8 @@
-using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class StateSaveLoad : MonoBehaviour
 {
@@ -65,6 +59,9 @@ public class StateSaveLoad : MonoBehaviour
 
         data.worldinv = FindObjectOfType<WorldGeneration>().inv;
 
+        data.speedstates = FindObjectOfType<WorldGeneration>().speedstates;
+
+
         Camera cam = FindObjectOfType<Camera>();
         data.CamScale = cam.orthographicSize;
         data.CamCoord = cam.gameObject.transform.localPosition;
@@ -88,6 +85,7 @@ public class StateSaveLoad : MonoBehaviour
         splitterData= new List<SplitterData>();
         coreData= new List<CoreData>();
 
+        
 
         string outputstring = new string("");
 
@@ -100,6 +98,7 @@ public class StateSaveLoad : MonoBehaviour
                 minerdat.Position = miner.pos;
                 minerdat.Rotation = Mathf.RoundToInt(miner.gameObject.transform.eulerAngles.z);
                 minerdat.Progress = miner.miningProgress;
+                minerdat.Speed = miner.secondsPerItem;
                 minerData.Add(minerdat);
             }
             else if(thisObj.TryGetComponent<Belt>(out Belt belt))
@@ -109,6 +108,7 @@ public class StateSaveLoad : MonoBehaviour
                 beltdat.Rotation = Mathf.RoundToInt(belt.gameObject.transform.eulerAngles.z);
                 beltdat.Progress = belt.itemID.y;
                 beltdat.itemID = Mathf.RoundToInt(belt.itemID.x);
+                beltdat.Speed = belt.timeTotravel;
                 beltData.Add(beltdat);
             }
             else if (thisObj.TryGetComponent<Refinery>(out Refinery refinery))
@@ -119,6 +119,7 @@ public class StateSaveLoad : MonoBehaviour
                 refinerydat.inv1 = refinery.inputInv;
                 refinerydat.inv2 = refinery.outputInv;
                 refinerydat.Progress = refinery.RProgress;
+                refinerydat.Speed = refinery.RTime;
                 refineryData.Add(refinerydat);
             }
             else if (thisObj.TryGetComponent<Splitter>(out Splitter splitter))
@@ -128,6 +129,7 @@ public class StateSaveLoad : MonoBehaviour
                 splitterdat.Rotation = Mathf.RoundToInt(splitter.gameObject.transform.eulerAngles.z);
                 splitterdat.Progress = splitter.itemID.y;
                 splitterdat.itemID = Mathf.RoundToInt(splitter.itemID.x);
+                splitterdat.Speed = splitter.timeTotravel;
                 splitterData.Add(splitterdat);
             }
             else if(thisObj.TryGetComponent(out Core core))
@@ -139,6 +141,7 @@ public class StateSaveLoad : MonoBehaviour
         }
         SaveData saveData = GetComponent<SaveData>();
 
+       
 
         saveData.minerdata = minerData.ToArray();
         saveData.beltdata= beltData.ToArray();
@@ -165,6 +168,7 @@ public class StateSaveLoad : MonoBehaviour
         foreach (MinerData minerData in saveData.minerdata)
         {
             GameObject newMiner = PlaceObjectManual(minerData.Position, 0, minerData.Rotation);
+            newMiner.GetComponent<Miner>().secondsPerItem = minerData.Speed;
             newMiner.GetComponent<Miner>().miningProgress = minerData.Progress;
         }
         foreach (BeltData beltData in saveData.beltdata)
@@ -172,6 +176,7 @@ public class StateSaveLoad : MonoBehaviour
             GameObject newBelt = PlaceObjectManual(beltData.Position, 1, beltData.Rotation);
             newBelt.GetComponent<Belt>().itemID.x = beltData.itemID;
             newBelt.GetComponent<Belt>().itemID.y = beltData.Progress;
+            newBelt.GetComponent<Belt>().timeTotravel = beltData.Speed;
             newBelt.GetComponent<Belt>().world = FindObjectOfType<WorldGeneration>();
      //       newBelt.GetComponent<Belt>().UpdateSpritePositions(false);
         }
@@ -180,15 +185,18 @@ public class StateSaveLoad : MonoBehaviour
             GameObject newSplitter = PlaceObjectManual(splitterData.Position,3, splitterData.Rotation);
             newSplitter.GetComponent<Splitter>().itemID.x = splitterData.itemID;
             newSplitter.GetComponent<Splitter>().itemID.y = splitterData.Progress;
+            newSplitter.GetComponent<Splitter>().timeTotravel = splitterData.Speed;
             newSplitter.GetComponent<Splitter>().world = FindObjectOfType<WorldGeneration>();
 
         }
         foreach (RefineryData refineryData in saveData.refinerydata)
         {
             GameObject newRefinery = PlaceObjectManual(refineryData.Position,2, refineryData.Rotation);
-            newRefinery.GetComponent<Refinery>().RProgress = Mathf.RoundToInt(refineryData.Progress);
+            newRefinery.GetComponent<Refinery>().RProgress = refineryData.Progress;
             newRefinery.GetComponent<Refinery>().inputInv = refineryData.inv1;
             newRefinery.GetComponent<Refinery>().outputInv = refineryData.inv2;
+            newRefinery.GetComponent<Refinery>().RTime = refineryData.Speed;
+
         }
         foreach (CoreData coreData in saveData.coredata)
         {
@@ -200,6 +208,8 @@ public class StateSaveLoad : MonoBehaviour
         FindObjectOfType<WorldGeneration>().inv = saveData.worldinv;
         FindObjectOfType<WorldGeneration>().Currency = saveData.Currency;
 
+        FindObjectOfType<WorldGeneration>().speedstates = saveData.speedstates;
+
         FindObjectOfType<Camera_Movement>().updateCamSize();
         //FindObjectOfType<WorldGeneration>().Initialize(24);
 
@@ -207,10 +217,14 @@ public class StateSaveLoad : MonoBehaviour
         int ticks = (Gettime() - oldtime);
         if (ticks < 0)
         {
-            ticks += 216000;
-            print("boosted time by 216000");
+            ticks += 86400;
+            print("boosted time by 86400");
         }
-        ticksToJam = ticks * 50;
+        else if(GameObject.Find("LoadingScreen"))
+        {
+            PlayerPrefs.SetInt("isloaded", 1);
+        }
+        ticksToJam = math.clamp(ticks * 50,0,360000);
         totalTicks = ticksToJam;
     }
     int Gettime()
@@ -249,10 +263,11 @@ public class StateSaveLoad : MonoBehaviour
     {
         if(ticksToJam != 0)
         {
-            if (ticksAtATime != Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50)
+            int optimaltick = math.clamp(Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50,5,20000);
+            if (ticksAtATime != optimaltick)
             {
-                ticksAtATime = Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50;
-                //print("ticks At a time: "+ ticksAtATime);
+                ticksAtATime = optimaltick;
+                print("ticks At a time: "+ ticksAtATime);
             }
             if (ticksToJam > ticksAtATime)
             {

@@ -47,7 +47,7 @@ public class hoveringSprites : MonoBehaviour
     {
         if (BracketOffset >= 0)
         {
-            BracketOffset -= 0.004f;
+            BracketOffset -= 0.8f * Time.deltaTime;
             SetTranforms();
             //print("BracketOffset:" + BracketOffset);
         }

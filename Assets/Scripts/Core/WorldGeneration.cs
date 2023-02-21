@@ -31,6 +31,8 @@ public class WorldGeneration : MonoBehaviour
     public Vector2 CamSize;
 
     public int OccCellcount;
+    [SerializeField]
+    public SpeedStates speedstates;
 
     [SerializeField]
     public Dictionary<Vector2, GameObject> OccupiedCells = new Dictionary<Vector2, GameObject>();
@@ -171,7 +173,7 @@ public class WorldGeneration : MonoBehaviour
             }
 
         }
-        UItext += "\n$" + Currency;
+        UItext += "\n$" + IntLib.IntToString(Currency);
 
         tmpUI.text = UItext;
        
@@ -226,3 +228,4 @@ public class Cell
     public int ID;
     public string name;
 }
+

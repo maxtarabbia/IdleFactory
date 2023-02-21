@@ -20,6 +20,8 @@ public class SaveData : MonoBehaviour
     public RefineryData[] refinerydata;
     public CoreData[] coredata;
 
+    public SpeedStates speedstates;
+
     public Inventory worldinv;
 
     public string SaveIntoJson()
@@ -39,6 +41,7 @@ public class SaveData : MonoBehaviour
         datatoSave.CamScale= CamScale;
         datatoSave.worldinv= worldinv;
 
+        datatoSave.speedstates= speedstates;
         
 
         string savedString = string.Empty;
@@ -61,6 +64,8 @@ public class SaveData : MonoBehaviour
 
         time = savedData.time;
 
+        speedstates = savedData.speedstates;
+
         CamScale= savedData.CamScale;
         CamCoord= savedData.CamCoord;
         worldinv = savedData.worldinv;
@@ -78,6 +83,8 @@ public struct DatatoSave
     public RefineryData[] refinerydata;
     public CoreData[] coredata;
 
+    public SpeedStates speedstates;
+
     public Vector2 CamCoord;
     public float CamScale;
 
@@ -91,7 +98,8 @@ public class MinerData
 {
     public Vector2 Position;
     public int Rotation;
-    public int Progress;
+    public float Progress;
+    public float Speed;
 }
 [System.Serializable]
 public class BeltData
@@ -100,6 +108,7 @@ public class BeltData
     public int Rotation;
     public float Progress;
     public int itemID;
+    public float Speed;
 }
 [System.Serializable]
 public class RefineryData
@@ -109,6 +118,7 @@ public class RefineryData
     public float Progress;
     public Inventory inv1;
     public Inventory inv2;
+    public float Speed;
 }
 [System.Serializable]
 public class SplitterData
@@ -117,6 +127,7 @@ public class SplitterData
     public int Rotation;
     public float Progress;
     public int itemID;
+    public float Speed;
 }
 [System.Serializable]
 public class CoreData

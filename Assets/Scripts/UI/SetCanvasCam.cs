@@ -1,3 +1,4 @@
+using Mono.CompilerServices.SymbolWriter;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,20 @@ using UnityEngine;
 public class SetCanvasCam : MonoBehaviour
 {
     bool FoundCam;
+    Canvas canvas;
     // Start is called before the first frame update
     void Start()
     {
-        GetComponentInChildren<Canvas>().worldCamera = FindObjectOfType<Camera>();
+        canvas = GetComponentInChildren<Canvas>();
+        if(canvas.isRootCanvas)
+        {
+            canvas.worldCamera = FindObjectOfType<Camera>();
+        }
+        else
+        {
+            canvas.overrideSorting = true;
+        }
+
     }
     private void Update()
     {

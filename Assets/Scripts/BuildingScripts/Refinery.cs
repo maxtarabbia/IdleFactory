@@ -15,8 +15,8 @@ public class Refinery : MonoBehaviour
 
     TickEvents tickEvents;
 
-    public int RProgress;
-    int RTime = 50;
+    public float RProgress;
+    public float RTime = 1;
 
     public int inCount;
     public int outCount;
@@ -35,6 +35,8 @@ public class Refinery : MonoBehaviour
         inputInv.maxStackSize = 10;
         outputInv.maxStackSize = 10;
         SetOutput();
+
+        RTime = world.speedstates.RefineryInfo.speed;
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
@@ -75,7 +77,7 @@ public class Refinery : MonoBehaviour
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count == 0)
             return;
 
-        RProgress++;
+        RProgress += Time.fixedDeltaTime;
         if (RProgress >= RTime)
         {
             int inID = inputInv.items[0].ID;

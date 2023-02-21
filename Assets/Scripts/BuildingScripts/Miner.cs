@@ -20,8 +20,8 @@ public class Miner : MonoBehaviour
 
     Transform[] transforms;
 
-    public int miningProgress;
-    int ticksToMine = 100;
+    public float miningProgress;
+    public float secondsPerItem = 4;
 
     bool isOnOre = false;
 
@@ -44,6 +44,7 @@ public class Miner : MonoBehaviour
 
         effect = GetComponent<VisualEffect>();
 
+        secondsPerItem = world.speedstates.MinerInfo.speed;
 
         pos = gameObject.transform.position;
         pos += new Vector2(-0.5f, -0.5f);
@@ -155,20 +156,20 @@ public class Miner : MonoBehaviour
     {
         if (isOnOre)
         {
-            if (miningProgress >= ticksToMine)
+            if (miningProgress >= secondsPerItem)
             {
                 MineItem();
                 miningProgress = 0;
             }
             MiningAnimation();
-            miningProgress += 1;
+            miningProgress += Time.fixedDeltaTime;
         }
     }
     void MiningAnimation()
     {
         transforms[1].localPosition = basePos + new Vector3(Random.value - 0.5f, Random.value - 0.5f) * 0.01f;
         transforms[2].localPosition = basePos + new Vector3(Random.value - 0.5f, Random.value - 0.5f) * 0.02f;
-        transforms[3].Rotate(Vector3.forward * (200/ticksToMine));
+        transforms[3].Rotate(Vector3.forward * (5/secondsPerItem));
     }
     void MineItem()
     {
