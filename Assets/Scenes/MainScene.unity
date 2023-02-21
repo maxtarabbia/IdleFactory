@@ -519,8 +519,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 0.02
   zoomSpeed: 3
-  minMaxSpeed: {x: 0.4, y: 1}
-  MinMaxSize: {x: 0.5, y: 20}
+  minMaxSpeed: {x: 0.4, y: 1.5}
+  MinMaxSize: {x: 0.5, y: 30}
 --- !u!1 &806666825
 GameObject:
   m_ObjectHideFlags: 0

@@ -101,15 +101,15 @@ public class WorldGeneration : MonoBehaviour
     }
     public void SetDefaultCell(Vector2 position)
     {
-        float scale = 0.1f;
+        float scale = 0.05f;
         Cell newcell = new Cell();
-        if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.4)
+        if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.55)
         {
             newcell.ID = 1;
             newcell.name = "Iron Ore";
             
         }
-        else if (noise.cnoise(new Vector2(Seed *20, Seed - 85) + position * scale) > 0.5)
+        else if (noise.cnoise(new Vector2(Seed *20, Seed - 85) + position * scale) > 0.55)
         {
             newcell.ID = 2;
             newcell.name = "Copper Ore";
@@ -161,12 +161,12 @@ public class WorldGeneration : MonoBehaviour
         {
             if (item.ID != -1)
             {
-                UItext = UItext + inv.IdNames[item.ID] + ": " + item.count;
+                UItext = UItext + inv.IdNames[item.ID] + ": " + IntLib.IntToString(item.count);
                 for(int i = 0; i < costs.Length; i++)
                 {
                     if (costs[i].x == item.ID)
                     {
-                        UItext = UItext + " - " + costs[i].y;
+                        UItext = UItext + " - " + IntLib.IntToString(Mathf.RoundToInt(costs[i].y));
                     }
                 }
                 UItext = UItext + "\n";
@@ -182,6 +182,7 @@ public class WorldGeneration : MonoBehaviour
     {
         GameObject cell = new GameObject();
         cell.transform.position = position;
+        cell.transform.position += new Vector3(0, 0, 10);
         cell.transform.localScale = Vector3.one;
         cell.transform.parent = gameObject.transform.GetChild(1);
         cell.name = oreMap[position].name;

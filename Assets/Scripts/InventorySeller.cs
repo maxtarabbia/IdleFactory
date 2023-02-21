@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class InventorySeller : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class InventorySeller : MonoBehaviour
     public Sprite[] spriteAssets;
     public GameObject SellerButtonPrefab;
     ItemSeller[] SellerButtons;
+    public TMP_FontAsset fontAsset;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,14 +29,28 @@ public class InventorySeller : MonoBehaviour
                 continue;
             stacks[i] = inv.items[i].count;
             itemSprites[i] = new GameObject();
-            itemSprites[i].AddComponent<SpriteRenderer>();
-            itemSprites[i].GetComponent<SpriteRenderer>().sprite = spriteAssets[inv.items[i].ID - 1];
-            itemSprites[i].GetComponent<SpriteRenderer>().sortingLayerID = gameObject.GetComponent<SpriteRenderer>().sortingLayerID;
-            itemSprites[i].GetComponent<SpriteRenderer>().sortingOrder = 3;
-            //itemSprites[i].transform.parent = transform;
+            itemSprites[i].name = inv.IdNames[inv.items[i].ID] + " icon";
+            SpriteRenderer SR = itemSprites[i].AddComponent<SpriteRenderer>();
+            SR.sprite = spriteAssets[inv.items[i].ID - 1];
+            SR.sortingLayerID = gameObject.GetComponent<SpriteRenderer>().sortingLayerID;
+            SR.sortingOrder = 3;
             itemSprites[i].transform.parent = transform;
-            itemSprites[i].transform.localPosition = new Vector3(-4.6f, 2.8f - i * 1.1f, -0.5f) * 0.08f;
+            itemSprites[i].transform.localPosition = new Vector3(-4.8f, 2.8f - i * 1.1f, -0.5f) * 0.08f;
             itemSprites[i].transform.localScale = Vector3.one * 0.08f;
+
+            GameObject textsprite = new GameObject();
+            textsprite.name = "itemCount";
+            textsprite.transform.parent = itemSprites[i].transform;
+            textsprite.transform.localScale = itemSprites[i].transform.localScale;
+            textsprite.transform.localPosition = new Vector3(1.5f,0,0);
+            TextMeshPro textmesh = textsprite.AddComponent<TextMeshPro>();
+            textmesh.text = IntLib.IntToString(inv.items[i].count);
+            textmesh.font = fontAsset;
+            textmesh.fontSize = 60;
+            textmesh.color = Color.black;
+            SortingGroup SG = textsprite.AddComponent<SortingGroup>();
+            SG.sortingLayerName = "UI";
+            SG.sortingOrder = 3;
 
             SellerButtons[i] = new ItemSeller();
             SellerButtons[i].ButtonPrefab = SellerButtonPrefab;
@@ -46,14 +63,17 @@ public class InventorySeller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        for(int i =0; i<itemSprites.Length;i++)
+        {
+            itemSprites[i].GetComponentInChildren<TextMeshPro>().text = IntLib.IntToString(inv.items[i].count);
+        }
     }
     class ItemSeller
     {
         public int ID;
         public GameObject[] SellButtons;
         public GameObject ButtonPrefab;
-        int buttoncount = 7;
+        int buttoncount = 6;
         public GameObject parent;
 
         public void SetButtons()
@@ -63,7 +83,7 @@ public class InventorySeller : MonoBehaviour
             {
                 SellButtons[i] = Instantiate(ButtonPrefab);
                 SellButtons[i].transform.parent = parent.transform;
-                SellButtons[i].transform.localPosition = new Vector3(1.4f + i * 1.2f, 0);
+                SellButtons[i].transform.localPosition = new Vector3(3f + i * 1.2f, 0);
                 SellButtons[i].transform.localScale = Vector3.one * 1.7f;
                 SellButtons[i].GetComponent<SpriteRenderer>().sortingOrder = 3;
                 SellButtons[i].GetComponent<SpriteRenderer>().sortingLayerName = "UI";

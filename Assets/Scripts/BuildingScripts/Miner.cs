@@ -230,19 +230,24 @@ public class Miner : MonoBehaviour
     bool OutputItem(int itemID)
     {
         Vector2 outputCoord = new Vector2();
+        Vector2 OutFromCoord = new Vector2();
         switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
             case 0:
                 outputCoord = pos + new Vector2(0, -1);
+                OutFromCoord = pos;
                 break;
             case 90:
                 outputCoord = pos + new Vector2(2, 0);
+                OutFromCoord = pos + new Vector2(1, 0);
                 break;
             case 180:
                 outputCoord = pos + new Vector2(1, 2);
+                OutFromCoord = pos + new Vector2(1, 1);
                 break;
             case 270:
                 outputCoord = pos + new Vector2(-1, 1);
+                OutFromCoord = pos + new Vector2(0,1);
                 break;
         }
         GameObject cellObj = null;
@@ -262,7 +267,7 @@ public class Miner : MonoBehaviour
             }
             else if(refineryScript != null)
             {
-                if(refineryScript.InputItem(itemID,1, pos))
+                if(refineryScript.InputItem(itemID,1, OutFromCoord))
                 {
                     return true;
                 }

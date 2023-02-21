@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class StateSaveLoad : MonoBehaviour
 {
-    GameObject objectToSave;
     string path = "Assets/Saves";
     // Start is called before the first frame update
 
@@ -31,7 +31,7 @@ public class StateSaveLoad : MonoBehaviour
         buildings = GetComponent<Buildings>();
         world = GetComponent<WorldGeneration>();
         path = Application.persistentDataPath + path;
-        if(System.IO.File.Exists(path + "/Save1.dat"))
+        if(File.Exists(path + "/Save1.dat"))
         {
             Load();
         }
@@ -43,8 +43,8 @@ public class StateSaveLoad : MonoBehaviour
 
     public void Save()
     {
+        Profiler.BeginSample("Searching all builds");
         saveData = GetComponent<SaveData>();
-        objectToSave = GameObject.Find("MasterObject");
         string stringdata;
         Transform[] Transforms = GameObject.Find("Buildings").GetComponentsInChildren<Transform>();
         List<GameObject> childObjects = new List<GameObject>();
@@ -55,8 +55,11 @@ public class StateSaveLoad : MonoBehaviour
                 childObjects.Add(child.gameObject);
             }
         }
+        Profiler.EndSample();
+        Profiler.BeginSample("Assemble Building Data");
         SaveData data = SerializeBuilding(childObjects.ToArray());
-
+        Profiler.EndSample();
+        Profiler.BeginSample("Collecting rest of data");
         data.worldinv = FindObjectOfType<WorldGeneration>().inv;
 
         data.speedstates = FindObjectOfType<WorldGeneration>().speedstates;
@@ -68,14 +71,15 @@ public class StateSaveLoad : MonoBehaviour
 
         data.time = Gettime();
         data.Currency = world.Currency;
-
+        Profiler.EndSample();
+        Profiler.BeginSample("convert to json");
         stringdata = JsonUtility.ToJson(data);
+        Profiler.EndSample();
 
-
+        Profiler.BeginSample("Writing to path");
         Directory.CreateDirectory(path);
         System.IO.File.WriteAllText(path + "/Save1.dat", stringdata);
-
-        //print("Game Saved to: " + path);
+        Profiler.EndSample();
     }
     public SaveData SerializeBuilding(GameObject[] go)
     {
@@ -92,7 +96,7 @@ public class StateSaveLoad : MonoBehaviour
 
         foreach(GameObject thisObj in go)
         {
-            if (thisObj.TryGetComponent<Miner>(out Miner miner))
+            if (thisObj.TryGetComponent(out Miner miner))
             {
                 MinerData minerdat = new MinerData();
                 minerdat.Position = miner.pos;
@@ -101,7 +105,7 @@ public class StateSaveLoad : MonoBehaviour
                 minerdat.Speed = miner.secondsPerItem;
                 minerData.Add(minerdat);
             }
-            else if(thisObj.TryGetComponent<Belt>(out Belt belt))
+            else if(thisObj.TryGetComponent(out Belt belt))
             {
                 BeltData beltdat = new BeltData();
                 beltdat.Position = belt.transform.position;
@@ -111,7 +115,7 @@ public class StateSaveLoad : MonoBehaviour
                 beltdat.Speed = belt.timeTotravel;
                 beltData.Add(beltdat);
             }
-            else if (thisObj.TryGetComponent<Refinery>(out Refinery refinery))
+            else if (thisObj.TryGetComponent(out Refinery refinery))
             {
                 RefineryData refinerydat = new RefineryData();
                 refinerydat.Position = refinery.pos;
@@ -122,7 +126,7 @@ public class StateSaveLoad : MonoBehaviour
                 refinerydat.Speed = refinery.RTime;
                 refineryData.Add(refinerydat);
             }
-            else if (thisObj.TryGetComponent<Splitter>(out Splitter splitter))
+            else if (thisObj.TryGetComponent(out Splitter splitter))
             {
                 SplitterData splitterdat = new SplitterData();
                 splitterdat.Position = splitter.transform.position;
@@ -224,7 +228,7 @@ public class StateSaveLoad : MonoBehaviour
         {
             PlayerPrefs.SetInt("isloaded", 1);
         }
-        ticksToJam = math.clamp(ticks * 50,0,360000);
+        ticksToJam = math.clamp(ticks * 50,0,720000);
         totalTicks = ticksToJam;
     }
     int Gettime()
@@ -282,7 +286,9 @@ public class StateSaveLoad : MonoBehaviour
         }
         if(SaveNext)
         {
+            Profiler.BeginSample("Saving");
             Save();
+            Profiler.EndSample();
         }
     }
     public GameObject PlaceObjectManual(Vector3 pos, int BuildableIndex, int Rotation)
@@ -293,7 +299,7 @@ public class StateSaveLoad : MonoBehaviour
         buildings.AllBuildings[BuildableIndex].count++;
 
         GameObject instancedObj = Instantiate(buildings.AllBuildings[BuildableIndex].prefab);
-        instancedObj.transform.position = Transposition + new Vector3(0, 0, -1);
+        instancedObj.transform.position = Transposition + new Vector3(0, 0, 9);
         instancedObj.transform.parent = transform.GetChild(0);
         instancedObj.isStatic = true;
         instancedObj.transform.Rotate(0, 0, Rotation);
