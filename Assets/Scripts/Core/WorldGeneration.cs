@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Unity.Profiling;
 using UnityEngine.Profiling;
+using System.Linq;
 
 public class WorldGeneration : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class WorldGeneration : MonoBehaviour
     public Sprite Blank;
     public Sprite Iron_Ore;
     public Sprite Copper_Ore;
+    public Sprite OOB;
 
     public int selectedBuildableIndex;
 
@@ -42,7 +44,6 @@ public class WorldGeneration : MonoBehaviour
     void Start()
     {
         SetInventory();
-       // Initialize(Spawnsize);
     }
     public void SetInventory()
     {
@@ -78,6 +79,12 @@ public class WorldGeneration : MonoBehaviour
     }
     public void UpdateNewBlocks()
     {
+        foreach(var cell in oreMap)
+        {
+            cell.Value.setToDelete = true;
+        }
+
+
         Profiler.BeginSample("Checking For Now Blocks");
 
         Vector2 startingcoord = CamCoord - (CamSize);
@@ -94,35 +101,67 @@ public class WorldGeneration : MonoBehaviour
                     SetDefaultCell(new Vector2(x, y) + startingcoord);
                     Profiler.EndSample();
                 }
+                else
+                {
+                    if(oreMap[(new Vector2(x, y) + startingcoord)].gameobject == null)
+                        SetDefaultCell(new Vector2(x, y) + startingcoord);
+                    oreMap[(new Vector2(x, y) + startingcoord)].setToDelete = false;
+                }
             }
         }
+        Profiler.BeginSample("Culling BLocks");
+        List<Vector2> keys = oreMap.Keys.ToList();
 
+        foreach (var key in keys)
+        {
+            if (oreMap[key].setToDelete)
+            {
+                Destroy(oreMap[key].gameobject);
+                oreMap[key].gameobject = null;
+            }
+        }
+        Profiler.EndSample();
         Profiler.EndSample();
     }
     public void SetDefaultCell(Vector2 position)
     {
-        float scale = 0.05f;
-        Cell newcell = new Cell();
-        if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.55)
+        if (!oreMap.ContainsKey(position))
         {
-            newcell.ID = 1;
-            newcell.name = "Iron Ore";
-            
+            float scale = 0.05f;
+            Cell newcell = new Cell();
+            if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.55)
+            {
+                newcell.ID = 1;
+                newcell.name = "Iron Ore";
+
+            }
+            else if (noise.cnoise(new Vector2(50 + Seed * 20, Seed - 85) + position * scale) > 0.55)
+            {
+                newcell.ID = 2;
+                newcell.name = "Copper Ore";
+            }
+            else
+            {
+                newcell.ID = 0;
+                newcell.name = "Air";
+            }
+
+            if (Vector2.Distance(math.clamp(position, new float2(-100, -100), new float2(100, 100)), position) + noise.cnoise(new Vector2(Seed * -23, Seed - 800) + position * scale * 1f) * 4 > 20)
+            {
+                newcell.ID = 3;
+                newcell.name = "OOB Block";
+            }
+            oreMap.Add(position, newcell);
+            Profiler.BeginSample("Creating new Block GameObject");
+            oreMap[position].gameobject = GenerateCell(position);
+            Profiler.EndSample();
         }
-        else if (noise.cnoise(new Vector2(Seed *20, Seed - 85) + position * scale) > 0.55)
+        else 
         {
-            newcell.ID = 2;
-            newcell.name = "Copper Ore";
+            oreMap[position].gameobject = GenerateCell(position);
         }
-        else
-        {
-            newcell.ID = 0;
-            newcell.name = "Air";
-        }
-        oreMap.Add(position, newcell);
-        Profiler.BeginSample("Creating new Block GameObject");
-        GenerateCell(position);
-        Profiler.EndSample();
+
+
 
     }
     void Update()
@@ -188,6 +227,7 @@ public class WorldGeneration : MonoBehaviour
         cell.name = oreMap[position].name;
         int ID = oreMap[position].ID;
         SpriteRenderer SR = cell.AddComponent<SpriteRenderer>();
+        if(ID != 3)
         cell.AddComponent<ObjectPlacement>();
         BoxCollider2D boxCol = cell.AddComponent<BoxCollider2D>();
         boxCol.edgeRadius = 0.0f;
@@ -204,6 +244,9 @@ public class WorldGeneration : MonoBehaviour
                 break;
             case 2:
                 SR.sprite = Copper_Ore;
+                break;
+            case 3:
+                SR.sprite = OOB;
                 break;
         }
         return cell;
@@ -226,7 +269,9 @@ public class Buildable
 
 public class Cell
 {
+    public GameObject gameobject;
     public int ID;
     public string name;
+    public bool setToDelete;
 }
 

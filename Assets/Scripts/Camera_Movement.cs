@@ -64,7 +64,6 @@ public class Camera_Movement : MonoBehaviour
         if (frameOffset.magnitude > 0)
         {
             timeMoving += Time.deltaTime;
-            FindObjectOfType<StateSaveLoad>().Save();
             updateCamSize();
         }
         else
@@ -73,7 +72,6 @@ public class Camera_Movement : MonoBehaviour
         }
         if (Input.mouseScrollDelta.sqrMagnitude > 0)
         {
-            FindObjectOfType<StateSaveLoad>().Save();
             updateCamSize();
             ZoomCam(Input.mouseScrollDelta.y * -0.01f * zoomSpeed);
         }
