@@ -41,6 +41,8 @@ public class WorldGeneration : MonoBehaviour
 
     public bool GodMode;
 
+    public GameObject OOBprefab;
+
     void Start()
     {
         SetInventory();
@@ -103,30 +105,32 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else
                 {
-                    if(oreMap[(new Vector2(x, y) + startingcoord)].gameobject == null)
+                    if(!oreMap[(new Vector2(x, y) + startingcoord)].gameobject.activeInHierarchy)
                         SetDefaultCell(new Vector2(x, y) + startingcoord);
                     oreMap[(new Vector2(x, y) + startingcoord)].setToDelete = false;
                 }
             }
         }
-        Profiler.BeginSample("Culling BLocks");
-        List<Vector2> keys = oreMap.Keys.ToList();
-
+        Profiler.BeginSample("Culling Blocks");
+        List<Cell> keys = oreMap.Values.ToList();
+        Profiler.BeginSample("looping Blocks");
         foreach (var key in keys)
         {
-            if (oreMap[key].setToDelete)
+            if (key.setToDelete)
             {
-                Destroy(oreMap[key].gameobject);
-                oreMap[key].gameobject = null;
+                key.gameobject.gameObject.SetActive(false);
             }
         }
+        Profiler.EndSample();
         Profiler.EndSample();
         Profiler.EndSample();
     }
     public void SetDefaultCell(Vector2 position)
     {
+        
         if (!oreMap.ContainsKey(position))
         {
+            Profiler.BeginSample("Setting ore");
             float scale = 0.05f;
             Cell newcell = new Cell();
             if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.55)
@@ -145,12 +149,20 @@ public class WorldGeneration : MonoBehaviour
                 newcell.ID = 0;
                 newcell.name = "Air";
             }
-
-            if (Vector2.Distance(math.clamp(position, new float2(-100, -100), new float2(100, 100)), position) + noise.cnoise(new Vector2(Seed * -23, Seed - 800) + position * scale * 1f) * 4 > 20)
+            float dist = Vector2.Distance(math.clamp(position, new float2(-100, -100), new float2(100, 100)), position) + noise.cnoise(new Vector2(Seed * -23, Seed - 800) + position * scale * 1f) * 4;
+            if (dist > 20)
             {
                 newcell.ID = 3;
                 newcell.name = "OOB Block";
+                newcell.dist = dist-20;
             }
+            Profiler.EndSample();
+            if (dist > 50)
+            {
+                
+                return;
+            }
+
             oreMap.Add(position, newcell);
             Profiler.BeginSample("Creating new Block GameObject");
             oreMap[position].gameobject = GenerateCell(position);
@@ -158,7 +170,7 @@ public class WorldGeneration : MonoBehaviour
         }
         else 
         {
-            oreMap[position].gameobject = GenerateCell(position);
+            oreMap[position].gameobject.gameObject.SetActive(true);
         }
 
 
@@ -219,16 +231,29 @@ public class WorldGeneration : MonoBehaviour
     }
     GameObject GenerateCell(Vector2 position)
     {
-        GameObject cell = new GameObject();
+        Profiler.BeginSample("Creating Gameobject");
+        int ID = oreMap[position].ID;
+        SpriteRenderer SR;
+        GameObject cell;
+        if (ID ==3)
+        {
+            cell = Instantiate(OOBprefab);
+            SR = cell.GetComponent<SpriteRenderer>();
+            cell.GetComponent<WallObject>().dist = oreMap[position].dist;
+        }
+        else
+        {
+            cell = new GameObject();
+            cell.AddComponent<ObjectPlacement>();
+            SR = cell.AddComponent<SpriteRenderer>();
+        }
+
         cell.transform.position = position;
         cell.transform.position += new Vector3(0, 0, 10);
         cell.transform.localScale = Vector3.one;
         cell.transform.parent = gameObject.transform.GetChild(1);
         cell.name = oreMap[position].name;
-        int ID = oreMap[position].ID;
-        SpriteRenderer SR = cell.AddComponent<SpriteRenderer>();
-        if(ID != 3)
-        cell.AddComponent<ObjectPlacement>();
+
         BoxCollider2D boxCol = cell.AddComponent<BoxCollider2D>();
         boxCol.edgeRadius = 0.0f;
         boxCol.size = new Vector2(1f,1f);
@@ -249,6 +274,7 @@ public class WorldGeneration : MonoBehaviour
                 SR.sprite = OOB;
                 break;
         }
+        Profiler.EndSample();
         return cell;
     }
 }
@@ -273,5 +299,6 @@ public class Cell
     public int ID;
     public string name;
     public bool setToDelete;
+    public float dist;
 }
 

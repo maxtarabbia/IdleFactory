@@ -54,6 +54,12 @@ public class ObjectPlacement : MonoBehaviour
                         print("Cell is Occupied by " + world.OccupiedCells[coord].gameObject.name);
                         break;
                     }
+                    if (world.oreMap[coord].ID == 3)
+                    {
+                        isClear = false;
+                        print("Cell is occupied by the edge of the world");
+                        break;
+                    }
                 }
             }
 
@@ -102,6 +108,37 @@ public class ObjectPlacement : MonoBehaviour
     }
     public void InitializeSpriteGhost()
     {
+
+        bool isClear = true;
+        Vector2 coord;
+
+        for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
+        {
+            for (int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
+            {
+                coord = new Vector2(transform.position.x + i, transform.position.y + j);
+                //if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)  coord += new Vector2(0.5f, 0.5f);
+                if (world.OccupiedCells.ContainsKey(coord))
+                {
+                    isClear = false;
+                    break;
+                }
+                if (world.oreMap.ContainsKey(coord) && world.oreMap[coord].ID == 3)
+                {
+                    isClear = false;
+                    break;
+                }
+            }
+        }
+        Color col = new Color(0.5f, 1, 0.8f);
+        if (!isClear)
+        {
+            col = new Color(1f, 0.5f, 0.5f);
+        }
+        else if(!world.inv.CheckRemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
+        {
+            col = new Color(1f, 1f, 0.5f);
+        }
         Vector3 Transposition = gameObject.transform.position;
 
         if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
@@ -112,7 +149,7 @@ public class ObjectPlacement : MonoBehaviour
         SpriteGhost.GetComponent<SpriteRenderer>().sprite = buildings.AllBuildings[world.selectedBuildableIndex].prefab.GetComponent<SpriteRenderer>().sprite;
         SpriteGhost.GetComponent<SpriteRenderer>().material = buildings.AllBuildings[world.selectedBuildableIndex].prefab.GetComponent<SpriteRenderer>().sharedMaterial;
         SpriteGhost.GetComponent<SpriteRenderer>().material.SetFloat("_IsGhost", 0.8f);
-        SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", new Color(0.5f,1,0.8f));
+        SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", col);
         SpriteGhost.GetComponent<SpriteRenderer>().sortingLayerName = "UI";
         SpriteGhost.GetComponent<SpriteRenderer>().sortingOrder = 1;
         SpriteGhost.transform.position = Transposition + new Vector3(0, 0, -1);

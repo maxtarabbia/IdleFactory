@@ -96,6 +96,28 @@ public class Inventory
         checkvoids();
         return foundall;
     }
+    public bool CheckRemoveItem(Vector2[] IDs, float multiplier)
+    {
+        //check to make sure there are enough of each item;
+        bool[] foundItems = new bool[IDs.Length];
+        for (int i = 0; i < IDs.Length; i++)
+        {
+            foreach (var item in items)
+            {
+                if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y * multiplier)
+                {
+                    foundItems[i] = true;
+                }
+            }
+        }
+        bool foundall = true;
+        foreach (bool found in foundItems)
+        {
+            if (!found)
+                foundall = false;
+        }
+        return foundall;
+    }
     void checkvoids()
     {
         for(int i = 0; i < items.Length; i++)

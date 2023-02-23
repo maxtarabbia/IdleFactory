@@ -519,7 +519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 0.02
   zoomSpeed: 3
-  minMaxSpeed: {x: 0.4, y: 1.5}
+  minMaxSpeed: {x: 40, y: 150}
   MinMaxSize: {x: 0.5, y: 30}
 --- !u!1 &806666825
 GameObject:
@@ -744,6 +744,8 @@ MonoBehaviour:
       speedScale: 1.1
       costScale: 1.5
   GodMode: 0
+  OOBprefab: {fileID: 2401475535027312438, guid: c60f62e42587fbe4c8f5de09c9f0d1c9,
+    type: 3}
 --- !u!114 &1298894906
 MonoBehaviour:
   m_ObjectHideFlags: 0

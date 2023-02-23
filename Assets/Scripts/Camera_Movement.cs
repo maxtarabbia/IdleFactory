@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.UIElements;
 
 public class Camera_Movement : MonoBehaviour
@@ -22,9 +23,13 @@ public class Camera_Movement : MonoBehaviour
     public Vector2 minMaxSpeed;
 
     public Vector2 MinMaxSize;
+    WorldGeneration world;
+    Camera cam;
 
     void Start()
     {
+        world = FindObjectOfType<WorldGeneration>();
+        cam = GetComponent<Camera>();
         updateCamSize();
     }
 
@@ -37,7 +42,7 @@ public class Camera_Movement : MonoBehaviour
             return;
         if (GameObject.Find("World Inv(Clone)"))
             return;
-
+        Profiler.BeginSample("MoveCam");
         frameOffset = Vector3.zero;
         if (Input.GetKey(Up))
         {
@@ -55,11 +60,11 @@ public class Camera_Movement : MonoBehaviour
         {
             MoveCam(3);
         }
+        Profiler.EndSample();
 
 
-
-
-        gameObject.transform.position += frameOffset;
+        Profiler.BeginSample("Updating cammovement");
+        gameObject.transform.position += frameOffset * Time.deltaTime;
 
         if (frameOffset.magnitude > 0)
         {
@@ -70,26 +75,29 @@ public class Camera_Movement : MonoBehaviour
         {
             timeMoving = 0;
         }
+
         if (Input.mouseScrollDelta.sqrMagnitude > 0)
         {
             updateCamSize();
             ZoomCam(Input.mouseScrollDelta.y * -0.01f * zoomSpeed);
         }
+        Profiler.EndSample();
     }
     public void updateCamSize()
     {
-        WorldGeneration world = FindObjectOfType<WorldGeneration>();
+        Profiler.BeginSample("Updating vars and camsize");
         Vector2 Camsize = new Vector2();
 
-        Camsize.y = GetComponent<Camera>().orthographicSize;
-        Camsize.x = Camsize.y*GetComponent<Camera>().aspect;
+        Camsize.y = cam.orthographicSize;
+        Camsize.x = Camsize.y*cam.aspect;
         world.CamSize= Camsize;
         world.CamCoord = gameObject.transform.position;
         world.UpdateNewBlocks();
+        Profiler.EndSample();
     }
     void ZoomCam(float dist)
     {
-        Camera cam = GetComponent<Camera>();
+        Profiler.BeginSample("Zooming Cam");
 
         if (cam.orthographicSize * 1 + dist < MinMaxSize.y && cam.orthographicSize * 1 + dist > MinMaxSize.x)
         {
@@ -108,10 +116,11 @@ public class Camera_Movement : MonoBehaviour
                 cam.orthographicSize = MinMaxSize.x;
             }
         }
+        Profiler.EndSample();
     }
     void MoveCam (int direction) 
     {
-        float speed = movementSpeed * GetComponent<Camera>().orthographicSize;
+        float speed = movementSpeed * cam.orthographicSize;
         speed *= Mathf.Lerp(minMaxSpeed.x, minMaxSpeed.y, Mathf.Clamp01(timeMoving*0.5f));
         switch (direction)
         {
