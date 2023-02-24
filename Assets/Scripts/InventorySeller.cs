@@ -65,7 +65,8 @@ public class InventorySeller : MonoBehaviour
     {
         for(int i =0; i<itemSprites.Length;i++)
         {
-            itemSprites[i].GetComponentInChildren<TextMeshPro>().text = IntLib.IntToString(inv.items[i].count);
+            if (itemSprites[i] != null)
+                itemSprites[i].GetComponentInChildren<TextMeshPro>().text = IntLib.IntToString(inv.items[i].count);
         }
     }
     class ItemSeller

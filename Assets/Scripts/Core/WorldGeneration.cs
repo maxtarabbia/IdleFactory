@@ -7,6 +7,7 @@ using UnityEngine;
 using Unity.Profiling;
 using UnityEngine.Profiling;
 using System.Linq;
+using UnityEngine.UI;
 
 public class WorldGeneration : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class WorldGeneration : MonoBehaviour
     public int selectedBuildableIndex;
 
     public Canvas UICanvas;
+
+    public Image UIImage;
+    public TextMeshProUGUI UIText;
 
     public Inventory inv;
     public int[] CurrencyRates;
@@ -47,6 +51,12 @@ public class WorldGeneration : MonoBehaviour
     {
         SetInventory();
     }
+    public void setBuildableIndex(int index)
+    {
+        selectedBuildableIndex = index;
+        UIImage.sprite = GetComponent<Buildings>().AllBuildings[index].prefab.GetComponent<SpriteRenderer>().sprite;
+        UIText.text = GetComponent<Buildings>().AllBuildings[index].name;
+    }
     public void SetInventory()
     {
         inv = new Inventory(4);
@@ -56,6 +66,7 @@ public class WorldGeneration : MonoBehaviour
             inv.AddItem(2, 5000);
             inv.AddItem(3, 5000);
             inv.AddItem(4, 5000);
+            Currency = 5000000;
         }
         else
         {
@@ -157,7 +168,7 @@ public class WorldGeneration : MonoBehaviour
                 newcell.dist = dist-20;
             }
             Profiler.EndSample();
-            if (dist > 50)
+            if (dist > 32)
             {
                 
                 return;

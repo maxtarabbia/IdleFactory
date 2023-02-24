@@ -6,7 +6,7 @@ public class Splitter : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
-    public float timeTotravel = 0.3f;
+    public float timeTotravel = 2f;
     public Vector2 itemID;
 
     Vector2[] OutputPos;

@@ -37,23 +37,23 @@ public class Controls : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Alpha1))
         {
-            Keystroke= 0;
+            world.setBuildableIndex(0);
         }
         if (Input.GetKey(KeyCode.Alpha2))
         {
-            Keystroke = 1;
+            world.setBuildableIndex(1);
         }
         if (Input.GetKey(KeyCode.Alpha3))
         {
-            Keystroke = 2;
+            world.setBuildableIndex(2);
         }
         if (Input.GetKey(KeyCode.Alpha4))
         {
-            Keystroke = 3;
+            world.setBuildableIndex(3);
         }
         if (Input.GetKey(KeyCode.Alpha5))
         {
-            Keystroke = 4;
+            world.setBuildableIndex(4);
         }
         if (Input.GetKey(KeyCode.F))
         {
@@ -84,9 +84,7 @@ public class Controls : MonoBehaviour
                 Destroy(IM);
             }
         }
-        world.selectedBuildableIndex = Keystroke;
-        UIsprite.sprite = buildings.AllBuildings[Keystroke].prefab.GetComponent<SpriteRenderer>().sprite;
-        UIText.text = buildings.AllBuildings[Keystroke].name;
+
 
     }
 }

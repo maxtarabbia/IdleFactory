@@ -86,7 +86,7 @@ public class Refinery : MonoBehaviour
             {
 
                 inputInv.RemoveItem(new Vector2[] {new Vector2 (inputInv.items[0].ID, 1)}, 1.0f);
-                RProgress = 0;
+                RProgress -= RTime;
             }
             else
             {

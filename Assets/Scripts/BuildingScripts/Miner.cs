@@ -159,7 +159,7 @@ public class Miner : MonoBehaviour
             if (miningProgress >= secondsPerItem)
             {
                 MineItem();
-                miningProgress = 0;
+                miningProgress -= secondsPerItem;
             }
             MiningAnimation();
             miningProgress += Time.fixedDeltaTime;
@@ -279,7 +279,7 @@ public class Miner : MonoBehaviour
             }
             else if (splitterscript != null)
             {
-                if (Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 0)
+                if (cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z == 90 || cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z == -270)
                 {
                     if (splitterscript.inputItem(itemID, 0))
                     {

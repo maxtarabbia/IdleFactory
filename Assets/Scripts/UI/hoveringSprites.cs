@@ -28,6 +28,8 @@ public class hoveringSprites : MonoBehaviour
 
     float THDelSave;
     float BracketOffset;
+
+    public int objectID;
     // Start is called before the first frame update
     void Start()
     {
@@ -121,6 +123,15 @@ public class hoveringSprites : MonoBehaviour
             }
             FindObjectOfType<StateSaveLoad>().Save();
             AlignDeletingBar();
+        }
+        if(Input.GetMouseButtonDown(2))
+        {
+            WorldGeneration world = FindObjectOfType<WorldGeneration>();
+
+            int rotation = Mathf.RoundToInt(transform.rotation.eulerAngles.z);
+            FindObjectOfType<Buildings>().AllBuildings[objectID].rotation = rotation;
+
+            world.setBuildableIndex(objectID);
         }
         if (Input.GetKey(KeyCode.Delete))
         {

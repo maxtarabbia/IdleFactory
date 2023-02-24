@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine;
 public class SaveData : MonoBehaviour
 {
-    public int time;
+    public long time;
 
     public Vector2 CamCoord;
     public float CamScale;
@@ -75,7 +75,7 @@ public class SaveData : MonoBehaviour
 }
 public struct DatatoSave
 {
-    public int time;
+    public long time;
 
     public MinerData[] minerdata;
     public BeltData[] beltdata;

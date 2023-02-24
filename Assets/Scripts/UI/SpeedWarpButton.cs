@@ -45,6 +45,7 @@ public class SpeedWarpButton : MonoBehaviour
     public void SpeedupMiner()
     {
         Miner[] miners  = FindObjectsOfType<Miner>();
+        speedinfo refinfo = world.speedstates.MinerInfo;
         if(miners.Length == 0 )
             return;
         
@@ -52,20 +53,23 @@ public class SpeedWarpButton : MonoBehaviour
         {
             return;
         }
-        world.speedstates.MinerInfo.speed = world.speedstates.MinerInfo.speed / world.speedstates.MinerInfo.speedScale;
+        refinfo.speed = 1 / (1 / refinfo.speed + (refinfo.speedScale - 1));
         foreach (Miner miner in miners)
         {
-            miner.secondsPerItem = world.speedstates.MinerInfo.speed;
+            miner.secondsPerItem = refinfo.speed;
         }
         world.Currency -= CurrentCost;
-        CurrentCost = (Mathf.RoundToInt(world.speedstates.MinerInfo.costScale * CurrentCost));
-        world.speedstates.MinerInfo.cost = CurrentCost;
+        CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));
+        refinfo.cost = CurrentCost;
         CostText.text = "$" +IntLib.IntToString(CurrentCost);
         FindObjectOfType<StateSaveLoad>().Save();
+        world.speedstates.MinerInfo = refinfo;
+        print("Miner speed set to:" + 1 / refinfo.speed);
     }
     public void SpeedupRefinery()
     {
         Refinery[] refineries = FindObjectsOfType<Refinery>();
+        speedinfo refinfo = world.speedstates.RefineryInfo;
         if (refineries.Length == 0)
             return;
 
@@ -73,44 +77,49 @@ public class SpeedWarpButton : MonoBehaviour
         {
             return;
         }
-        world.speedstates.RefineryInfo.speed = world.speedstates.RefineryInfo.speed / world.speedstates.RefineryInfo.speedScale;
+        refinfo.speed = 1/(1 / refinfo.speed + (refinfo.speedScale - 1));
         foreach (Refinery refinery in refineries)
         {
-            refinery.RTime = world.speedstates.RefineryInfo.speed;
+            refinery.RTime = refinfo.speed;
         }
         world.Currency -= CurrentCost;
-        CurrentCost = (Mathf.RoundToInt(world.speedstates.RefineryInfo.costScale * CurrentCost));
-        world.speedstates.RefineryInfo.cost = CurrentCost;
+        CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));
+        refinfo.cost = CurrentCost;
         CostText.text = "$" + IntLib.IntToString(CurrentCost);
         FindObjectOfType<StateSaveLoad>().Save();
+        world.speedstates.RefineryInfo = refinfo;
+        print("Refinery speed set to:" + 1 / refinfo.speed);
     }
     public void SpeedupBelt()
     {
 
-
+        speedinfo refinfo = world.speedstates.BeltInfo;
         if (world.Currency < CurrentCost)
         {
             return;
         }
         
         Belt[] belts = FindObjectsOfType<Belt>();
-        world.speedstates.BeltInfo.speed = world.speedstates.BeltInfo.speed / world.speedstates.BeltInfo.speedScale;
+        refinfo.speed = 1 / (1 / refinfo.speed + (refinfo.speedScale - 1));
         foreach (Belt belt in belts)
         {
-            belt.timeTotravel = world.speedstates.BeltInfo.speed;
+            belt.timeTotravel = refinfo.speed;
         }
         Splitter[] splitters = FindObjectsOfType<Splitter>();
         foreach (Splitter splitter in splitters)
         {
-            splitter.timeTotravel = world.speedstates.BeltInfo.speed;
+            splitter.timeTotravel = refinfo.speed;
         }
 
         world.Currency -= CurrentCost;
-        CurrentCost = (Mathf.RoundToInt(world.speedstates.BeltInfo.costScale * CurrentCost));
+        CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));
         CostText.text = "$" + IntLib.IntToString(CurrentCost);
-        world.speedstates.BeltInfo.cost = CurrentCost;
+        refinfo.cost = CurrentCost;
+        print("Belt speed set to:" + 1 / refinfo.speed);
 
         if (belts.Length != 0)
         FindObjectOfType<StateSaveLoad>().Save();
+        world.speedstates.BeltInfo= refinfo;
+
     }
 }

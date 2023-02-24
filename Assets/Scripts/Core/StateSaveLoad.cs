@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -21,9 +22,9 @@ public class StateSaveLoad : MonoBehaviour
     Buildings buildings;
     WorldGeneration world;
 
-    public int totalTicks;
-    public int ticksToJam;
-    int ticksAtATime = 5000;
+    public long totalTicks;
+    public long ticksToJam;
+    long ticksAtATime = 5000;
 
     SaveData saveData;
     void Start()
@@ -43,6 +44,7 @@ public class StateSaveLoad : MonoBehaviour
 
     public void Save()
     {
+        
         Profiler.BeginSample("Searching all builds");
         saveData = GetComponent<SaveData>();
         string stringdata;
@@ -217,8 +219,8 @@ public class StateSaveLoad : MonoBehaviour
         FindObjectOfType<Camera_Movement>().updateCamSize();
         //FindObjectOfType<WorldGeneration>().Initialize(24);
 
-        int oldtime = saveData.time;
-        int ticks = (Gettime() - oldtime);
+        long oldtime = saveData.time;
+        long ticks = (Gettime() - oldtime);
         if (ticks < 0)
         {
             ticks += 86400;
@@ -228,12 +230,12 @@ public class StateSaveLoad : MonoBehaviour
         {
             PlayerPrefs.SetInt("isloaded", 1);
         }
-        ticksToJam = math.clamp(ticks * 50,0,720000);
+        ticksToJam = ticks * 50;
         totalTicks = ticksToJam;
     }
-    int Gettime()
+    long Gettime()
     {
-        return DateTime.Now.Second + DateTime.Now.Minute * 60 + DateTime.Now.Hour * 3600;
+        return ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
     }
     void clearMap()
     {
@@ -286,10 +288,15 @@ public class StateSaveLoad : MonoBehaviour
         }
         if(SaveNext)
         {
-            Profiler.BeginSample("Saving");
-            Save();
-            Profiler.EndSample();
+            asyncsave();
         }
+    }
+    async void asyncsave()
+    {
+        Profiler.BeginSample("Saving");
+        Save();
+        //await Task.Run(() => Save());
+        Profiler.EndSample();
     }
     public GameObject PlaceObjectManual(Vector3 pos, int BuildableIndex, int Rotation)
     {

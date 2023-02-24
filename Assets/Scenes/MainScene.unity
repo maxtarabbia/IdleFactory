@@ -719,6 +719,8 @@ MonoBehaviour:
   OOB: {fileID: 21300000, guid: 5ff548dba2c4b614080f5cd645cb4e13, type: 3}
   selectedBuildableIndex: 0
   UICanvas: {fileID: 232368677}
+  UIImage: {fileID: 806666827}
+  UIText: {fileID: 2061852761}
   inv:
     items: []
     maxStackSize: 0
@@ -1119,7 +1121,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: miner
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a39be6695a7baf47a966c3355855a07, type: 2}
   m_sharedMaterial: {fileID: -5530275386899717260, guid: 8a39be6695a7baf47a966c3355855a07,

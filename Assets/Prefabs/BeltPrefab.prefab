@@ -222,6 +222,7 @@ MonoBehaviour:
   outputCoord:
     x: 0
     y: 0
+  objectID: 1
 --- !u!1 &9034683836393798069
 GameObject:
   m_ObjectHideFlags: 0

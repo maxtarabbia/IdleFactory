@@ -25,4 +25,16 @@ public class TickEvents : MonoBehaviour
             //print("Tick jammed "+ iterations+ " times.");
         }
     }
+    public void TickJam(long iterations)
+    {
+        if (MyEvent != null)
+        {
+            for (int i = 0; i < iterations; i++)
+            {
+                MyEvent();
+
+            }
+            //print("Tick jammed "+ iterations+ " times.");
+        }
+    }
 }
