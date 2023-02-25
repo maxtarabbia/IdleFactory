@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -46,7 +47,7 @@ public class InventorySeller : MonoBehaviour
             TextMeshPro textmesh = textsprite.AddComponent<TextMeshPro>();
             textmesh.text = IntLib.IntToString(inv.items[i].count);
             textmesh.font = fontAsset;
-            textmesh.fontSize = 60;
+            textmesh.fontSize = 55;
             textmesh.color = Color.black;
             SortingGroup SG = textsprite.AddComponent<SortingGroup>();
             SG.sortingLayerName = "UI";

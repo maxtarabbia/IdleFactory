@@ -27,6 +27,8 @@ public class Miner : MonoBehaviour
 
     int calls;
 
+    Inventory inv;
+
     public Sprite[] OreSprites;
     //Start is called before the first frame update
     void Awake()
@@ -38,6 +40,9 @@ public class Miner : MonoBehaviour
     }
     void Initialize()
     {
+        inv = new Inventory(1);
+        inv.maxStackSize= 1;
+        inv.PopulateItemIDs();
         world = FindObjectOfType<WorldGeneration>();
         worldmap = world.oreMap;
         gameObject.transform.localScale = Vector3.one;
@@ -164,6 +169,13 @@ public class Miner : MonoBehaviour
             MiningAnimation();
             miningProgress += Time.fixedDeltaTime;
         }
+        if (inv.items[0].count > 0)
+        {
+            if (OutputItem(inv.items[0].ID))
+            {
+                inv.RemoveItem(new Vector2[] { new Vector2(inv.items[0].ID, 1) }, 1);
+            }
+        }
     }
     void MiningAnimation()
     {
@@ -197,21 +209,27 @@ public class Miner : MonoBehaviour
             case 1: //iron ore
                 calls = 0;
                 if (!OutputItem(1))
-                { 
+                {
+                    if (!inv.AddItem(1, 1))
+                    { 
                     world.inv.AddItem(1, 1);
                     effect.SetTexture("spriteTex", OreSprites[0].texture);
                     if (PlayerPrefs.GetInt("isLoaded") == 1)
                         effect.Play();
+                    }
                 }
                 break;
             case 2: //copper ore
                 calls = 0;
                 if (!OutputItem(2))
                 {
-                    world.inv.AddItem(2, 1);
-                    effect.SetTexture("spriteTex", OreSprites[1].texture);
-                    if(PlayerPrefs.GetInt("isLoaded") == 1)
-                        effect.Play();
+                    if (!inv.AddItem(2, 1))
+                    {
+                        world.inv.AddItem(2, 1);
+                        effect.SetTexture("spriteTex", OreSprites[1].texture);
+                        if (PlayerPrefs.GetInt("isLoaded") == 1)
+                            effect.Play();
+                    }
                 }
                 break;
         }

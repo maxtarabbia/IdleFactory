@@ -37,7 +37,7 @@ public class Inventory
         bool foundspot = false;
         foreach(var item in items)
         {
-            if(item.ID == ID && !foundspot && item.count + count < maxStackSize)
+            if(item.ID == ID && !foundspot && item.count + count <= maxStackSize)
             {
                 item.count += count;
                 foundspot = true;
