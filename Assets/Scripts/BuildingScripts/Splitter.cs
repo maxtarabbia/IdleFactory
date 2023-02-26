@@ -14,7 +14,11 @@ public class Splitter : MonoBehaviour
 
     TickEvents tickEvents;
 
+    float timeSinceFixed;
+
     GameObject sprite;
+
+    bool canOutput;
 
     public Sprite[] spriteAssets;
     // Start is called before the first frame update
@@ -42,6 +46,21 @@ public class Splitter : MonoBehaviour
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
  
+    }
+    void SetSpritePos(float Offset)
+    {
+        float xVal = 0;
+        float yVal = 0;
+
+        if ((itemID.y + Offset) >= timeTotravel && !canOutput)
+        {
+            Offset = timeTotravel - itemID.y;
+        }
+
+                xVal = 0.5f - ((itemID.y + Offset) / timeTotravel);
+                yVal = 0;
+
+        sprite.transform.localPosition = new Vector3(xVal, yVal, (itemID.y + Offset));
     }
     void FixOutputs()
     {
@@ -74,6 +93,8 @@ public class Splitter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        timeSinceFixed += Time.deltaTime;
+        SetSpritePos(timeSinceFixed);
         UpdateSprites();
     }
     void UpdateSprites()
@@ -91,6 +112,7 @@ public class Splitter : MonoBehaviour
     void OnTick()
     {
         UpdateSpritePositions(true);
+        timeSinceFixed = 0;
     }
     void UpdateSpritePositions(bool moveForward)
     {
@@ -109,12 +131,15 @@ public class Splitter : MonoBehaviour
         {
             if (OutputItem((int)itemID.x))
             {
+                timeSinceFixed = 0;
                 sprite.GetComponent<SpriteRenderer>().sprite = null;
                 itemID = new Vector2(-1, 0);
+                canOutput = true;
             }
             else
             {
                 itemID.y = timeTotravel;
+                canOutput = false;
             }
         }
     }

@@ -19,6 +19,9 @@ public class Belt : MonoBehaviour
 
     public Sprite[] BeltRotations;
     int BeltRotationState = 0;
+
+    float timeSinceFixed;
+    bool canOutput;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,7 +75,8 @@ public class Belt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        timeSinceFixed += Time.deltaTime;
+        SetSpritePos(timeSinceFixed);
     }
     public void UpdateBeltInput()
     {
@@ -150,11 +154,41 @@ public class Belt : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        //OnTick();
     }
     void OnTick()
     {
         UpdateSpritePositions(true);
+        timeSinceFixed = 0;
+    }
+    void SetSpritePos(float Offset)
+    {
+        float xVal = 0;
+        float yVal = 0;
+
+        if ((itemID.y + Offset) >= timeTotravel && !canOutput)
+        {
+            Offset = timeTotravel - itemID.y;
+        }
+        switch (BeltRotationState)
+        {
+            case 0:
+                xVal = 0.5f - ((itemID.y + Offset) / timeTotravel);
+                yVal = 0;
+
+                break;
+            case 1:
+                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
+                yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) / timeTotravel), 0, 0.5f);
+
+                break;
+            case 2:
+                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
+                yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) / timeTotravel), 0, 0.5f) * -1;
+
+                break;
+        }
+
+        sprite.transform.localPosition = new Vector3(xVal, yVal, (itemID.y + Offset));
     }
     public void UpdateSpritePositions(bool moveForward)
     {
@@ -197,11 +231,14 @@ public class Belt : MonoBehaviour
         {
             if (OutputItem((int)itemID.x))
             {
+                timeSinceFixed = 0;
                 sprite.GetComponent<SpriteRenderer>().sprite = null;
                 itemID = new Vector2(-1, 0);
+                canOutput= true;
             }
             else
             {
+                canOutput = false;
                 itemID.y = timeTotravel;
             }
         }
@@ -220,7 +257,7 @@ public class Belt : MonoBehaviour
             }
         return false;
     }
-    bool OutputItem(int itemID)
+    bool OutputItem(int initemID)
     {
 
         GameObject cellObj;
@@ -233,23 +270,25 @@ public class Belt : MonoBehaviour
             Core core = cellObj.GetComponent<Core>();
             if (beltscript != null)
             {
-                float spot = 0;
+                float spot = itemID.y - timeTotravel;
+                spot /= timeTotravel;
                 if(Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 90 || Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 270)
                 {
-                    spot = 0f;
+                    spot = itemID.y-timeTotravel;
+                    spot/= timeTotravel;
                 }
                 else if(Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 180)
                 {
                     spot= 0.9f;
                 }
-                if (beltscript.inputItem(itemID, spot))
+                if (beltscript.inputItem(initemID, spot))
                 {
                   return true;
                 }
             }
             else if (refineryScript != null)
             {
-                if (refineryScript.InputItem(itemID, 1, pos))
+                if (refineryScript.InputItem(initemID, 1, pos))
                 {
                     return true;
                 }
@@ -258,7 +297,7 @@ public class Belt : MonoBehaviour
             {
                 if (Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 0)
                 {
-                    if (splitter.inputItem(itemID,0))
+                    if (splitter.inputItem(initemID,0))
                     {
                         return true;
                     }
@@ -267,7 +306,7 @@ public class Belt : MonoBehaviour
             }
             else if (core != null)
             {
-                core.InputItem(itemID);
+                core.InputItem(initemID);
                 return true;
             }
         }
