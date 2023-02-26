@@ -26,7 +26,7 @@ public class StateSaveLoad : MonoBehaviour
     public long ticksToJam;
     long ticksAtATime = 5000;
 
-    int MaxHours = 2;
+    int MaxHours = 1;
 
     SaveData saveData;
     void Start()

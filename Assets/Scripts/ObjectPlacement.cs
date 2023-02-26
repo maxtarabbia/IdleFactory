@@ -106,7 +106,7 @@ public class ObjectPlacement : MonoBehaviour
             InitializeSpriteGhost();
         }
     }
-    public void InitializeSpriteGhost()
+    Color GetColor()
     {
 
         bool isClear = true;
@@ -130,15 +130,22 @@ public class ObjectPlacement : MonoBehaviour
                 }
             }
         }
+
         Color col = new Color(0.5f, 1, 0.8f);
         if (!isClear)
         {
             col = new Color(1f, 0.5f, 0.5f);
         }
-        else if(!world.inv.CheckRemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
+        else if (!world.inv.CheckRemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
         {
             col = new Color(1f, 1f, 0.5f);
         }
+        return col;
+    }
+    public void InitializeSpriteGhost()
+    {
+
+
         Vector3 Transposition = gameObject.transform.position;
 
         if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
@@ -149,7 +156,7 @@ public class ObjectPlacement : MonoBehaviour
         SpriteGhost.GetComponent<SpriteRenderer>().sprite = buildings.AllBuildings[world.selectedBuildableIndex].prefab.GetComponent<SpriteRenderer>().sprite;
         SpriteGhost.GetComponent<SpriteRenderer>().material = buildings.AllBuildings[world.selectedBuildableIndex].prefab.GetComponent<SpriteRenderer>().sharedMaterial;
         SpriteGhost.GetComponent<SpriteRenderer>().material.SetFloat("_IsGhost", 0.8f);
-        SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", col);
+        SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", GetColor());
         SpriteGhost.GetComponent<SpriteRenderer>().sortingLayerName = "UI";
         SpriteGhost.GetComponent<SpriteRenderer>().sortingOrder = 1;
         SpriteGhost.transform.position = Transposition + new Vector3(0, 0, -1);
@@ -180,7 +187,10 @@ public class ObjectPlacement : MonoBehaviour
                 buildings.AllBuildings[world.selectedBuildableIndex].rotation = (int)SpriteGhost.transform.rotation.eulerAngles.z;
                 ResetSprite();
             }
-            
+            if(Time.frameCount % 5 == 0 && SpriteGhost != null)
+            {
+                SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", GetColor());
+            }
         }
     }
     public void ResetSprite()

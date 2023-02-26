@@ -150,13 +150,12 @@ public class Miner : MonoBehaviour
         {
             Initialize();
         }
-        
+        if(isOnOre)
+        {
+            MiningAnimation();
+        }
     }
     
-    private void FixedUpdate()
-    {
-        //OnTick();
-    }
     void OnTick()
     {
         if (isOnOre)
@@ -166,7 +165,6 @@ public class Miner : MonoBehaviour
                 MineItem();
                 miningProgress -= secondsPerItem;
             }
-            MiningAnimation();
             miningProgress += Time.fixedDeltaTime;
         }
         if (inv.items[0].count > 0)
@@ -179,9 +177,10 @@ public class Miner : MonoBehaviour
     }
     void MiningAnimation()
     {
-        transforms[1].localPosition = basePos + new Vector3(Random.value - 0.5f, Random.value - 0.5f) * 0.01f;
-        transforms[2].localPosition = basePos + new Vector3(Random.value - 0.5f, Random.value - 0.5f) * 0.02f;
-        transforms[3].Rotate(Vector3.forward * (5/secondsPerItem));
+
+        transforms[1].localPosition = basePos + new Vector3(Mathf.Sin(Time.frameCount*0.0984f + pos.x*85.584f), Mathf.Sin(Time.frameCount * 0.132f + pos.y * 85.584f)) * 0.005f;
+        transforms[2].localPosition = basePos + new Vector3(Mathf.Sin(Time.frameCount * 0.186f + pos.x * 1.4f), Mathf.Sin(Time.frameCount * 0.1f+ pos.x * 12.544f)) * 0.01f;
+        transforms[3].Rotate(Vector3.forward * (200/secondsPerItem) * Time.deltaTime);
     }
     void MineItem()
     {

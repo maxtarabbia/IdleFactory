@@ -6,11 +6,16 @@ using UnityEngine.PlayerLoop;
 
 public class TickEvents : MonoBehaviour
 {
-    public delegate void MyEventHandler();
-    public event MyEventHandler MyEvent;
+    public delegate void TickEventHandler();
+    public event TickEventHandler MyEvent;
+    private void Start()
+    {
+        Time.fixedDeltaTime = 0.02f;
+    }
     void FixedUpdate()
     {
-        if(MyEvent != null)
+
+        if (MyEvent != null)
             MyEvent();
     }
     public void TickJam(int iterations)
