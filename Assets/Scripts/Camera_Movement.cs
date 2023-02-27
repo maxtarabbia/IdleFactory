@@ -114,7 +114,6 @@ public class Camera_Movement : MonoBehaviour
         }
         else
         {
-            print("Touches: " + Input.touchCount);
             if(Input.touches.Length == 2)
             {
                 if (pinchDist != -1)

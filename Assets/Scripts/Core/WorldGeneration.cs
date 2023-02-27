@@ -50,6 +50,11 @@ public class WorldGeneration : MonoBehaviour
 
     void Start()
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        Screen.orientation = ScreenOrientation.LandscapeRight;
+        Screen.orientation = ScreenOrientation.AutoRotation;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
         SetInventory();
     }
     public void setBuildableIndex(int index)
@@ -190,6 +195,7 @@ public class WorldGeneration : MonoBehaviour
     }
     void Update()
     {
+        Screen.orientation = ScreenOrientation.AutoRotation;
         if(UICanvas == null)
         {
             UICanvas = FindObjectOfType<Canvas>();

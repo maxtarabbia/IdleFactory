@@ -30,6 +30,7 @@ public class hoveringSprites : MonoBehaviour
     float BracketOffset;
 
     bool isTouch;
+    Camera_Movement cammove;
 
     public int objectID;
     // Start is called before the first frame update
@@ -44,6 +45,7 @@ public class hoveringSprites : MonoBehaviour
             sprites[i].transform.localEulerAngles = (new Vector3(0,0,i*90));
             sprites[i].isStatic= true;
         }
+        cammove= FindObjectOfType<Camera_Movement>();
         isTouch = FindObjectOfType<WorldGeneration>().isTouch;
         SetTranforms();
     }
@@ -111,11 +113,18 @@ public class hoveringSprites : MonoBehaviour
         DeletingBarMaterial.SetFloat("_Value", 0);
         timeHeld = 0;
     }
+    private void OnMouseUp()
+    {
+        if(isTouch && cammove.distanceMoved < 0.5f && cammove.timeMoving < 0.3f)
+        {
+            RotateCW?.Invoke();
+        }
+    }
     private void OnMouseOver()
     {
         if (isTouch)
         {
-            if (Input.touchCount == 1)
+            if (Input.touchCount == 1 && cammove.distanceMoved < 50f)
             {
                 timeHeld += Time.deltaTime;
                 DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);

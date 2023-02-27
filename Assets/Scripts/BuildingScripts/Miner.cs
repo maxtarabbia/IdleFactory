@@ -158,6 +158,12 @@ public class Miner : MonoBehaviour
     
     void OnTick()
     {
+        if(this == null)
+        {
+            tickEvents.MyEvent -= OnTick;
+            return;
+        }
+
         if (isOnOre)
         {
             if (miningProgress >= secondsPerItem)
@@ -240,7 +246,7 @@ public class Miner : MonoBehaviour
         isOnOre = false;
         foreach (int tile in coveredTileID)
         {
-            if (tile != 0)
+            if (tile > 0)
                 isOnOre= true;
             
         }

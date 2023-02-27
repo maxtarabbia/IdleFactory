@@ -177,7 +177,6 @@ public class ObjectPlacement : MonoBehaviour
             {
                 
             }
-            print("Dist Moved: " + cammove.distanceMoved);
 
         }
     }
