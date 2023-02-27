@@ -46,9 +46,6 @@ public class SpeedWarpButton : MonoBehaviour
     {
         Miner[] miners  = FindObjectsOfType<Miner>();
         speedinfo refinfo = world.speedstates.MinerInfo;
-        if(miners.Length == 0 )
-            return;
-        
         if(world.Currency < CurrentCost)
         {
             return;
@@ -70,8 +67,6 @@ public class SpeedWarpButton : MonoBehaviour
     {
         Refinery[] refineries = FindObjectsOfType<Refinery>();
         speedinfo refinfo = world.speedstates.RefineryInfo;
-        if (refineries.Length == 0)
-            return;
 
         if (world.Currency < CurrentCost)
         {

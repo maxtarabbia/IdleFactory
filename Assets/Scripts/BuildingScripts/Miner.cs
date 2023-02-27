@@ -190,9 +190,10 @@ public class Miner : MonoBehaviour
         }
         if(calls > 60)
         {
-            isOnOre = false;
-            print("Broken Miner at:" + pos);
+
             checkForOre();
+            print("Broken Miner at:" + pos + "\nWith: " + coveredTileID[0] + "," + coveredTileID[1] + "," + coveredTileID[2] + "," + coveredTileID[3]);
+            isOnOre = false;
             calls = 0;
             return;
         }

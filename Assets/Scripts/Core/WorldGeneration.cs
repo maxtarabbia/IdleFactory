@@ -46,6 +46,7 @@ public class WorldGeneration : MonoBehaviour
     public bool GodMode;
 
     public GameObject OOBprefab;
+    public bool isTouch;
 
     void Start()
     {
@@ -255,7 +256,10 @@ public class WorldGeneration : MonoBehaviour
         else
         {
             cell = new GameObject();
-            cell.AddComponent<ObjectPlacement>();
+            ObjectPlacement OP = cell.AddComponent<ObjectPlacement>();
+            OP.world = this;
+            OP.buildings = GetComponent<Buildings>();
+            OP.cammove = FindObjectOfType<Camera_Movement>();
             SR = cell.AddComponent<SpriteRenderer>();
         }
 

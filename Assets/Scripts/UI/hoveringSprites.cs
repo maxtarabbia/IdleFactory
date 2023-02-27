@@ -29,6 +29,8 @@ public class hoveringSprites : MonoBehaviour
     float THDelSave;
     float BracketOffset;
 
+    bool isTouch;
+
     public int objectID;
     // Start is called before the first frame update
     void Start()
@@ -42,7 +44,7 @@ public class hoveringSprites : MonoBehaviour
             sprites[i].transform.localEulerAngles = (new Vector3(0,0,i*90));
             sprites[i].isStatic= true;
         }
-
+        isTouch = FindObjectOfType<WorldGeneration>().isTouch;
         SetTranforms();
     }
     private void Update()
@@ -111,60 +113,84 @@ public class hoveringSprites : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (isTouch)
         {
-            if(Input.GetKey(KeyCode.LeftShift))
+            if (Input.touchCount == 1)
             {
-                RotateCCW?.Invoke();
+                timeHeld += Time.deltaTime;
+                DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
+                if (timeHeld > 0.5f)
+                {
+                    Delete?.Invoke();
+                    FindObjectOfType<StateSaveLoad>().LateSave();
+                }
             }
             else
             {
-                RotateCW?.Invoke();
-            }
-            FindObjectOfType<StateSaveLoad>().Save();
-            AlignDeletingBar();
-        }
-        if(Input.GetMouseButtonDown(2))
-        {
-            WorldGeneration world = FindObjectOfType<WorldGeneration>();
-
-            int rotation = Mathf.RoundToInt(transform.rotation.eulerAngles.z);
-            FindObjectOfType<Buildings>().AllBuildings[objectID].rotation = rotation;
-
-            world.setBuildableIndex(objectID);
-        }
-        if (Input.GetKey(KeyCode.Delete))
-        {
-            if (THDelSave == -1)
-                return;
-            THDelSave += Time.deltaTime;
-            if (THDelSave > 3)
-            {
-                THDelSave = -1;
-                FindObjectOfType<StateSaveLoad>().DeleteSave();
-            }
-            print("Deleting save in: " + (3 - THDelSave));
-        }
-        else
-        {
-            THDelSave= 0;
-        }
-        if(Input.GetMouseButton(1))
-        {
-            timeHeld += Time.deltaTime;
-            DeletingBarMaterial.SetFloat("_Value",timeHeld/0.5f);
-            if(timeHeld > 0.5f)
-            {
-                Delete?.Invoke();
-                FindObjectOfType<StateSaveLoad>().LateSave();
+                if (timeHeld != 0)
+                {
+                    DeletingBarMaterial.SetFloat("_Value", 0);
+                    timeHeld = 0;
+                }
             }
         }
         else
         {
-            if (timeHeld != 0)
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                DeletingBarMaterial.SetFloat("_Value", 0);
-                timeHeld = 0;
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    RotateCCW?.Invoke();
+                }
+                else
+                {
+                    RotateCW?.Invoke();
+                }
+                FindObjectOfType<StateSaveLoad>().Save();
+                AlignDeletingBar();
+            }
+            if (Input.GetMouseButtonDown(2))
+            {
+                WorldGeneration world = FindObjectOfType<WorldGeneration>();
+
+                int rotation = Mathf.RoundToInt(transform.rotation.eulerAngles.z);
+                FindObjectOfType<Buildings>().AllBuildings[objectID].rotation = rotation;
+
+                world.setBuildableIndex(objectID);
+            }
+            if (Input.GetKey(KeyCode.Delete))
+            {
+                if (THDelSave == -1)
+                    return;
+                THDelSave += Time.deltaTime;
+                if (THDelSave > 3)
+                {
+                    THDelSave = -1;
+                    FindObjectOfType<StateSaveLoad>().DeleteSave();
+                }
+                print("Deleting save in: " + (3 - THDelSave));
+            }
+            else
+            {
+                THDelSave = 0;
+            }
+            if (Input.GetMouseButton(1))
+            {
+                timeHeld += Time.deltaTime;
+                DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
+                if (timeHeld > 0.5f)
+                {
+                    Delete?.Invoke();
+                    FindObjectOfType<StateSaveLoad>().LateSave();
+                }
+            }
+            else
+            {
+                if (timeHeld != 0)
+                {
+                    DeletingBarMaterial.SetFloat("_Value", 0);
+                    timeHeld = 0;
+                }
             }
         }
     }

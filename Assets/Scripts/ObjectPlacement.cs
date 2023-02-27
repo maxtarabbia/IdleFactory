@@ -5,15 +5,17 @@ using UnityEngine;
 
 public class ObjectPlacement : MonoBehaviour
 {
-    WorldGeneration world;
-    Buildings buildings;
-
+    public WorldGeneration world;
+    public Buildings buildings;
+    public Camera_Movement cammove;
     public bool isHovered;
     GameObject SpriteGhost;
     int LastBuildableIndex;
+    bool isTouch;
+
     void Start()
     {
-
+            isTouch = world.isTouch;
     }
     private void OnMouseExit()
     {
@@ -23,59 +25,56 @@ public class ObjectPlacement : MonoBehaviour
             DestroyImmediate(SpriteGhost);
         }
     }
-    // Update is called once per frame
-    void OnMouseDown()
+    // Update is called once per fram
+    void testToPlace()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            if (world == null)
-            {
-                world = FindObjectOfType<WorldGeneration>();
-                buildings = FindObjectOfType<Buildings>();
-            }
-            Vector3 Transposition = gameObject.transform.position;
-
-            if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
-                Transposition += new Vector3(0.5f, 0.5f, 0f);
-            
-
-            bool isClear = true;
-            Vector2 coord;
-            
-            for (int i = 0;i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
-            {
-                for(int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
-                {
-                    coord = new Vector2(transform.position.x + i, transform.position.y + j);
-                    //if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)  coord += new Vector2(0.5f, 0.5f);
-                    if (world.OccupiedCells.ContainsKey(coord))
-                    {
-                        isClear = false; 
-                        print("Cell is Occupied by " + world.OccupiedCells[coord].gameObject.name);
-                        break;
-                    }
-                    if (world.oreMap[coord].ID == 3)
-                    {
-                        isClear = false;
-                        print("Cell is occupied by the edge of the world");
-                        break;
-                    }
-                }
-            }
-
-            if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
-                placeObject();
-        }
-    }
-    private void OnMouseEnter()
-    {
-        isHovered= true;
         if (world == null)
         {
             world = FindObjectOfType<WorldGeneration>();
             buildings = FindObjectOfType<Buildings>();
         }
-        if (Input.GetMouseButton(0))
+        Vector3 Transposition = gameObject.transform.position;
+
+        if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)
+            Transposition += new Vector3(0.5f, 0.5f, 0f);
+
+
+        bool isClear = true;
+        Vector2 coord;
+
+        for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
+        {
+            for (int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
+            {
+                coord = new Vector2(transform.position.x + i, transform.position.y + j);
+                //if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0)  coord += new Vector2(0.5f, 0.5f);
+                if (world.OccupiedCells.ContainsKey(coord))
+                {
+                    isClear = false;
+                    print("Cell is Occupied by " + world.OccupiedCells[coord].gameObject.name);
+                    break;
+                }
+                if (world.oreMap[coord].ID == 3)
+                {
+                    isClear = false;
+                    print("Cell is occupied by the edge of the world");
+                    break;
+                }
+            }
+        }
+
+        if (isClear && world.inv.RemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
+            placeObject();
+    }
+    private void OnMouseEnter()
+    {
+        isHovered = true;
+        if (world == null)
+        {
+            world = FindObjectOfType<WorldGeneration>();
+            buildings = FindObjectOfType<Buildings>();
+        }
+        if (Input.GetMouseButton(0) && !isTouch)
         {
             Vector3 Transposition = gameObject.transform.position;
 
@@ -103,6 +102,7 @@ public class ObjectPlacement : MonoBehaviour
         }
         else
         {
+            if(!isTouch) 
             InitializeSpriteGhost();
         }
     }
@@ -165,8 +165,32 @@ public class ObjectPlacement : MonoBehaviour
         SpriteGhost.transform.Rotate(0, 0, buildings.AllBuildings[world.selectedBuildableIndex].rotation);
         LastBuildableIndex = world.selectedBuildableIndex;
     }
+    private void OnMouseUp()
+    {
+        if (isTouch && Input.touches.Length > 0)
+        {
+            if (cammove.distanceMoved < 0.5f && cammove.timeMoving < 0.3f && Input.touches[0].phase == TouchPhase.Ended)
+            {
+                testToPlace();
+            }
+            else
+            {
+                
+            }
+            print("Dist Moved: " + cammove.distanceMoved);
+
+        }
+    }
+    private void OnMouseDown()
+    {
+        if (Input.GetMouseButtonDown(0) && !isTouch)
+        {
+            testToPlace();
+        }
+    }
     private void Update()
     {
+
         if (world != null)
         {
             if (world.selectedBuildableIndex != LastBuildableIndex)
