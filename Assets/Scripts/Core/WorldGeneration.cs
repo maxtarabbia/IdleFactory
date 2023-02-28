@@ -59,7 +59,7 @@ public class WorldGeneration : MonoBehaviour
     }
     public void SetInventory()
     {
-        inv = new Inventory(4);
+        inv = new Inventory(5);
         if (GodMode)
         {
             inv.AddItem(1, 5000);

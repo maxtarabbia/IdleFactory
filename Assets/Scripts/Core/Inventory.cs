@@ -24,12 +24,15 @@ public class Inventory
     }
     public void PopulateItemIDs()
     {
-        IdNames = new Dictionary<int,string>();
-        IdNames.Add(0, "Air");
-        IdNames.Add(1, "Iron Ore");
-        IdNames.Add(2, "Copper Ore");
-        IdNames.Add(3, "Iron Ingot");
-        IdNames.Add(4, "Copper Ingot");
+        IdNames = new Dictionary<int, string>
+        {
+            { 0, "Air" },
+            { 1, "Iron Ore" },
+            { 2, "Copper Ore" },
+            { 3, "Iron Ingot" },
+            { 4, "Copper Ingot" },
+            { 5, "Steel Ingot" }
+        };
     }
 
     public bool AddItem(int ID, int count)
