@@ -55,7 +55,7 @@ public class Camera_Movement : MonoBehaviour
             frameOffset = Vector3.zero;
             if(Input.touches.Length == 1)
             {
-                frameOffset = Input.touches[0].deltaPosition * -0.1f * cam.orthographicSize;
+                frameOffset = Input.touches[0].deltaPosition * -0.11f * cam.orthographicSize;
             }
             if(Input.touchCount == 0)
             {

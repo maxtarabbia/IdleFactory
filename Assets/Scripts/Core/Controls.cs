@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Controls : MonoBehaviour
 {
-    int Keystroke;
     WorldGeneration world;
     public Image UIsprite;
     public TextMeshProUGUI UIText;
@@ -19,7 +18,6 @@ public class Controls : MonoBehaviour
         world = FindObjectOfType<WorldGeneration>();
         //UIsprite = GameObject.Find("InventoryDisplay").GetComponent<Image>();
         //UIText = GameObject.Find("SelectedBuildingText").GetComponent<TextMeshPro>();
-        Keystroke = 0;
         buildings = FindObjectOfType<Buildings>();
     }
 

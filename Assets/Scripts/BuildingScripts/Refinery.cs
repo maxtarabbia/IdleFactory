@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Refinery : MonoBehaviour
@@ -9,6 +10,9 @@ public class Refinery : MonoBehaviour
 
     public Inventory inputInv;
     public Inventory outputInv;
+
+    public int4[] recipies;
+    int selectedrecipie;
 
     Vector2 outputCoord = new Vector2();
     Vector2 inputCoord= new Vector2();
@@ -74,24 +78,13 @@ public class Refinery : MonoBehaviour
         inCount = inputInv.items[0].count;
         outCount = outputInv.items[0].count;
 
-        if (inputInv.items[0].ID == -1 || inputInv.items[0].count == 0)
+        if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies[selectedrecipie].y)
             return;
 
         RProgress += Time.fixedDeltaTime;
         if (RProgress >= RTime)
         {
-            int inID = inputInv.items[0].ID;
-            int outID = inID + 2;
-            if (outputInv.AddItem(outID, 1))
-            {
-
-                inputInv.RemoveItem(new Vector2[] {new Vector2 (inputInv.items[0].ID, 1)}, 1.0f);
-                RProgress -= RTime;
-            }
-            else
-            {
-                RProgress = RTime;
-            }
+            AttemptSmelt();
         }
         if (outputInv.items[0].count > 0)
         {
@@ -99,6 +92,20 @@ public class Refinery : MonoBehaviour
             {
                 outputInv.RemoveItem(new Vector2[] { new Vector2(outputInv.items[0].ID, 1) },1.0f);
             }
+        }
+    }
+    void AttemptSmelt()
+    {
+        int outID = recipies[selectedrecipie].z;
+        if (outputInv.AddItem(outID, recipies[selectedrecipie].w))
+        {
+
+            inputInv.RemoveItem(new Vector2[] { new Vector2(inputInv.items[0].ID, recipies[selectedrecipie].y) }, 1.0f);
+            RProgress -= RTime;
+        }
+        else
+        {
+            RProgress = RTime;
         }
     }
     private void OnMouseOver()
@@ -209,7 +216,22 @@ public class Refinery : MonoBehaviour
     {
         if ((inPos - inputCoord).sqrMagnitude <= 0.05f)
         {
-            return inputInv.AddItem(ID, count);
+            if (inputInv.AddItem(ID, count))
+            {
+                for(int i = 0; i < recipies.Length; i++)
+                {
+                    if(ID == recipies[i].x)
+                    {
+                        selectedrecipie = i;
+                        break;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
