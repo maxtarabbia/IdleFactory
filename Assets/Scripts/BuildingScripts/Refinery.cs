@@ -17,7 +17,7 @@ public class Refinery : MonoBehaviour
     [SerializeField]
     public Recipies recipies;
 
-    string recipepath = "Assets/Recipies";
+    string recipepath = "/Recipies";
     string saveExtention = "/Refinery.dat";
 
     Vector2 outputCoord = new Vector2();
@@ -45,9 +45,9 @@ public class Refinery : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (File.Exists(recipepath + saveExtention))
+        if (File.Exists(Application.persistentDataPath + recipepath + saveExtention))
         {
-            recipies = (Recipies)JsonUtility.FromJson(System.IO.File.ReadAllText(recipepath + saveExtention), typeof(Recipies));
+            recipies = (Recipies)JsonUtility.FromJson(System.IO.File.ReadAllText(Application.persistentDataPath + recipepath + saveExtention), typeof(Recipies));
         }
         /*
         Directory.CreateDirectory(recipepath);

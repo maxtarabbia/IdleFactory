@@ -29,7 +29,7 @@ public class SceneLoaderButton : MonoBehaviour
     }
     public void NewGame()
     {
-        string path = Application.persistentDataPath + "Assets/Saves";
+        string path = Application.persistentDataPath + "/Saves";
         System.IO.File.Delete(path + "/Save1.dat");
         LoadMainScene();
     }

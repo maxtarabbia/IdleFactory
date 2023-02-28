@@ -1193,7 +1193,7 @@ MonoBehaviour:
   inv:
     items: []
     maxStackSize: 0
-  CurrencyRates: 0100000001000000050000000a00000014000000
+  CurrencyRates: 0100000001000000050000000a00000032000000
   Currency: 0
   CamCoord: {x: 0, y: 0}
   CamSize: {x: 0, y: 0}

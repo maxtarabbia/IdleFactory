@@ -8,7 +8,7 @@ using UnityEngine.Profiling;
 
 public class StateSaveLoad : MonoBehaviour
 {
-    string path = "Assets/Saves";
+    string path = "/Saves";
     // Start is called before the first frame update
 
     bool SaveNext = false;
