@@ -13,6 +13,7 @@ public class Refinery : MonoBehaviour
     public Inventory inputInv;
     public Inventory outputInv;
 
+
     [SerializeField]
     public Recipies recipies;
 
@@ -102,6 +103,7 @@ public class Refinery : MonoBehaviour
     {
         inCount = inputInv.items[0].count;
         outCount = outputInv.items[0].count;
+
 
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].y)
             return;
@@ -243,6 +245,7 @@ public class Refinery : MonoBehaviour
         {
             if (inputInv.AddItem(ID, count))
             {
+
                 for (int i = 0; i < recipies.values.Length; i++)
                 {
                     if (ID == recipies.values[i].x)

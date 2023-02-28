@@ -3,22 +3,16 @@ using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Profiling;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
-public class Camera_Movement : MonoBehaviour
+public class Touch_Movement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    KeyCode Up = KeyCode.W;
-    KeyCode Left = KeyCode.A;
-    KeyCode Right = KeyCode.D;
-    KeyCode Down = KeyCode.S;
+    // Start is called before the first frame updat
     
     public float movementSpeed = 0.01f;
     public float zoomSpeed = 1f;
 
-    public float timeMoving;
-    public float distanceMoved;
+    float timeMoving;
 
     Vector3 frameOffset;
 
@@ -28,16 +22,11 @@ public class Camera_Movement : MonoBehaviour
     WorldGeneration world;
     Camera cam;
 
-    float pinchDist;
-
-    bool isTouch;
-
     void Start()
     {
         world = FindObjectOfType<WorldGeneration>();
         cam = GetComponent<Camera>();
         updateCamSize();
-        isTouch = world.isTouch;
     }
 
     // Update is called once per frame
@@ -50,42 +39,11 @@ public class Camera_Movement : MonoBehaviour
         if (GameObject.Find("World Inv(Clone)"))
             return;
         Profiler.BeginSample("MoveCam");
-        if (isTouch)
+        frameOffset = Vector3.zero;
+
+        if (Input.touches.Length > 0)
         {
-            frameOffset = Vector3.zero;
-            if(Input.touches.Length == 1)
-            {
-                frameOffset = Input.touches[0].deltaPosition * -0.11f * cam.orthographicSize;
-            }
-            if(Input.touchCount == 0)
-            {
-                timeMoving= 0f;
-                distanceMoved = 0f;
-            }
-            else
-            {
-                timeMoving += Time.deltaTime;
-            }
-        }
-        else
-        {
-            frameOffset = Vector3.zero;
-            if (Input.GetKey(Up))
-            {
-                MoveCam(0);
-            }
-            if (Input.GetKey(Left))
-            {
-                MoveCam(1);
-            }
-            if (Input.GetKey(Right))
-            {
-                MoveCam(2);
-            }
-            if (Input.GetKey(Down))
-            {
-                MoveCam(3);
-            }
+            frameOffset = Input.touches[0].deltaPosition;
         }
         Profiler.EndSample();
 
@@ -96,43 +54,17 @@ public class Camera_Movement : MonoBehaviour
         if (frameOffset.magnitude > 0)
         {
             timeMoving += Time.deltaTime;
-            distanceMoved += frameOffset.magnitude;
             updateCamSize();
         }
         else
         {
-            if(!isTouch) 
             timeMoving = 0;
         }
-        if (!isTouch)
+
+        if (Input.mouseScrollDelta.sqrMagnitude > 0)
         {
-            if (Input.mouseScrollDelta.sqrMagnitude > 0)
-            {
-                updateCamSize();
-                ZoomCam(Input.mouseScrollDelta.y * -0.01f * zoomSpeed);
-            }
-        }
-        else
-        {
-            if(Input.touches.Length == 2)
-            {
-                if (pinchDist != -1)
-                {
-                    float newPinchDist = Vector2.Distance(Input.touches[0].position, Input.touches[1].position);
-                    float zoomamount = (1-newPinchDist / pinchDist) * 0.5f;
-                    ZoomCam(zoomamount);
-                    updateCamSize();
-                    pinchDist = newPinchDist;
-                }
-                else
-                {
-                    pinchDist = Vector2.Distance(Input.touches[0].position, Input.touches[1].position);
-                }
-            }
-            else
-            {
-                pinchDist = -1;
-            }
+            updateCamSize();
+            ZoomCam(Input.mouseScrollDelta.y * -0.01f * zoomSpeed);
         }
         Profiler.EndSample();
     }

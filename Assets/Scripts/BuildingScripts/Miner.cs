@@ -158,6 +158,12 @@ public class Miner : MonoBehaviour
     
     void OnTick()
     {
+        if(this == null)
+        {
+            tickEvents.MyEvent -= OnTick;
+            return;
+        }
+
         if (isOnOre)
         {
             if (miningProgress >= secondsPerItem)
@@ -190,9 +196,10 @@ public class Miner : MonoBehaviour
         }
         if(calls > 60)
         {
-            isOnOre = false;
-            print("Broken Miner at:" + pos);
+
             checkForOre();
+            print("Broken Miner at:" + pos + "\nWith: " + coveredTileID[0] + "," + coveredTileID[1] + "," + coveredTileID[2] + "," + coveredTileID[3]);
+            isOnOre = false;
             calls = 0;
             return;
         }
@@ -239,7 +246,7 @@ public class Miner : MonoBehaviour
         isOnOre = false;
         foreach (int tile in coveredTileID)
         {
-            if (tile != 0)
+            if (tile > 0)
                 isOnOre= true;
             
         }
