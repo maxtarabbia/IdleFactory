@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -11,11 +13,15 @@ public class Refinery : MonoBehaviour
     public Inventory inputInv;
     public Inventory outputInv;
 
-    public int4[] recipies;
-    int selectedrecipie;
+
+    [SerializeField]
+    public Recipies recipies;
+
+    string recipepath = "Assets/Recipies";
+    string saveExtention = "/Refinery.dat";
 
     Vector2 outputCoord = new Vector2();
-    Vector2 inputCoord= new Vector2();
+    Vector2 inputCoord = new Vector2();
 
     TickEvents tickEvents;
 
@@ -24,17 +30,37 @@ public class Refinery : MonoBehaviour
 
     public int inCount;
     public int outCount;
+    [Serializable]
+    public struct Recipies
+    {
+        //x = Input Item ID
+        //y = Input Item Count
+        //z = Output Item ID
+        //w = Input Item Count
+
+        public int4[] values;
+        public int selectedRecipe;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        if (File.Exists(recipepath + saveExtention))
+        {
+            recipies = (Recipies)JsonUtility.FromJson(System.IO.File.ReadAllText(recipepath + saveExtention), typeof(Recipies));
+        }
+        /*
+        Directory.CreateDirectory(recipepath);
+        System.IO.File.WriteAllText(recipepath + saveExtention, JsonUtility.ToJson(recipies,true));
+        */
+
         world = FindObjectOfType<WorldGeneration>();
         pos = gameObject.transform.position;
         pos += new Vector2(-0.5f, -0.5f);
-        if(inputInv == null || inputInv.items.Length == 0)
-        inputInv = new Inventory(1);
-        if(outputInv == null || outputInv.items.Length == 0)
-        outputInv = new Inventory(1);
+        if (inputInv == null || inputInv.items.Length == 0)
+            inputInv = new Inventory(1);
+        if (outputInv == null || outputInv.items.Length == 0)
+            outputInv = new Inventory(1);
 
         inputInv.maxStackSize = 10;
         outputInv.maxStackSize = 10;
@@ -44,12 +70,12 @@ public class Refinery : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
-         
+
     }
 
     void FixedUpdate()
     {
-       // OnTick();
+        // OnTick();
     }
     void SetOutput()
     {
@@ -61,7 +87,7 @@ public class Refinery : MonoBehaviour
                 break;
             case 90:
                 outputCoord = pos + new Vector2(1, -1);
-                inputCoord =  pos + new Vector2(0, 2);
+                inputCoord = pos + new Vector2(0, 2);
                 break;
             case 180:
                 outputCoord = pos + new Vector2(2, 1);
@@ -78,7 +104,8 @@ public class Refinery : MonoBehaviour
         inCount = inputInv.items[0].count;
         outCount = outputInv.items[0].count;
 
-        if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies[selectedrecipie].y)
+
+        if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].y)
             return;
 
         RProgress += Time.fixedDeltaTime;
@@ -90,17 +117,17 @@ public class Refinery : MonoBehaviour
         {
             if (OutputItem())
             {
-                outputInv.RemoveItem(new Vector2[] { new Vector2(outputInv.items[0].ID, 1) },1.0f);
+                outputInv.RemoveItem(new Vector2[] { new Vector2(outputInv.items[0].ID, 1) }, 1.0f);
             }
         }
     }
     void AttemptSmelt()
     {
-        int outID = recipies[selectedrecipie].z;
-        if (outputInv.AddItem(outID, recipies[selectedrecipie].w))
+        int outID = recipies.values[recipies.selectedRecipe].z;
+        if (outputInv.AddItem(outID, recipies.values[recipies.selectedRecipe].w))
         {
 
-            inputInv.RemoveItem(new Vector2[] { new Vector2(inputInv.items[0].ID, recipies[selectedrecipie].y) }, 1.0f);
+            inputInv.RemoveItem(new Vector2[] { new Vector2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].y) }, 1.0f);
             RProgress -= RTime;
         }
         else
@@ -147,14 +174,14 @@ public class Refinery : MonoBehaviour
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-         
+
     }
     public void RotateCCW()
     {
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-         
+
     }
     public void Delete()
     {
@@ -166,12 +193,12 @@ public class Refinery : MonoBehaviour
         world.OccupiedCells.Remove(pos + new Vector2(0, 1));
         world.OccupiedCells.Remove(pos + new Vector2(1, 0));
         world.OccupiedCells.Remove(pos + new Vector2(1, 1));
-            
+
         builds.AllBuildings[2].count--;
-         
+
         Destroy(gameObject);
     }
-        bool OutputItem()
+    bool OutputItem()
     {
         int itemID = outputInv.items[0].ID;
 
@@ -192,19 +219,19 @@ public class Refinery : MonoBehaviour
             }
             else if (refineryScript != null)
             {
-                if (refineryScript.InputItem(itemID, 1,pos))
+                if (refineryScript.InputItem(itemID, 1, pos))
                 {
                     return true;
                 }
             }
-            else if(splitterscript != null)
+            else if (splitterscript != null)
             {
-                if(splitterscript.inputItem(itemID,0.5f))
+                if (splitterscript.inputItem(itemID, 0.5f))
                 {
                     return true;
                 }
             }
-            else if(corescript != null)
+            else if (corescript != null)
             {
                 corescript.InputItem(itemID);
                 return true;
@@ -218,11 +245,12 @@ public class Refinery : MonoBehaviour
         {
             if (inputInv.AddItem(ID, count))
             {
-                for(int i = 0; i < recipies.Length; i++)
+
+                for (int i = 0; i < recipies.values.Length; i++)
                 {
-                    if(ID == recipies[i].x)
+                    if (ID == recipies.values[i].x)
                     {
-                        selectedrecipie = i;
+                        recipies.selectedRecipe = i;
                         break;
                     }
                 }

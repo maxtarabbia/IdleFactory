@@ -56,14 +56,16 @@ MonoBehaviour:
     items: []
     maxStackSize: 0
   recipies:
-  - x: 1
-    y: 1
-    z: 3
-    w: 1
-  - x: 2
-    y: 1
-    z: 4
-    w: 1
+    values:
+    - x: 1
+      y: 1
+      z: 3
+      w: 1
+    - x: 2
+      y: 2
+      z: 4
+      w: 1
+    selectedRecipe: 0
   RProgress: 0
   RTime: 1
   inCount: 0
