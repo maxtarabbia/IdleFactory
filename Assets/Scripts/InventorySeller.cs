@@ -36,7 +36,7 @@ public class InventorySeller : MonoBehaviour
             SR.sortingLayerID = gameObject.GetComponent<SpriteRenderer>().sortingLayerID;
             SR.sortingOrder = 3;
             itemSprites[i].transform.parent = transform;
-            itemSprites[i].transform.localPosition = new Vector3(-4.8f, 2.8f - i * 1.1f, -0.5f) * 0.08f;
+            itemSprites[i].transform.localPosition = new Vector3(-4.8f, 2.8f - i * 1.0f, -0.5f) * 0.08f;
             itemSprites[i].transform.localScale = Vector3.one * 0.08f;
 
             GameObject textsprite = new GameObject();
