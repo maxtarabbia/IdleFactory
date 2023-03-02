@@ -15,9 +15,9 @@ public class Refinery : MonoBehaviour
 
 
     [SerializeField]
-    public Recipies recipies;
+    public Recipes recipies;
 
-    string recipepath = "/Recipies";
+    string recipepath = "/Recipes";
     string saveExtention = "/Refinery.dat";
 
     Vector2 outputCoord = new Vector2();
@@ -31,15 +31,23 @@ public class Refinery : MonoBehaviour
     public int inCount;
     public int outCount;
     [Serializable]
-    public struct Recipies
+    public struct Recipes
     {
         //x = Input Item ID
         //y = Input Item Count
         //z = Output Item ID
         //w = Input Item Count
 
-        public int4[] values;
+        public RefineryRecipe[] values;
         public int selectedRecipe;
+    }
+    [Serializable]
+    public struct RefineryRecipe
+    {
+        public int inputItemID;
+        public int inCount;
+        public int outputItemID;
+        public int outCount;
     }
 
     // Start is called before the first frame update
@@ -47,7 +55,7 @@ public class Refinery : MonoBehaviour
     {
         if (File.Exists(Application.persistentDataPath + recipepath + saveExtention))
         {
-            recipies = (Recipies)JsonUtility.FromJson(System.IO.File.ReadAllText(Application.persistentDataPath + recipepath + saveExtention), typeof(Recipies));
+            recipies = (Recipes)JsonUtility.FromJson(System.IO.File.ReadAllText(Application.persistentDataPath + recipepath + saveExtention), typeof(Recipes));
         }
         /*
         Directory.CreateDirectory(recipepath);
@@ -105,7 +113,7 @@ public class Refinery : MonoBehaviour
         outCount = outputInv.items[0].count;
 
 
-        if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].y)
+        if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
             return;
 
         RProgress += Time.fixedDeltaTime;
@@ -123,11 +131,11 @@ public class Refinery : MonoBehaviour
     }
     void AttemptSmelt()
     {
-        int outID = recipies.values[recipies.selectedRecipe].z;
-        if (outputInv.AddItem(outID, recipies.values[recipies.selectedRecipe].w))
+        int outID = recipies.values[recipies.selectedRecipe].outputItemID;
+        if (outputInv.AddItem(outID, recipies.values[recipies.selectedRecipe].outCount))
         {
 
-            inputInv.RemoveItem(new Vector2[] { new Vector2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].y) }, 1.0f);
+            inputInv.RemoveItem(new Vector2[] { new Vector2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
             RProgress -= RTime;
         }
         else
@@ -248,7 +256,7 @@ public class Refinery : MonoBehaviour
 
                 for (int i = 0; i < recipies.values.Length; i++)
                 {
-                    if (ID == recipies.values[i].x)
+                    if (ID == recipies.values[i].inputItemID)
                     {
                         recipies.selectedRecipe = i;
                         break;

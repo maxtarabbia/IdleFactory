@@ -19,7 +19,7 @@ public class ItemSellButton : MonoBehaviour
        bool abletoSell = world.inv.RemoveItem(new Vector2[] {new Vector2(ID + 1,count)},1f);
         if (abletoSell)
         {
-            world.Currency += (count * world.CurrencyRates[ID]);
+            world.Currency += (count * world.items[ID].value);
             world.GetComponent<StateSaveLoad>().Save();
         }
     }

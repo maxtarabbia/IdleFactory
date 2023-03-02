@@ -15,12 +15,15 @@ public class WorldGeneration : MonoBehaviour
     public Dictionary<Vector2, Cell> oreMap = new Dictionary<Vector2, Cell>();
     int Spawnsize = 20;
 
-    public int Seed = 42;
+    public int Seed = -1;
 
     public Sprite Blank;
     public Sprite Iron_Ore;
     public Sprite Copper_Ore;
     public Sprite OOB;
+
+    [SerializeField]
+    public Item[] items;
 
     public int selectedBuildableIndex;
 
@@ -30,7 +33,6 @@ public class WorldGeneration : MonoBehaviour
     public TextMeshProUGUI UIText;
 
     public Inventory inv;
-    public int[] CurrencyRates;
     public int Currency;
 
     public Vector2 CamCoord;
@@ -46,15 +48,31 @@ public class WorldGeneration : MonoBehaviour
     public bool GodMode;
 
     public GameObject OOBprefab;
+    public GameObject OrePrefab;
     public bool isTouch;
+
+
 
     void Start()
     {
+        if(Seed == -1)
+        {
+            Seed = PlayerPrefs.GetInt("Seed");
+        }
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         Screen.orientation = ScreenOrientation.LandscapeRight;
         Screen.orientation = ScreenOrientation.AutoRotation;
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
+
+        ObjectPlacement OP = OrePrefab.GetComponent<ObjectPlacement>();
+        OP.isTouch= isTouch;
+        OP.world = this;
+        OP.buildings = GetComponent<Buildings>();
+        OP.cammove = FindObjectOfType<Camera_Movement>();
+
+        UpdateNewBlocks();
+
         SetInventory();
     }
     public void setBuildableIndex(int index)
@@ -80,9 +98,14 @@ public class WorldGeneration : MonoBehaviour
             inv.AddItem(2, 0);
         }
     }
-    public void Initialize(int size)
+    public void Initialize(int size, int Seed)
     {
+        ObjectPlacement OP = OrePrefab.GetComponent<ObjectPlacement>();
+        OP.world = this;
+        OP.buildings = GetComponent<Buildings>();
+        OP.cammove = FindObjectOfType<Camera_Movement>();
 
+        this.Seed = Seed;
         OccupiedCells.Clear();
         oreMap.Clear();
         
@@ -98,13 +121,15 @@ public class WorldGeneration : MonoBehaviour
     }
     public void UpdateNewBlocks()
     {
+        if (Seed == -1)
+            return;
         foreach(var cell in oreMap)
         {
             cell.Value.setToDelete = true;
         }
 
 
-        Profiler.BeginSample("Checking For Now Blocks");
+        Profiler.BeginSample("Checking For New Blocks");
 
         Vector2 startingcoord = CamCoord - (CamSize);
         startingcoord = startingcoord + new Vector2(-1, -1);
@@ -144,7 +169,7 @@ public class WorldGeneration : MonoBehaviour
     }
     public void SetDefaultCell(Vector2 position)
     {
-        
+
         if (!oreMap.ContainsKey(position))
         {
             Profiler.BeginSample("Setting ore");
@@ -249,26 +274,24 @@ public class WorldGeneration : MonoBehaviour
     }
     GameObject GenerateCell(Vector2 position)
     {
-        Profiler.BeginSample("Creating Gameobject");
+        
         int ID = oreMap[position].ID;
         SpriteRenderer SR;
         GameObject cell;
+        Profiler.BeginSample("Creating Gameobject");
         if (ID ==3)
         {
             cell = Instantiate(OOBprefab);
-            SR = cell.GetComponent<SpriteRenderer>();
             cell.GetComponent<WallObject>().dist = oreMap[position].dist;
         }
         else
         {
-            cell = new GameObject();
-            ObjectPlacement OP = cell.AddComponent<ObjectPlacement>();
-            OP.world = this;
-            OP.buildings = GetComponent<Buildings>();
-            OP.cammove = FindObjectOfType<Camera_Movement>();
-            SR = cell.AddComponent<SpriteRenderer>();
+            cell = Instantiate(OrePrefab);
         }
-
+        SR = cell.GetComponent<SpriteRenderer>();
+        Profiler.EndSample();
+        Profiler.BeginSample("Setting position");
+        cell.isStatic = true;
         cell.transform.position = position;
         cell.transform.position += new Vector3(0, 0, 10);
         cell.transform.localScale = Vector3.one;
@@ -299,6 +322,14 @@ public class WorldGeneration : MonoBehaviour
         return cell;
     }
 }
+[Serializable]
+public class Item
+{
+    public int ID;
+    public Sprite sprite;
+    public int value;
+}
+
 [Serializable]
 public class Buildable
 {

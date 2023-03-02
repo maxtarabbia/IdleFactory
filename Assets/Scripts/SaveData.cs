@@ -8,6 +8,7 @@ using UnityEngine;
 public class SaveData : MonoBehaviour
 {
     public long time;
+    public int seed;
 
     public Vector2 CamCoord;
     public float CamScale;
@@ -30,6 +31,7 @@ public class SaveData : MonoBehaviour
         DatatoSave datatoSave = new DatatoSave();
 
         datatoSave.time = time;
+        datatoSave.seed = seed;
 
         datatoSave.minerdata= minerdata;
         datatoSave.beltdata= beltdata;
@@ -63,6 +65,7 @@ public class SaveData : MonoBehaviour
         coredata= savedData.coredata;
 
         time = savedData.time;
+        seed = savedData.seed;
 
         speedstates = savedData.speedstates;
 
@@ -76,6 +79,7 @@ public class SaveData : MonoBehaviour
 public struct DatatoSave
 {
     public long time;
+    public int seed;
 
     public MinerData[] minerdata;
     public BeltData[] beltdata;

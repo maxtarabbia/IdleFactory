@@ -6,7 +6,7 @@ public class Belt : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
-    public float timeTotravel = 2f;
+    public float timeTotravel = 1f;
     public Vector2 itemID;
 
     Vector2 outputCoord = new Vector2();

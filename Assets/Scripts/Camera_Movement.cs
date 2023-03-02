@@ -34,6 +34,7 @@ public class Camera_Movement : MonoBehaviour
 
     void Start()
     {
+        GameObject.Find("Background").GetComponent<SpriteRenderer>().material.SetFloat("_Seed", PlayerPrefs.GetInt("Seed"));
         world = FindObjectOfType<WorldGeneration>();
         cam = GetComponent<Camera>();
         updateCamSize();
