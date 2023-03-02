@@ -101,7 +101,7 @@ public class Splitter : MonoBehaviour
     {
         if (itemID.x != -1)
         {
-            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x - 1];
+            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x];
             sprite.transform.localPosition = new Vector2(0.5f - (itemID.y / timeTotravel), 0);
         }
     }
@@ -120,7 +120,7 @@ public class Splitter : MonoBehaviour
         {
             if (moveForward)
                 itemID.y += Time.fixedDeltaTime;
-            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x - 1];
+            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x];
             sprite.transform.localPosition = new Vector2(0.5f - (itemID.y / timeTotravel), 0);
         }
         else

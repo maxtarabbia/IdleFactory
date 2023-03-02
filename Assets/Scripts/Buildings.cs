@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Buildings : MonoBehaviour
@@ -18,10 +17,10 @@ public class Building
     public string name;
     public GameObject prefab;
     public int size;
-    public Vector2[] cost;
+    public int2[] cost;
     public int rotation;
     public int count;
-    public Building(GameObject prefab, string name, int size, Vector2[] cost, int rotation)
+    public Building(GameObject prefab, string name, int size, int2[] cost, int rotation)
     {
         this.prefab = prefab;
         this.name = name;

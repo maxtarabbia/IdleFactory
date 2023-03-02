@@ -2,12 +2,11 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 [System.Serializable]
 public class Inventory
 {
-    [SerializeField]
-    public Dictionary<int,string> IdNames = new Dictionary<int,string>();
 
     [SerializeField]
     public ItemStack[] items;
@@ -24,15 +23,6 @@ public class Inventory
     }
     public void PopulateItemIDs()
     {
-        IdNames = new Dictionary<int, string>
-        {
-            { 0, "Air" },
-            { 1, "Iron Ore" },
-            { 2, "Copper Ore" },
-            { 3, "Iron Ingot" },
-            { 4, "Copper Ingot" },
-            { 5, "Steel Ingot" }
-        };
     }
 
     public bool AddItem(int ID, int count)
@@ -61,7 +51,7 @@ public class Inventory
         }
         return foundspot;
     }
-    public bool RemoveItem(Vector2[] IDs, float multiplier)
+    public bool RemoveItem(int2[] IDs, float multiplier)
     {
         //check to make sure there are enough of each item;
         bool[] foundItems = new bool[IDs.Length];
@@ -69,7 +59,7 @@ public class Inventory
         {
             foreach (var item in items)
             {
-                if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y * multiplier)
+                if (item.ID == IDs[i].x && item.count >= IDs[i].y * multiplier)
                 {
                     foundItems[i] = true;
                 }
@@ -99,7 +89,7 @@ public class Inventory
         checkvoids();
         return foundall;
     }
-    public bool CheckRemoveItem(Vector2[] IDs, float multiplier)
+    public bool CheckRemoveItem(int2[] IDs, float multiplier)
     {
         //check to make sure there are enough of each item;
         bool[] foundItems = new bool[IDs.Length];
@@ -107,7 +97,7 @@ public class Inventory
         {
             foreach (var item in items)
             {
-                if (item.ID == (int)IDs[i].x && item.count >= (int)IDs[i].y * multiplier)
+                if (item.ID == IDs[i].x && item.count >= IDs[i].y * multiplier)
                 {
                     foundItems[i] = true;
                 }

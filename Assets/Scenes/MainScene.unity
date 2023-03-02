@@ -1188,18 +1188,23 @@ MonoBehaviour:
   OOB: {fileID: 21300000, guid: 5ff548dba2c4b614080f5cd645cb4e13, type: 3}
   items:
   - ID: 0
+    name: Iron Ore
     sprite: {fileID: 21300000, guid: 1166c45cd8faced4eb7f954116d407c1, type: 3}
     value: 1
   - ID: 1
+    name: Copper Ore
     sprite: {fileID: 21300000, guid: 6a567ab51f18e4c408630d2fc227782b, type: 3}
     value: 1
   - ID: 2
+    name: Iron Ingot
     sprite: {fileID: 21300000, guid: 2be8e2e0f299ea247a325b78a1c32924, type: 3}
     value: 2
   - ID: 3
+    name: Copper Ingot
     sprite: {fileID: 21300000, guid: c07a3d83028318b4a94848eb0e3e65f8, type: 3}
     value: 5
   - ID: 4
+    name: Steel Ingot
     sprite: {fileID: 21300000, guid: b296c80bcb4356542a75fb43ac91c077, type: 3}
     value: 20
   selectedBuildableIndex: 0
@@ -1225,7 +1230,7 @@ MonoBehaviour:
       speedScale: 1.05
       costScale: 1.5
     BeltInfo:
-      speed: 2
+      speed: 1
       cost: 1
       speedScale: 1.1
       costScale: 1.5
@@ -1253,7 +1258,8 @@ MonoBehaviour:
       type: 3}
     size: 2
     cost:
-    - {x: 1, y: 5}
+    - x: 0
+      y: 5
     rotation: 0
     count: 0
   - name: Belt
@@ -1261,7 +1267,8 @@ MonoBehaviour:
       type: 3}
     size: 1
     cost:
-    - {x: 2, y: 2}
+    - x: 1
+      y: 2
     rotation: 0
     count: 0
   - name: Refinery
@@ -1269,8 +1276,10 @@ MonoBehaviour:
       type: 3}
     size: 2
     cost:
-    - {x: 1, y: 5}
-    - {x: 2, y: 5}
+    - x: 0
+      y: 5
+    - x: 1
+      y: 5
     rotation: 0
     count: 0
   - name: Splitter
@@ -1278,7 +1287,8 @@ MonoBehaviour:
       type: 3}
     size: 1
     cost:
-    - {x: 3, y: 5}
+    - x: 2
+      y: 5
     rotation: 0
     count: 0
   - name: Core

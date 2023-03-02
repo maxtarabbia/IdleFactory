@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -177,7 +177,7 @@ public class Miner : MonoBehaviour
         {
             if (OutputItem(inv.items[0].ID))
             {
-                inv.RemoveItem(new Vector2[] { new Vector2(inv.items[0].ID, 1) }, 1);
+                inv.RemoveItem(new int2[] { new int2(inv.items[0].ID, 1) }, 1);
             }
         }
     }
@@ -203,7 +203,7 @@ public class Miner : MonoBehaviour
             calls = 0;
             return;
         }
-        float randfloat = Random.value;
+        float randfloat = (float)new System.Random().NextDouble();
         int minedItemID = coveredTileID[Mathf.FloorToInt(randfloat * 4)];
         switch (minedItemID)
         {
@@ -214,11 +214,11 @@ public class Miner : MonoBehaviour
                 break;
             case 1: //iron ore
                 calls = 0;
-                if (!OutputItem(1))
+                if (!OutputItem(0))
                 {
-                    if (!inv.AddItem(1, 1))
+                    if (!inv.AddItem(0, 1))
                     { 
-                    world.inv.AddItem(1, 1);
+                    world.inv.AddItem(0, 1);
                     effect.SetTexture("spriteTex", OreSprites[0].texture);
                     if (PlayerPrefs.GetInt("isLoaded") == 1)
                         effect.Play();
@@ -227,11 +227,11 @@ public class Miner : MonoBehaviour
                 break;
             case 2: //copper ore
                 calls = 0;
-                if (!OutputItem(2))
+                if (!OutputItem(1))
                 {
-                    if (!inv.AddItem(2, 1))
+                    if (!inv.AddItem(1, 1))
                     {
-                        world.inv.AddItem(2, 1);
+                        world.inv.AddItem(1, 1);
                         effect.SetTexture("spriteTex", OreSprites[1].texture);
                         if (PlayerPrefs.GetInt("isLoaded") == 1)
                             effect.Play();

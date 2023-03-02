@@ -26,7 +26,7 @@ public class StateSaveLoad : MonoBehaviour
     public long ticksToJam;
     long ticksAtATime = 5000;
 
-    int MaxHours = 2;
+    int MaxHours = 4;
 
     SaveData saveData;
     void Start()
@@ -227,17 +227,18 @@ public class StateSaveLoad : MonoBehaviour
         //FindObjectOfType<WorldGeneration>().Initialize(24);
 
         long oldtime = saveData.time;
-        long ticks = (Gettime() - oldtime);
-        if (ticks < 0)
+        long seconds = (Gettime() - oldtime);
+        if (seconds < 0)
         {
-            ticks = 0;
+            seconds = 0;
             print("?????");
         }
         else if(GameObject.Find("LoadingScreen"))
         {
             PlayerPrefs.SetInt("isloaded", 1);
         }
-        ticksToJam = Mathf.Clamp((int)ticks,5,3600 * MaxHours) * 50;
+        print("Simulating " + seconds + " seconds\nActually simulating " + Mathf.Clamp((int)seconds, 5, 3600 * MaxHours) + " seconds");
+        ticksToJam = Mathf.Clamp((int)seconds,5,3600 * MaxHours) * 50;
         totalTicks = ticksToJam;
     }
     long Gettime()

@@ -15,7 +15,6 @@ public class Belt : MonoBehaviour
 
     TickEvents tickEvents;
 
-    public Sprite[] spriteAssets;
 
     public Sprite[] BeltRotations;
     int BeltRotationState = 0;
@@ -197,7 +196,7 @@ public class Belt : MonoBehaviour
         {
             if (moveForward)
                 itemID.y += Time.fixedDeltaTime;
-            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x - 1];
+            sprite.GetComponent<SpriteRenderer>().sprite = world.items[(int)itemID.x].sprite;
 
             float xVal = 0;
             float yVal = 0;

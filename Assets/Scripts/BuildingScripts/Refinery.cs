@@ -125,7 +125,7 @@ public class Refinery : MonoBehaviour
         {
             if (OutputItem())
             {
-                outputInv.RemoveItem(new Vector2[] { new Vector2(outputInv.items[0].ID, 1) }, 1.0f);
+                outputInv.RemoveItem(new int2[] { new int2(outputInv.items[0].ID, 1) }, 1.0f);
             }
         }
     }
@@ -135,7 +135,7 @@ public class Refinery : MonoBehaviour
         if (outputInv.AddItem(outID, recipies.values[recipies.selectedRecipe].outCount))
         {
 
-            inputInv.RemoveItem(new Vector2[] { new Vector2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
+            inputInv.RemoveItem(new int2[] { new int2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
             RProgress -= RTime;
         }
         else

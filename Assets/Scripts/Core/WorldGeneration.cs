@@ -86,16 +86,15 @@ public class WorldGeneration : MonoBehaviour
         inv = new Inventory(5);
         if (GodMode)
         {
+            inv.AddItem(0, 5000);
             inv.AddItem(1, 5000);
             inv.AddItem(2, 5000);
             inv.AddItem(3, 5000);
-            inv.AddItem(4, 5000);
             Currency = 5000000;
         }
         else
         {
-            inv.AddItem(1, 5);
-            inv.AddItem(2, 0);
+            inv.AddItem(0, 5);
         }
     }
     public void Initialize(int size, int Seed)
@@ -255,7 +254,8 @@ public class WorldGeneration : MonoBehaviour
         {
             if (item.ID != -1)
             {
-                UItext = UItext + inv.IdNames[item.ID] + ": " + IntLib.IntToString(item.count);
+                
+                UItext = UItext + items[item.ID].name + ": " + IntLib.IntToString(item.count);
                 for(int i = 0; i < costs.Length; i++)
                 {
                     if (costs[i].x == item.ID)
@@ -326,6 +326,7 @@ public class WorldGeneration : MonoBehaviour
 public class Item
 {
     public int ID;
+    public string name;
     public Sprite sprite;
     public int value;
 }
