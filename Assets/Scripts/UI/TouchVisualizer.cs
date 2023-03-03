@@ -19,7 +19,7 @@ public class TouchVisualizer : MonoBehaviour
             for(int i = 0; i < Input.touchCount; i++)
             {
                 sprites.Add(Instantiate(prefab));
-                sprites[i].transform.parent = transform;
+                sprites[i].transform.SetParent(transform, false);
                 sprites[i].transform.localScale = Vector3.one * 60;
                 RectTransform rect = sprites[i].GetComponent<RectTransform>();
                 Vector2 pos = Input.touches[i].position;

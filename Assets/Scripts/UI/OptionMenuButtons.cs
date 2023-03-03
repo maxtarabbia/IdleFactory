@@ -12,13 +12,22 @@ public class OptionMenuButtons : MonoBehaviour
     void AddFullScreenButton()
     {
         GameObject button = Instantiate(FullscreenToggleButton,transform);
+        button.transform.localPosition = new Vector3(0, 0, -0.01f);
     }
     // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Destroy(transform.parent.transform.parent.gameObject);
+            CloseMenu();
         }
+    }
+    public void CloseMenu()
+    {
+        Destroy(transform.parent.transform.parent.gameObject);
+    }
+    private void OnMouseDown()
+    {
+        CloseMenu();
     }
 }
