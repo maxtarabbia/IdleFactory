@@ -14,9 +14,12 @@ public class InventorySeller : MonoBehaviour
     public GameObject SellerButtonPrefab;
     ItemSeller[] SellerButtons;
     public TMP_FontAsset fontAsset;
+    WorldGeneration world;
+    
     // Start is called before the first frame update
     void Start()
     {
+        world = FindObjectOfType<WorldGeneration>();
         Camera cam = FindObjectOfType<Camera>();
         gameObject.transform.position = new Vector3(cam.gameObject.transform.position.x, cam.gameObject.transform.position.y, transform.position.z);
         gameObject.transform.localScale *= cam.orthographicSize;
@@ -30,14 +33,14 @@ public class InventorySeller : MonoBehaviour
                 continue;
             stacks[i] = inv.items[i].count;
             itemSprites[i] = new GameObject();
-            itemSprites[i].name = inv.IdNames[inv.items[i].ID] + " icon";
+            itemSprites[i].name = world.items[inv.items[i].ID].name + " icon";
             SpriteRenderer SR = itemSprites[i].AddComponent<SpriteRenderer>();
-            SR.sprite = spriteAssets[inv.items[i].ID - 1];
+            SR.sprite = world.items[inv.items[i].ID].sprite;
             SR.sortingLayerID = gameObject.GetComponent<SpriteRenderer>().sortingLayerID;
             SR.sortingOrder = 3;
             itemSprites[i].transform.parent = transform;
-            itemSprites[i].transform.localPosition = new Vector3(-4.8f, 2.8f - i * 1.1f, -0.5f) * 0.08f;
-            itemSprites[i].transform.localScale = Vector3.one * 0.08f;
+            itemSprites[i].transform.localPosition = new Vector3(-4.8f, 2.85f - i * 0.85f, -0.5f) * 0.08f;
+            itemSprites[i].transform.localScale = Vector3.one * 0.07f;
 
             GameObject textsprite = new GameObject();
             textsprite.name = "itemCount";
@@ -56,7 +59,7 @@ public class InventorySeller : MonoBehaviour
             SellerButtons[i] = new ItemSeller();
             SellerButtons[i].ButtonPrefab = SellerButtonPrefab;
             SellerButtons[i].parent = itemSprites[i];
-            SellerButtons[i].ID = inv.items[i].ID - 1;
+            SellerButtons[i].ID = inv.items[i].ID;
             SellerButtons[i].SetButtons();
         }
     }

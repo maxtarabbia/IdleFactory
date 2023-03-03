@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class ItemSellButton : MonoBehaviour
@@ -16,10 +17,10 @@ public class ItemSellButton : MonoBehaviour
     }
     public void Sell()
     {
-       bool abletoSell = world.inv.RemoveItem(new Vector2[] {new Vector2(ID + 1,count)},1f);
+       bool abletoSell = world.inv.RemoveItem(new int2[] {new int2(ID,count)},1f);
         if (abletoSell)
         {
-            world.Currency += (count * world.CurrencyRates[ID]);
+            world.Currency += (count * world.items[ID].value);
             world.GetComponent<StateSaveLoad>().Save();
         }
     }

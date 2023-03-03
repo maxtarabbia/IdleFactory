@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Splitter : MonoBehaviour
@@ -20,12 +21,13 @@ public class Splitter : MonoBehaviour
 
     bool canOutput;
 
-    public Sprite[] spriteAssets;
+    Sprite[] spriteAssets;
     // Start is called before the first frame update
     void Start()
     {
         OutputPos = new Vector2[3];
         world = FindObjectOfType<WorldGeneration>();
+        spriteAssets = world.items.GroupBy(o => o.sprite).Select(g=>g.First().sprite).ToArray();
         pos = transform.position;
         //x is ID
         //y is time spent on belt
@@ -101,7 +103,7 @@ public class Splitter : MonoBehaviour
     {
         if (itemID.x != -1)
         {
-            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x - 1];
+            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x];
             sprite.transform.localPosition = new Vector2(0.5f - (itemID.y / timeTotravel), 0);
         }
     }
@@ -120,7 +122,7 @@ public class Splitter : MonoBehaviour
         {
             if (moveForward)
                 itemID.y += Time.fixedDeltaTime;
-            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x - 1];
+            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x];
             sprite.transform.localPosition = new Vector2(0.5f - (itemID.y / timeTotravel), 0);
         }
         else
@@ -176,6 +178,14 @@ public class Splitter : MonoBehaviour
             Refinery refineryScript = cellObj.GetComponent<Refinery>();
             Splitter splitter = cellObj.GetComponent<Splitter>();
             Core corescript = cellObj.GetComponent<Core>();
+            Assembler assembler = cellObj.GetComponent<Assembler>();
+            if (assembler != null)
+            {
+                if (assembler.InputItem(itemID, 1, pos))
+                {
+                    return true;
+                }
+            }
             if (beltscript != null)
             {
                 float spot = 0;

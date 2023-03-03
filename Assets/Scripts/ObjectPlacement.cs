@@ -11,11 +11,10 @@ public class ObjectPlacement : MonoBehaviour
     public bool isHovered;
     GameObject SpriteGhost;
     int LastBuildableIndex;
-    bool isTouch;
+    public bool isTouch;
 
     void Start()
     {
-            isTouch = world.isTouch;
     }
     private void OnMouseExit()
     {
@@ -187,8 +186,10 @@ public class ObjectPlacement : MonoBehaviour
             testToPlace();
         }
     }
+
     private void Update()
     {
+        
 
         if (world != null)
         {

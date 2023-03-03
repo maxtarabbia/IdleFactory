@@ -8,7 +8,7 @@ using UnityEngine.Profiling;
 
 public class StateSaveLoad : MonoBehaviour
 {
-    string path = "Assets/Saves";
+    string path = "/Saves";
     // Start is called before the first frame update
 
     bool SaveNext = false;
@@ -18,6 +18,7 @@ public class StateSaveLoad : MonoBehaviour
     public List<RefineryData> refineryData = new List<RefineryData>();
     public List<SplitterData> splitterData = new List<SplitterData>();
     public List<CoreData> coreData = new List<CoreData>();
+    public List<AssemblerData> assemblerData = new List<AssemblerData>();
 
     Buildings buildings;
     WorldGeneration world;
@@ -26,7 +27,7 @@ public class StateSaveLoad : MonoBehaviour
     public long ticksToJam;
     long ticksAtATime = 5000;
 
-    int MaxHours = 2;
+    int MaxHours = 4;
 
     SaveData saveData;
     void Start()
@@ -43,7 +44,6 @@ public class StateSaveLoad : MonoBehaviour
     {
         SaveNext = true;
     }
-
     public void Save()
     {
         
@@ -64,9 +64,10 @@ public class StateSaveLoad : MonoBehaviour
         SaveData data = SerializeBuilding(childObjects.ToArray());
         Profiler.EndSample();
         Profiler.BeginSample("Collecting rest of data");
-        data.worldinv = FindObjectOfType<WorldGeneration>().inv;
+        WorldGeneration world = FindObjectOfType<WorldGeneration>();
+        data.worldinv = world.inv;
 
-        data.speedstates = FindObjectOfType<WorldGeneration>().speedstates;
+        data.speedstates = world.speedstates;
 
 
         Camera cam = FindObjectOfType<Camera>();
@@ -74,6 +75,7 @@ public class StateSaveLoad : MonoBehaviour
         data.CamCoord = cam.gameObject.transform.localPosition;
 
         data.time = Gettime();
+        data.seed = world.Seed;
         data.Currency = world.Currency;
         Profiler.EndSample();
         Profiler.BeginSample("convert to json");
@@ -92,6 +94,7 @@ public class StateSaveLoad : MonoBehaviour
         refineryData= new List<RefineryData>();
         splitterData= new List<SplitterData>();
         coreData= new List<CoreData>();
+        assemblerData= new List<AssemblerData>();
 
         
 
@@ -146,6 +149,19 @@ public class StateSaveLoad : MonoBehaviour
                 coredat.Position = core.gameObject.transform.position;
                 coreData.Add(coredat);
             }
+            else if (thisObj.TryGetComponent(out Assembler assembler))
+            {
+                AssemblerData assemblerdat = new AssemblerData
+                {
+                    Position = assembler.pos,
+                    Rotation = Mathf.RoundToInt(assembler.gameObject.transform.eulerAngles.z),
+                    inv1 = assembler.inputInv,
+                    inv2 = assembler.outputInv,
+                    Progress = assembler.RProgress,
+                    Speed = assembler.RTime
+                };
+                assemblerData.Add(assemblerdat);
+            }
         }
         SaveData saveData = GetComponent<SaveData>();
 
@@ -156,6 +172,7 @@ public class StateSaveLoad : MonoBehaviour
         saveData.refinerydata= refineryData.ToArray();
         saveData.splitterdata= splitterData.ToArray();
         saveData.coredata= coreData.ToArray();
+        saveData.assemblerdata= assemblerData.ToArray();
 
         return saveData;
     }
@@ -170,8 +187,11 @@ public class StateSaveLoad : MonoBehaviour
         }
         clearMap();
 
-        FindObjectOfType<WorldGeneration>().Initialize(24);
-        FindObjectOfType<WorldGeneration>().SetInventory();
+        WorldGeneration world = FindObjectOfType<WorldGeneration>();
+
+        PlayerPrefs.SetInt("Seed", saveData.seed);
+        world.Initialize(24, saveData.seed);
+        world.SetInventory();
 
         foreach (MinerData minerData in saveData.minerdata)
         {
@@ -185,7 +205,7 @@ public class StateSaveLoad : MonoBehaviour
             newBelt.GetComponent<Belt>().itemID.x = beltData.itemID;
             newBelt.GetComponent<Belt>().itemID.y = beltData.Progress;
             newBelt.GetComponent<Belt>().timeTotravel = beltData.Speed;
-            newBelt.GetComponent<Belt>().world = FindObjectOfType<WorldGeneration>();
+            newBelt.GetComponent<Belt>().world = world;
      //       newBelt.GetComponent<Belt>().UpdateSpritePositions(false);
         }
         foreach (SplitterData splitterData in saveData.splitterdata)
@@ -194,7 +214,7 @@ public class StateSaveLoad : MonoBehaviour
             newSplitter.GetComponent<Splitter>().itemID.x = splitterData.itemID;
             newSplitter.GetComponent<Splitter>().itemID.y = splitterData.Progress;
             newSplitter.GetComponent<Splitter>().timeTotravel = splitterData.Speed;
-            newSplitter.GetComponent<Splitter>().world = FindObjectOfType<WorldGeneration>();
+            newSplitter.GetComponent<Splitter>().world = world;
 
         }
         foreach (RefineryData refineryData in saveData.refinerydata)
@@ -210,30 +230,42 @@ public class StateSaveLoad : MonoBehaviour
         {
             GameObject newCore = PlaceObjectManual(coreData.Position + new Vector2(-.5f,-.5f), 4, 0);
         }
+        foreach (AssemblerData assemblerData in saveData.assemblerdata)
+        {
+            GameObject newAssembler = PlaceObjectManual(assemblerData.Position, 5, assemblerData.Rotation);
+            newAssembler.GetComponent<Assembler>().RProgress = assemblerData.Progress;
+            newAssembler.GetComponent<Assembler>().inputInv = assemblerData.inv1;
+            newAssembler.GetComponent<Assembler>().outputInv = assemblerData.inv2;
+            newAssembler.GetComponent<Assembler>().RTime = assemblerData.Speed;
+
+        }
         FindObjectOfType<Camera>().transform.position = new Vector3(saveData.CamCoord.x, saveData.CamCoord.y, -10);
         FindObjectOfType<Camera>().orthographicSize = saveData.CamScale;
 
-        FindObjectOfType<WorldGeneration>().inv = saveData.worldinv;
-        FindObjectOfType<WorldGeneration>().Currency = saveData.Currency;
+        world.inv = saveData.worldinv;
+        world.Currency = saveData.Currency;
+        world.Seed = saveData.seed;
 
-        FindObjectOfType<WorldGeneration>().speedstates = saveData.speedstates;
+        world.speedstates = saveData.speedstates;
 
         FindObjectOfType<Camera_Movement>().updateCamSize();
         //FindObjectOfType<WorldGeneration>().Initialize(24);
 
         long oldtime = saveData.time;
-        long ticks = (Gettime() - oldtime);
-        if (ticks < 0)
+        long seconds = (Gettime() - oldtime);
+        if (seconds < 0)
         {
-            ticks = 0;
+            seconds = 0;
             print("?????");
         }
         else if(GameObject.Find("LoadingScreen"))
         {
             PlayerPrefs.SetInt("isloaded", 1);
         }
-        ticksToJam = Mathf.Clamp((int)ticks,5,3600 * MaxHours) * 50;
+        print("Simulating " + seconds + " seconds\nActually simulating " + Mathf.Clamp((int)seconds, 5, 3600 * MaxHours) + " seconds");
+        ticksToJam = Mathf.Clamp((int)seconds,5,3600 * MaxHours) * 50;
         totalTicks = ticksToJam;
+        world.inv.SortInv();
     }
     long Gettime()
     {

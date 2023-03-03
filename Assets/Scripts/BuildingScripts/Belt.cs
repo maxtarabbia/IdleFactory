@@ -6,7 +6,7 @@ public class Belt : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
-    public float timeTotravel = 2f;
+    public float timeTotravel = 1f;
     public Vector2 itemID;
 
     Vector2 outputCoord = new Vector2();
@@ -15,7 +15,6 @@ public class Belt : MonoBehaviour
 
     TickEvents tickEvents;
 
-    public Sprite[] spriteAssets;
 
     public Sprite[] BeltRotations;
     int BeltRotationState = 0;
@@ -197,7 +196,7 @@ public class Belt : MonoBehaviour
         {
             if (moveForward)
                 itemID.y += Time.fixedDeltaTime;
-            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x - 1];
+            sprite.GetComponent<SpriteRenderer>().sprite = world.items[(int)itemID.x].sprite;
 
             float xVal = 0;
             float yVal = 0;
@@ -268,6 +267,14 @@ public class Belt : MonoBehaviour
             Refinery refineryScript= cellObj.GetComponent<Refinery>();
             Splitter splitter = cellObj.GetComponent<Splitter>();
             Core core = cellObj.GetComponent<Core>();
+            Assembler assembler = cellObj.GetComponent<Assembler>();
+            if (assembler != null)
+            {
+                if (assembler.InputItem(initemID, 1, pos))
+                {
+                    return true;
+                }
+            }
             if (beltscript != null)
             {
                 float spot = itemID.y - timeTotravel;
