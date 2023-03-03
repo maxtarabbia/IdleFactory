@@ -120,6 +120,7 @@ public class Refinery : MonoBehaviour
             RProgress += Time.fixedDeltaTime;
         if (RProgress >= RTime)
         {
+            RefreshRecipe();
             AttemptSmelt();
         }
         if (outputInv.items[0].count > 0)
@@ -262,16 +263,7 @@ public class Refinery : MonoBehaviour
         {
             if (inputInv.AddItem(ID, count))
             {
-                isJammed = true;
-                for (int i = 0; i < recipies.values.Length; i++)
-                {
-                    if (ID == recipies.values[i].inputItemID)
-                    {
-                        recipies.selectedRecipe = i;
-                        isJammed= false;
-                        break;
-                    }
-                }
+                RefreshRecipe();
                 return true;
             }
             else
@@ -287,5 +279,18 @@ public class Refinery : MonoBehaviour
     private void OnDestroy()
     {
         tickEvents.MyEvent -= OnTick;
+    }
+    void RefreshRecipe()
+    {
+        isJammed = true;
+        for (int i = 0; i < recipies.values.Length; i++)
+        {
+            if (inputInv.items[0].ID == recipies.values[i].inputItemID)
+            {
+                recipies.selectedRecipe = i;
+                isJammed = false;
+                break;
+            }
+        }
     }
 }
