@@ -57,14 +57,14 @@ MonoBehaviour:
     maxStackSize: 0
   recipies:
     values:
-    - x: 1
-      y: 1
-      z: 3
-      w: 1
-    - x: 2
-      y: 2
-      z: 4
-      w: 1
+    - inputItemID: 0
+      inCount: 0
+      outputItemID: 0
+      outCount: 0
+    - inputItemID: 0
+      inCount: 0
+      outputItemID: 0
+      outCount: 0
     selectedRecipe: 0
   RProgress: 0
   RTime: 1
@@ -114,7 +114,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
-  m_EdgeRadius: 0.05
+  m_EdgeRadius: 0
 --- !u!212 &8451941540297078519
 SpriteRenderer:
   m_ObjectHideFlags: 0

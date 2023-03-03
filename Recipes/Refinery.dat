@@ -1,0 +1,23 @@
+{
+    "values": [
+        {
+            "inputItemID": 0,
+            "inCount": 2,
+            "outputItemID": 2,
+            "outCount": 1
+        },
+        {
+            "inputItemID": 1,
+            "inCount": 2,
+            "outputItemID": 3,
+            "outCount": 1
+        },
+        {
+            "inputItemID": 2,
+            "inCount": 5,
+            "outputItemID": 4,
+            "outCount": 1
+        }
+    ],
+    "selectedRecipe": 0
+}

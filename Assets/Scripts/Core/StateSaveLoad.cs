@@ -18,6 +18,7 @@ public class StateSaveLoad : MonoBehaviour
     public List<RefineryData> refineryData = new List<RefineryData>();
     public List<SplitterData> splitterData = new List<SplitterData>();
     public List<CoreData> coreData = new List<CoreData>();
+    public List<AssemblerData> assemblerData = new List<AssemblerData>();
 
     Buildings buildings;
     WorldGeneration world;
@@ -93,6 +94,7 @@ public class StateSaveLoad : MonoBehaviour
         refineryData= new List<RefineryData>();
         splitterData= new List<SplitterData>();
         coreData= new List<CoreData>();
+        assemblerData= new List<AssemblerData>();
 
         
 
@@ -147,6 +149,19 @@ public class StateSaveLoad : MonoBehaviour
                 coredat.Position = core.gameObject.transform.position;
                 coreData.Add(coredat);
             }
+            else if (thisObj.TryGetComponent(out Assembler assembler))
+            {
+                AssemblerData assemblerdat = new AssemblerData
+                {
+                    Position = assembler.pos,
+                    Rotation = Mathf.RoundToInt(assembler.gameObject.transform.eulerAngles.z),
+                    inv1 = assembler.inputInv,
+                    inv2 = assembler.outputInv,
+                    Progress = assembler.RProgress,
+                    Speed = assembler.RTime
+                };
+                assemblerData.Add(assemblerdat);
+            }
         }
         SaveData saveData = GetComponent<SaveData>();
 
@@ -157,6 +172,7 @@ public class StateSaveLoad : MonoBehaviour
         saveData.refinerydata= refineryData.ToArray();
         saveData.splitterdata= splitterData.ToArray();
         saveData.coredata= coreData.ToArray();
+        saveData.assemblerdata= assemblerData.ToArray();
 
         return saveData;
     }
@@ -214,6 +230,15 @@ public class StateSaveLoad : MonoBehaviour
         {
             GameObject newCore = PlaceObjectManual(coreData.Position + new Vector2(-.5f,-.5f), 4, 0);
         }
+        foreach (AssemblerData assemblerData in saveData.assemblerdata)
+        {
+            GameObject newAssembler = PlaceObjectManual(assemblerData.Position, 5, assemblerData.Rotation);
+            newAssembler.GetComponent<Assembler>().RProgress = assemblerData.Progress;
+            newAssembler.GetComponent<Assembler>().inputInv = assemblerData.inv1;
+            newAssembler.GetComponent<Assembler>().outputInv = assemblerData.inv2;
+            newAssembler.GetComponent<Assembler>().RTime = assemblerData.Speed;
+
+        }
         FindObjectOfType<Camera>().transform.position = new Vector3(saveData.CamCoord.x, saveData.CamCoord.y, -10);
         FindObjectOfType<Camera>().orthographicSize = saveData.CamScale;
 
@@ -240,6 +265,7 @@ public class StateSaveLoad : MonoBehaviour
         print("Simulating " + seconds + " seconds\nActually simulating " + Mathf.Clamp((int)seconds, 5, 3600 * MaxHours) + " seconds");
         ticksToJam = Mathf.Clamp((int)seconds,5,3600 * MaxHours) * 50;
         totalTicks = ticksToJam;
+        world.inv.SortInv();
     }
     long Gettime()
     {

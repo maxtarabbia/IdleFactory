@@ -20,6 +20,7 @@ public class SaveData : MonoBehaviour
     public SplitterData[] splitterdata;
     public RefineryData[] refinerydata;
     public CoreData[] coredata;
+    public AssemblerData[] assemblerdata;
 
     public SpeedStates speedstates;
 
@@ -38,6 +39,7 @@ public class SaveData : MonoBehaviour
         datatoSave.splitterdata= splitterdata;
         datatoSave.coredata= coredata;
         datatoSave.refinerydata= refinerydata;
+        datatoSave.assemblerdata= assemblerdata;
         datatoSave.Currency= Currency;
         datatoSave.CamCoord = CamCoord;
         datatoSave.CamScale= CamScale;
@@ -63,6 +65,7 @@ public class SaveData : MonoBehaviour
         splitterdata= savedData.splitterdata;
         refinerydata= savedData.refinerydata;
         coredata= savedData.coredata;
+        assemblerdata= savedData.assemblerdata;
 
         time = savedData.time;
         seed = savedData.seed;
@@ -86,6 +89,7 @@ public struct DatatoSave
     public SplitterData[] splitterdata;
     public RefineryData[] refinerydata;
     public CoreData[] coredata;
+    public AssemblerData[] assemblerdata;
 
     public SpeedStates speedstates;
 
@@ -112,6 +116,16 @@ public class BeltData
     public int Rotation;
     public float Progress;
     public int itemID;
+    public float Speed;
+}
+[System.Serializable]
+public class AssemblerData
+{
+    public Vector2 Position;
+    public int Rotation;
+    public float Progress;
+    public Inventory inv1;
+    public Inventory inv2;
     public float Speed;
 }
 [System.Serializable]

@@ -1207,6 +1207,10 @@ MonoBehaviour:
     name: Steel Ingot
     sprite: {fileID: 21300000, guid: b296c80bcb4356542a75fb43ac91c077, type: 3}
     value: 20
+  - ID: 5
+    name: Copper Wire
+    sprite: {fileID: 21300000, guid: d40ef36820c2a7e418908410dc6aaeb9, type: 3}
+    value: 20
   selectedBuildableIndex: 0
   UICanvas: {fileID: 232368677}
   UIImage: {fileID: 806666827}
@@ -1298,6 +1302,17 @@ MonoBehaviour:
     cost: []
     rotation: 0
     count: 0
+  - name: Assembler
+    prefab: {fileID: 6865126705278305189, guid: 539ab3c7ab6db4548bc8f36d66bfb114,
+      type: 3}
+    size: 2
+    cost:
+    - x: 3
+      y: 2
+    - x: 4
+      y: 2
+    rotation: 0
+    count: 0
 --- !u!114 &1298894907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1345,6 +1360,7 @@ MonoBehaviour:
   refineryData: []
   splitterData: []
   coreData: []
+  assemblerData: []
   totalTicks: 0
   ticksToJam: 0
 --- !u!114 &1298894910
@@ -1369,6 +1385,7 @@ MonoBehaviour:
   splitterdata: []
   refinerydata: []
   coredata: []
+  assemblerdata: []
   speedstates:
     MinerInfo:
       speed: 0

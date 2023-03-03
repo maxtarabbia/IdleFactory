@@ -282,6 +282,14 @@ public class Miner : MonoBehaviour
             Refinery refineryScript = cellObj.GetComponent<Refinery>();
             Core corescript = cellObj.GetComponent<Core>();
             Splitter splitterscript = cellObj.GetComponent<Splitter>();
+            Assembler assembler = cellObj.GetComponent<Assembler>();
+            if (assembler != null)
+            {
+                if (assembler.InputItem(itemID, 1, OutFromCoord))
+                {
+                    return true;
+                }
+            }
             if (beltScript != null)
             {
                 if (beltScript.inputItem(itemID, 0.5f))

@@ -43,13 +43,20 @@ public class Inventory
             {
                 if(item.ID == -1 && !foundspot)
                 {
+                    
                     item.ID = ID;
                     item.count = count;
                     foundspot = true;
+                    SortInv();
                 }
             }
         }
         return foundspot;
+    }
+    public void SortInv()
+    {
+        List<ItemStack> sorteditems = items.OrderBy(i => i.ID).ToList();
+        items = sorteditems.ToArray();
     }
     public bool RemoveItem(int2[] IDs, float multiplier)
     {

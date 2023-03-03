@@ -267,6 +267,14 @@ public class Belt : MonoBehaviour
             Refinery refineryScript= cellObj.GetComponent<Refinery>();
             Splitter splitter = cellObj.GetComponent<Splitter>();
             Core core = cellObj.GetComponent<Core>();
+            Assembler assembler = cellObj.GetComponent<Assembler>();
+            if (assembler != null)
+            {
+                if (assembler.InputItem(initemID, 1, pos))
+                {
+                    return true;
+                }
+            }
             if (beltscript != null)
             {
                 float spot = itemID.y - timeTotravel;

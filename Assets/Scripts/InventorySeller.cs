@@ -15,6 +15,7 @@ public class InventorySeller : MonoBehaviour
     ItemSeller[] SellerButtons;
     public TMP_FontAsset fontAsset;
     WorldGeneration world;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -34,12 +35,12 @@ public class InventorySeller : MonoBehaviour
             itemSprites[i] = new GameObject();
             itemSprites[i].name = world.items[inv.items[i].ID].name + " icon";
             SpriteRenderer SR = itemSprites[i].AddComponent<SpriteRenderer>();
-            SR.sprite = spriteAssets[inv.items[i].ID];
+            SR.sprite = world.items[inv.items[i].ID].sprite;
             SR.sortingLayerID = gameObject.GetComponent<SpriteRenderer>().sortingLayerID;
             SR.sortingOrder = 3;
             itemSprites[i].transform.parent = transform;
-            itemSprites[i].transform.localPosition = new Vector3(-4.8f, 2.8f - i * 1.0f, -0.5f) * 0.08f;
-            itemSprites[i].transform.localScale = Vector3.one * 0.08f;
+            itemSprites[i].transform.localPosition = new Vector3(-4.8f, 2.85f - i * 0.85f, -0.5f) * 0.08f;
+            itemSprites[i].transform.localScale = Vector3.one * 0.07f;
 
             GameObject textsprite = new GameObject();
             textsprite.name = "itemCount";

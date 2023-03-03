@@ -77,6 +77,11 @@ public class SpeedWarpButton : MonoBehaviour
         {
             refinery.RTime = refinfo.speed;
         }
+        Assembler[] assemblers = FindObjectsOfType<Assembler>();
+        foreach(Assembler assembler in assemblers)
+        {
+            assembler.RTime = refinfo.speed;
+        }
         world.Currency -= CurrentCost;
         CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));
         refinfo.cost = CurrentCost;

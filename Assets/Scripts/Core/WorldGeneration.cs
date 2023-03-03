@@ -83,14 +83,16 @@ public class WorldGeneration : MonoBehaviour
     }
     public void SetInventory()
     {
-        inv = new Inventory(5);
+        inv = new Inventory(6);
         if (GodMode)
         {
             inv.AddItem(0, 5000);
             inv.AddItem(1, 5000);
             inv.AddItem(2, 5000);
             inv.AddItem(3, 5000);
-            Currency = 5000000;
+            inv.AddItem(4, 5000);
+            inv.AddItem(5, 5000);
+            Currency = 100000000;
         }
         else
         {

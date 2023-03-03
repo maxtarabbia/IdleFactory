@@ -8,7 +8,7 @@ using UnityEngine;
 public class Refinery : MonoBehaviour
 {
     WorldGeneration world;
-    public Vector2 pos;
+    public Vector2Int pos;
 
     public Inventory inputInv;
     public Inventory outputInv;
@@ -17,27 +17,25 @@ public class Refinery : MonoBehaviour
     [SerializeField]
     public Recipes recipies;
 
-    string recipepath = "/Recipes";
+    string recipepath = "Recipes";
     string saveExtention = "/Refinery.dat";
 
-    Vector2 outputCoord = new Vector2();
-    Vector2 inputCoord = new Vector2();
+    Vector2Int outputCoord = new Vector2Int();
+    Vector2Int inputCoord = new Vector2Int();
+    Vector2Int outFromCoord = new Vector2Int();
 
     TickEvents tickEvents;
 
     public float RProgress;
     public float RTime = 1;
 
+    bool isJammed = false;
+
     public int inCount;
     public int outCount;
     [Serializable]
     public struct Recipes
     {
-        //x = Input Item ID
-        //y = Input Item Count
-        //z = Output Item ID
-        //w = Input Item Count
-
         public RefineryRecipe[] values;
         public int selectedRecipe;
     }
@@ -53,9 +51,9 @@ public class Refinery : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (File.Exists(Application.persistentDataPath + recipepath + saveExtention))
+        if (File.Exists(recipepath + saveExtention))
         {
-            recipies = (Recipes)JsonUtility.FromJson(System.IO.File.ReadAllText(Application.persistentDataPath + recipepath + saveExtention), typeof(Recipes));
+            recipies = (Recipes)JsonUtility.FromJson(System.IO.File.ReadAllText(recipepath + saveExtention), typeof(Recipes));
         }
         /*
         Directory.CreateDirectory(recipepath);
@@ -63,8 +61,7 @@ public class Refinery : MonoBehaviour
         */
 
         world = FindObjectOfType<WorldGeneration>();
-        pos = gameObject.transform.position;
-        pos += new Vector2(-0.5f, -0.5f);
+        pos = Vector2Int.RoundToInt((Vector2)gameObject.transform.position + new Vector2(-0.5f, -0.5f));
         if (inputInv == null || inputInv.items.Length == 0)
             inputInv = new Inventory(1);
         if (outputInv == null || outputInv.items.Length == 0)
@@ -90,20 +87,24 @@ public class Refinery : MonoBehaviour
         switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
             case 0:
-                outputCoord = pos + new Vector2(-1, 0);
-                inputCoord = pos + new Vector2(2, 1);
+                outputCoord = pos + new Vector2Int(-1, 0);
+                outFromCoord = pos;
+                inputCoord = pos + new Vector2Int(2, 1);
                 break;
             case 90:
-                outputCoord = pos + new Vector2(1, -1);
-                inputCoord = pos + new Vector2(0, 2);
+                outputCoord = pos + new Vector2Int(1, -1);
+                outFromCoord = pos + new Vector2Int(1, 0);
+                inputCoord = pos + new Vector2Int(0, 2);
                 break;
             case 180:
-                outputCoord = pos + new Vector2(2, 1);
-                inputCoord = pos + new Vector2(-1, 0);
+                outputCoord = pos + new Vector2Int(2, 1);
+                outFromCoord = pos + new Vector2Int(1, 1);
+                inputCoord = pos + new Vector2Int(-1, 0);
                 break;
             case 270:
-                outputCoord = pos + new Vector2(0, 2);
-                inputCoord = pos + new Vector2(1, -1);
+                outputCoord = pos + new Vector2Int(0, 2);
+                outFromCoord = pos + new Vector2Int(0, 1);
+                inputCoord = pos + new Vector2Int(1, -1);
                 break;
         }
     }
@@ -115,8 +116,8 @@ public class Refinery : MonoBehaviour
 
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
             return;
-
-        RProgress += Time.fixedDeltaTime;
+        if (!isJammed)
+            RProgress += Time.fixedDeltaTime;
         if (RProgress >= RTime)
         {
             AttemptSmelt();
@@ -218,6 +219,14 @@ public class Refinery : MonoBehaviour
             Refinery refineryScript = cellObj.GetComponent<Refinery>();
             Splitter splitterscript = cellObj.GetComponent<Splitter>();
             Core corescript = cellObj.GetComponent<Core>();
+            Assembler assembler = cellObj.GetComponent<Assembler>();
+            if (assembler != null)
+            {
+                if (assembler.InputItem(itemID, 1, outFromCoord))
+                {
+                    return true;
+                }
+            }
             if (beltScript != null)
             {
                 if (beltScript.inputItem(itemID, 0.5f))
@@ -227,7 +236,7 @@ public class Refinery : MonoBehaviour
             }
             else if (refineryScript != null)
             {
-                if (refineryScript.InputItem(itemID, 1, pos))
+                if (refineryScript.InputItem(itemID, 1, outFromCoord))
                 {
                     return true;
                 }
@@ -253,12 +262,13 @@ public class Refinery : MonoBehaviour
         {
             if (inputInv.AddItem(ID, count))
             {
-
+                isJammed = true;
                 for (int i = 0; i < recipies.values.Length; i++)
                 {
                     if (ID == recipies.values[i].inputItemID)
                     {
                         recipies.selectedRecipe = i;
+                        isJammed= false;
                         break;
                     }
                 }
