@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
+using UnityEngine.UIElements;
 
 public class StateSaveLoad : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class StateSaveLoad : MonoBehaviour
     public List<SplitterData> splitterData = new List<SplitterData>();
     public List<CoreData> coreData = new List<CoreData>();
     public List<AssemblerData> assemblerData = new List<AssemblerData>();
+    public List<UBData> UBdata = new List<UBData>();
+
 
     Buildings buildings;
     WorldGeneration world;
@@ -46,7 +49,6 @@ public class StateSaveLoad : MonoBehaviour
     }
     public void Save()
     {
-        
         Profiler.BeginSample("Searching all builds");
         saveData = GetComponent<SaveData>();
         string stringdata;
@@ -95,6 +97,7 @@ public class StateSaveLoad : MonoBehaviour
         splitterData= new List<SplitterData>();
         coreData= new List<CoreData>();
         assemblerData= new List<AssemblerData>();
+        UBdata = new List<UBData>();
 
         
 
@@ -149,6 +152,18 @@ public class StateSaveLoad : MonoBehaviour
                 coredat.Position = core.gameObject.transform.position;
                 coreData.Add(coredat);
             }
+            else if(thisObj.TryGetComponent(out UnderGroundBelt underGroundBelt))
+            {
+                UBData UBdat = new UBData
+                {
+                    Position = underGroundBelt.transform.position,
+                    Rotation = Mathf.RoundToInt(underGroundBelt.gameObject.transform.eulerAngles.z),
+                    Progress = underGroundBelt.itemID.y,
+                    itemID = Mathf.RoundToInt(underGroundBelt.itemID.x),
+                    Speed = underGroundBelt.timeTotravel
+                };
+                UBdata.Add(UBdat);
+            }
             else if (thisObj.TryGetComponent(out Assembler assembler))
             {
                 AssemblerData assemblerdat = new AssemblerData
@@ -166,7 +181,7 @@ public class StateSaveLoad : MonoBehaviour
         SaveData saveData = GetComponent<SaveData>();
 
        
-
+        saveData.UBdata = UBdata.ToArray();
         saveData.minerdata = minerData.ToArray();
         saveData.beltdata= beltData.ToArray();
         saveData.refinerydata= refineryData.ToArray();
@@ -199,6 +214,14 @@ public class StateSaveLoad : MonoBehaviour
             newMiner.GetComponent<Miner>().secondsPerItem = minerData.Speed;
             newMiner.GetComponent<Miner>().miningProgress = minerData.Progress;
         }
+        foreach (UBData UBdata in saveData.UBdata)
+        {
+            GameObject newUGBelt = PlaceObjectManual(UBdata.Position, 6, UBdata.Rotation);
+            newUGBelt.GetComponent<UnderGroundBelt>().itemID.x = UBdata.itemID;
+            newUGBelt.GetComponent<UnderGroundBelt>().itemID.y = UBdata.Progress;
+            newUGBelt.GetComponent<UnderGroundBelt>().timeTotravel = UBdata.Speed;
+            newUGBelt.GetComponent<UnderGroundBelt>().world = world;
+        }
         foreach (BeltData beltData in saveData.beltdata)
         {
             GameObject newBelt = PlaceObjectManual(beltData.Position, 1, beltData.Rotation);
@@ -206,7 +229,6 @@ public class StateSaveLoad : MonoBehaviour
             newBelt.GetComponent<Belt>().itemID.y = beltData.Progress;
             newBelt.GetComponent<Belt>().timeTotravel = beltData.Speed;
             newBelt.GetComponent<Belt>().world = world;
-     //       newBelt.GetComponent<Belt>().UpdateSpritePositions(false);
         }
         foreach (SplitterData splitterData in saveData.splitterdata)
         {
@@ -334,6 +356,9 @@ public class StateSaveLoad : MonoBehaviour
     }
     public GameObject PlaceObjectManual(Vector3 pos, int BuildableIndex, int Rotation)
     {
+
+
+
         Vector3 Transposition = pos;
         if (buildings.AllBuildings[BuildableIndex].size % 2 == 0) Transposition += new Vector3(0.5f, 0.5f, 0f);
 
@@ -353,6 +378,14 @@ public class StateSaveLoad : MonoBehaviour
                 world.OccupiedCells[new Vector2(pos.x + i, pos.y + j)] = instancedObj;
             }
         }
+
+        if (BuildableIndex == 6)
+        {
+            Vector3 rotatedpos = Quaternion.Euler(0, 0, Rotation) * new Vector3(-3, 0, 0) + pos;
+            Vector2 Vec2 = rotatedpos;
+            world.OccupiedCells.Add((Vector2)Vector2Int.RoundToInt(Vec2), instancedObj);
+        }
+
         return instancedObj;
     }
     public void DeleteSave()

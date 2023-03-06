@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -1451229560485884586}
   - component: {fileID: 8451941540297078519}
   - component: {fileID: -8402704205813031092}
+  - component: {fileID: 8028243304932433466}
   m_Layer: 0
   m_Name: RefineryPrefab
   m_TagString: Untagged
@@ -155,7 +156,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 589192775
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 2dd440489eb135a41aa8bbcb6da675f2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -233,6 +234,18 @@ MonoBehaviour:
     x: 0
     y: 0
   objectID: 2
+--- !u!114 &8028243304932433466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4639877332619864522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd078e29d9e98c94fb3676b652623d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8158662176475307641
 GameObject:
   m_ObjectHideFlags: 0

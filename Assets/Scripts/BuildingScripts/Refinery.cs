@@ -75,6 +75,7 @@ public class Refinery : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
+        FindObjectOfType<StateSaveLoad>().Save();
 
     }
 
@@ -84,6 +85,12 @@ public class Refinery : MonoBehaviour
     }
     void SetOutput()
     {
+        /*
+         inputCoord = pos + new Vector2Int(2, 1);
+         inputCoord = pos + new Vector2Int(0, 2);
+         inputCoord = pos + new Vector2Int(-1, 0);
+         inputCoord = pos + new Vector2Int(1, -1);
+         */
         switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
             case 0:
@@ -212,6 +219,12 @@ public class Refinery : MonoBehaviour
     {
         int itemID = outputInv.items[0].ID;
 
+        GameObject OutputObj = null;
+        world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
+
+        if (OutputObj != null)
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, itemID, Vector2Int.RoundToInt(outFromCoord));
+        /*
         GameObject cellObj = null;
         world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
         if (cellObj != null)
@@ -255,6 +268,7 @@ public class Refinery : MonoBehaviour
                 return true;
             }
         }
+        */
         return false;
     }
     public bool InputItem(int ID, int count, Vector2 inPos)

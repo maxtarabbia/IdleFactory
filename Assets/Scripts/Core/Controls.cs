@@ -57,6 +57,10 @@ public class Controls : MonoBehaviour
         {
             world.setBuildableIndex(5);
         }
+        if (Input.GetKey(KeyCode.Alpha7))
+        {
+            world.setBuildableIndex(6);
+        }
         if (Input.GetKey(KeyCode.F))
         {
             TickEvents events = GetComponent<TickEvents>();

@@ -21,6 +21,7 @@ public class SaveData : MonoBehaviour
     public RefineryData[] refinerydata;
     public CoreData[] coredata;
     public AssemblerData[] assemblerdata;
+    public UBData[] UBdata;
 
     public SpeedStates speedstates;
 
@@ -34,6 +35,7 @@ public class SaveData : MonoBehaviour
         datatoSave.time = time;
         datatoSave.seed = seed;
 
+        datatoSave.UBdata = UBdata;
         datatoSave.minerdata= minerdata;
         datatoSave.beltdata= beltdata;
         datatoSave.splitterdata= splitterdata;
@@ -66,6 +68,8 @@ public class SaveData : MonoBehaviour
         refinerydata= savedData.refinerydata;
         coredata= savedData.coredata;
         assemblerdata= savedData.assemblerdata;
+        UBdata = savedData.UBdata;
+
 
         time = savedData.time;
         seed = savedData.seed;
@@ -90,6 +94,7 @@ public struct DatatoSave
     public RefineryData[] refinerydata;
     public CoreData[] coredata;
     public AssemblerData[] assemblerdata;
+    public UBData[] UBdata;
 
     public SpeedStates speedstates;
 
@@ -107,6 +112,15 @@ public class MinerData
     public Vector2 Position;
     public int Rotation;
     public float Progress;
+    public float Speed;
+}
+[System.Serializable]
+public class UBData
+{
+    public Vector2 Position;
+    public int Rotation;
+    public float Progress;
+    public int itemID;
     public float Speed;
 }
 [System.Serializable]

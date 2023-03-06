@@ -16,6 +16,8 @@ public class Miner : MonoBehaviour
     VisualEffect effect;
     WorldGeneration world;
 
+    GameObject OutputObj;
+
     TickEvents tickEvents;
 
     Transform[] transforms;
@@ -274,22 +276,20 @@ public class Miner : MonoBehaviour
                 OutFromCoord = pos + new Vector2(0,1);
                 break;
         }
-        GameObject cellObj = null;
-        world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
-        if (cellObj != null)
+
+        bool canAccept = false;
+        if (OutputObj == null)
+            world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
+        if(OutputObj != null)
+            canAccept = ItemReceiver.CanObjectAcceptItem(OutputObj,itemID,Vector2Int.RoundToInt(OutFromCoord));
+
+        return canAccept;
+
+
+        /*
+        if (OutputObj != null)
         {
-            Belt beltScript = cellObj.GetComponent<Belt>();
-            Refinery refineryScript = cellObj.GetComponent<Refinery>();
-            Core corescript = cellObj.GetComponent<Core>();
-            Splitter splitterscript = cellObj.GetComponent<Splitter>();
-            Assembler assembler = cellObj.GetComponent<Assembler>();
-            if (assembler != null)
-            {
-                if (assembler.InputItem(itemID, 1, OutFromCoord))
-                {
-                    return true;
-                }
-            }
+            Belt beltScript = OutputObj.GetComponent<Belt>();
             if (beltScript != null)
             {
                 if (beltScript.inputItem(itemID, 0.5f))
@@ -297,21 +297,10 @@ public class Miner : MonoBehaviour
                     return true;
                 }
             }
-            else if(refineryScript != null)
+            Splitter splitterscript = OutputObj.GetComponent<Splitter>();
+            if (splitterscript != null)
             {
-                if(refineryScript.InputItem(itemID,1, OutFromCoord))
-                {
-                    return true;
-                }
-            }
-            else if (corescript != null)
-            {
-                corescript.InputItem(itemID);
-                return true;
-            }
-            else if (splitterscript != null)
-            {
-                if (cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z == 90 || cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z == -270)
+                if (OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z == 90 || OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z == -270)
                 {
                     if (splitterscript.inputItem(itemID, 0))
                     {
@@ -320,8 +309,31 @@ public class Miner : MonoBehaviour
                 }
 
             }
+            Refinery refineryScript = OutputObj.GetComponent<Refinery>();
+            if (refineryScript != null)
+            {
+                if (refineryScript.InputItem(itemID, 1, OutFromCoord))
+                {
+                    return true;
+                }
+            }
+            Assembler assembler = OutputObj.GetComponent<Assembler>();
+            if (assembler != null)
+            {
+                if (assembler.InputItem(itemID, 1, OutFromCoord))
+                {
+                    return true;
+                }
+            }
+            Core corescript = OutputObj.GetComponent<Core>();
+            if (corescript != null)
+            {
+                corescript.InputItem(itemID);
+                return true;
+            }
+
         }
         return false;
-
+        */
     }
 }

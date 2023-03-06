@@ -9,6 +9,7 @@ public class Assembler : MonoBehaviour
     public Vector2Int pos;
 
     public Inventory inputInv;
+    public Inventory inputInv2;
     public Inventory outputInv;
 
     bool isJammed = false;
@@ -22,14 +23,13 @@ public class Assembler : MonoBehaviour
     Vector2Int outputCoord = new Vector2Int();
     Vector2Int outFromCoord = new Vector2Int();
     Vector2Int inputCoord = new Vector2Int();
+    Vector2Int inputCoord2 = new Vector2Int();
 
     TickEvents tickEvents;
 
     public float RProgress;
     public float RTime = 1;
 
-    public int inCount;
-    public int outCount;
     [Serializable]
     public struct Recipes
     {
@@ -41,6 +41,8 @@ public class Assembler : MonoBehaviour
     {
         public int inputItemID;
         public int inCount;
+        public int inputItemID2;
+        public int inCount2;
         public int outputItemID;
         public int outCount;
     }
@@ -55,12 +57,15 @@ public class Assembler : MonoBehaviour
 
         world = FindObjectOfType<WorldGeneration>();
         pos = Vector2Int.RoundToInt((Vector2)gameObject.transform.position + new Vector2(-0.5f, -0.5f));
+        if (inputInv2 == null || inputInv2.items.Length == 0)
+            inputInv2 = new Inventory(1);
         if (inputInv == null || inputInv.items.Length == 0)
             inputInv = new Inventory(1);
         if (outputInv == null || outputInv.items.Length == 0)
             outputInv = new Inventory(1);
 
         inputInv.maxStackSize = 10;
+        inputInv2.maxStackSize= 10;
         outputInv.maxStackSize = 10;
         SetOutput();
 
@@ -68,7 +73,7 @@ public class Assembler : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
-
+        FindObjectOfType<StateSaveLoad>().Save();
     }
 
     void FixedUpdate()
@@ -77,35 +82,40 @@ public class Assembler : MonoBehaviour
     }
     void SetOutput()
     {
+        
+        
+        inputCoord2 = pos + new Vector2Int(-1, 0);
+        inputCoord2 = pos + new Vector2Int(1, -1);
         switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
             case 0:
                 outputCoord = pos + new Vector2Int(-1, 1);
                 outFromCoord = pos + new Vector2Int(0, 1);
                 inputCoord = pos + new Vector2Int(2, 0);
+                inputCoord2 = pos + new Vector2Int(2, 1);
                 break;
             case 90:
                 outputCoord = pos + new Vector2Int(0, -1);
                 outFromCoord = pos + new Vector2Int(0, 0);
                 inputCoord = pos + new Vector2Int(1, 2);
+                inputCoord2 = pos + new Vector2Int(0, 2);
                 break;
             case 180:
                 outputCoord = pos + new Vector2Int(2, 0);
                 outFromCoord = pos + new Vector2Int(1, 0);
                 inputCoord = pos + new Vector2Int(-1, 1);
+                inputCoord2 = pos + new Vector2Int(-1, 0);
                 break;
             case 270:
                 outputCoord = pos + new Vector2Int(1, 2);
                 outFromCoord = pos + new Vector2Int(1, 1);
                 inputCoord = pos + new Vector2Int(0, -1);
+                inputCoord2 = pos + new Vector2Int(1, -1);
                 break;
         }
     }
     void OnTick()
     {
-        inCount = inputInv.items[0].count;
-        outCount = outputInv.items[0].count;
-
 
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
             return;
@@ -126,9 +136,11 @@ public class Assembler : MonoBehaviour
     void AttemptBuild()
     {
         int outID = recipies.values[recipies.selectedRecipe].outputItemID;
+        if (!inputInv2.CheckRemoveItem(new int2[] { new int2(recipies.values[recipies.selectedRecipe].inputItemID2, recipies.values[recipies.selectedRecipe].inCount2) }, 1f))
+            return;
         if (outputInv.AddItem(outID, recipies.values[recipies.selectedRecipe].outCount))
         {
-
+            inputInv2.RemoveItem(new int2[] { new int2(recipies.values[recipies.selectedRecipe].inputItemID2, recipies.values[recipies.selectedRecipe].inCount2) }, 1f);
             inputInv.RemoveItem(new int2[] { new int2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
             RProgress -= RTime;
         }
@@ -204,8 +216,14 @@ public class Assembler : MonoBehaviour
     {
         int itemID = outputInv.items[0].ID;
 
-        GameObject cellObj = null;
-        world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
+        GameObject OutputObj = null;
+        world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
+
+        if (OutputObj != null)
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, itemID, Vector2Int.RoundToInt(outFromCoord));
+
+        /*
+
         if (cellObj != null)
         {
             Belt beltScript = cellObj.GetComponent<Belt>();
@@ -215,7 +233,7 @@ public class Assembler : MonoBehaviour
             Assembler assembler = cellObj.GetComponent<Assembler>();
             if (assembler != null)
             {
-                if (assembler.InputItem(itemID, 1, pos))
+                if (assembler.InputItem(itemID, 1, outFromCoord))
                 {
                     return true;
                 }
@@ -229,7 +247,7 @@ public class Assembler : MonoBehaviour
             }
             else if (refineryScript != null)
             {
-                if (refineryScript.InputItem(itemID, 1, pos))
+                if (refineryScript.InputItem(itemID, 1, outFromCoord))
                 {
                     return true;
                 }
@@ -247,6 +265,7 @@ public class Assembler : MonoBehaviour
                 return true;
             }
         }
+        */
         return false;
     }
     public bool InputItem(int ID, int count, Vector2 inPos)
@@ -265,6 +284,17 @@ public class Assembler : MonoBehaviour
                         break;
                     }
                 }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if((inPos - inputCoord2).sqrMagnitude <= 0.05f)
+        {
+            if (inputInv2.AddItem(ID, count))
+            {
                 return true;
             }
             else

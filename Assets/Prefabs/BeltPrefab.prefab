@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5891399416402255133}
   - component: {fileID: 2555554900948256933}
   - component: {fileID: 5137627015894068009}
+  - component: {fileID: 6828531097217075785}
   m_Layer: 0
   m_Name: BeltPrefab
   m_TagString: Untagged
@@ -51,12 +52,6 @@ MonoBehaviour:
   world: {fileID: 0}
   timeTotravel: 1
   itemID: {x: 0, y: 0}
-  spriteAssets:
-  - {fileID: 21300000, guid: 1166c45cd8faced4eb7f954116d407c1, type: 3}
-  - {fileID: 21300000, guid: 6a567ab51f18e4c408630d2fc227782b, type: 3}
-  - {fileID: 21300000, guid: 2be8e2e0f299ea247a325b78a1c32924, type: 3}
-  - {fileID: 21300000, guid: c07a3d83028318b4a94848eb0e3e65f8, type: 3}
-  - {fileID: 21300000, guid: b296c80bcb4356542a75fb43ac91c077, type: 3}
   BeltRotations:
   - {fileID: 21300000, guid: b7893a3a18d111b49818c004aa215faa, type: 3}
   - {fileID: 21300000, guid: 006de6b81006ebb458c6c66c15e17355, type: 3}
@@ -224,6 +219,19 @@ MonoBehaviour:
     x: 0
     y: 0
   objectID: 1
+--- !u!114 &6828531097217075785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7357262922707060930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd078e29d9e98c94fb3676b652623d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2
 --- !u!1 &9034683836393798069
 GameObject:
   m_ObjectHideFlags: 0

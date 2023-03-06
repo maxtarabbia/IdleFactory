@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 4810176146906671460}
   - component: {fileID: 9103843297449255192}
   - component: {fileID: 1918950800219173728}
+  - component: {fileID: 840763073352256515}
   m_Layer: 0
   m_Name: AssemblerPrefab
   m_TagString: Untagged
@@ -161,7 +162,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 589192775
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: e00d325f98da3f94ea19648ffd0f7613, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -189,6 +190,9 @@ MonoBehaviour:
   inputInv:
     items: []
     maxStackSize: 0
+  inputInv2:
+    items: []
+    maxStackSize: 0
   outputInv:
     items: []
     maxStackSize: 0
@@ -197,8 +201,6 @@ MonoBehaviour:
     selectedRecipe: 0
   RProgress: 0
   RTime: 1
-  inCount: 0
-  outCount: 0
 --- !u!114 &9103843297449255192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,3 +312,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &840763073352256515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6865126705278305189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd078e29d9e98c94fb3676b652623d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

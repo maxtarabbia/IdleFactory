@@ -352,6 +352,7 @@ GameObject:
   - component: {fileID: 8799806321794726531}
   - component: {fileID: 7427830111449972129}
   - component: {fileID: -4118159357335922493}
+  - component: {fileID: 1198552160817436052}
   m_Layer: 0
   m_Name: MinerPrefab
   m_TagString: Untagged
@@ -477,7 +478,6 @@ MonoBehaviour:
   pos: {x: 0, y: 0}
   coveredTileID: 
   miningProgress: 0
-  ticksToMine: 200
   secondsPerItem: 4
   OreSprites:
   - {fileID: 21300000, guid: 1166c45cd8faced4eb7f954116d407c1, type: 3}
@@ -644,3 +644,17 @@ MonoBehaviour:
   outputCoord:
     x: 0
     y: 0
+  objectID: 0
+--- !u!114 &1198552160817436052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8220867538285562738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd078e29d9e98c94fb3676b652623d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1

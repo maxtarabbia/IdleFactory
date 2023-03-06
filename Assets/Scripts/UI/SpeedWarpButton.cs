@@ -110,6 +110,11 @@ public class SpeedWarpButton : MonoBehaviour
         {
             splitter.timeTotravel = refinfo.speed;
         }
+        UnderGroundBelt[] UBS = FindObjectsOfType<UnderGroundBelt>();
+        foreach (UnderGroundBelt ub in UBS)
+        {
+            ub.timeTotravel = refinfo.speed;
+        }
 
         world.Currency -= CurrentCost;
         CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));

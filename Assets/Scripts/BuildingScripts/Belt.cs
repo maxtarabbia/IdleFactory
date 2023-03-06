@@ -15,6 +15,7 @@ public class Belt : MonoBehaviour
 
     TickEvents tickEvents;
 
+    SpriteRenderer SR;
 
     public Sprite[] BeltRotations;
     int BeltRotationState = 0;
@@ -36,8 +37,9 @@ public class Belt : MonoBehaviour
             sprite.transform.parent = gameObject.transform;
             sprite.transform.eulerAngles = (Vector3.zero);
         }
-        sprite.AddComponent<SpriteRenderer>();
-        sprite.GetComponent<SpriteRenderer>().sortingLayerName = "Particles";
+        SR = sprite.AddComponent<SpriteRenderer>();
+        SR.sortingLayerName = "Buildings";
+        SR.sortingOrder = 1;
         if(itemID == Vector2.zero)
             itemID = new Vector2(-1, 0);
         UpdateBeltInput();
@@ -47,7 +49,7 @@ public class Belt : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
-         
+        FindObjectOfType<StateSaveLoad>().Save();
     }
 
     public void UpdateAdjacentBelts()
@@ -116,11 +118,11 @@ public class Belt : MonoBehaviour
         bool rightOcc = false;
 
         if (rearObj != null)
-            rearOcc = rearObj.GetComponent<Belt>() != null || rearObj.GetComponent<Splitter>() != null;
+            rearOcc = rearObj.GetComponent<Belt>() != null || rearObj.GetComponent<Splitter>() != null || rearObj.GetComponent<UnderGroundBelt>() != null;
         if (leftObj != null)
-            leftOcc = leftObj.GetComponent<Belt>() != null || leftObj.GetComponent<Splitter>() != null;
-        if(rightObj != null)
-            rightOcc = rightObj.GetComponent<Belt>() != null || rightObj.GetComponent<Splitter>() != null;
+            leftOcc = leftObj.GetComponent<Belt>() != null || leftObj.GetComponent<Splitter>() != null || leftObj.GetComponent<UnderGroundBelt>() != null;
+        if (rightObj != null)
+            rightOcc = rightObj.GetComponent<Belt>() != null || rightObj.GetComponent<Splitter>() != null || rightObj.GetComponent<UnderGroundBelt>() != null;
 
         if (rearOcc && rearObj.GetComponent<Belt>() != null)
             rearOcc = rearObj.GetComponent<Belt>().outputCoord == pos;
@@ -128,6 +130,13 @@ public class Belt : MonoBehaviour
             leftOcc = leftObj.GetComponent<Belt>().outputCoord == pos;
         if (rightOcc && rightObj.GetComponent<Belt>() != null)
             rightOcc = rightObj.GetComponent<Belt>().outputCoord == pos;
+
+        if(rearOcc && rearObj.GetComponent<UnderGroundBelt>() != null)
+            rearOcc = rearObj.GetComponent<UnderGroundBelt>().OutputCoord == pos;
+        if (leftOcc && leftObj.GetComponent<UnderGroundBelt>() != null)
+            leftOcc = leftObj.GetComponent<UnderGroundBelt>().OutputCoord == pos;
+        if (rightOcc && rightObj.GetComponent<UnderGroundBelt>() != null)
+            rightOcc = rightObj.GetComponent<UnderGroundBelt>().OutputCoord == pos;
 
 
         if (!rearOcc && (leftOcc ^ rightOcc))
@@ -256,18 +265,83 @@ public class Belt : MonoBehaviour
             }
         return false;
     }
+    public bool inputItem(int inItem, Vector2Int inPos)
+    {
+        Vector2Int relativepos = inPos - Vector2Int.RoundToInt(pos);
+        float spot = 0;
+        Vector2Int outputpos = new Vector2Int(-1,0);
+        switch(gameObject.transform.rotation.eulerAngles.z)
+        {
+            case 0:
+                outputpos = new Vector2Int(-1, 0);
+                break;
+            case 90:
+                outputpos = new Vector2Int(0, -1);
+                break;
+            case 180:
+                outputpos = new Vector2Int(1, 0);
+                break;
+            case 270:
+                outputpos = new Vector2Int(0, 1);
+                break;
+        }
+
+        if (relativepos == outputpos)
+        {
+            spot = 0.9f;
+        }
+        if (inputItem(inItem, spot))
+        {
+            return true;
+        }
+
+
+        return false;
+    }
     bool OutputItem(int initemID)
     {
+        GameObject OutputObj = null;
+        world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
 
-        GameObject cellObj;
-        world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
-        if (cellObj != null)
+        if (OutputObj != null)
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos));
+        /*
+        if(!world.OccupiedCells.TryGetValue(outputCoord, out OutputObj))
+            return false;
+        if (OutputObj != null)
         {
-            Belt beltscript = cellObj.GetComponent<Belt>();
-            Refinery refineryScript= cellObj.GetComponent<Refinery>();
-            Splitter splitter = cellObj.GetComponent<Splitter>();
-            Core core = cellObj.GetComponent<Core>();
-            Assembler assembler = cellObj.GetComponent<Assembler>();
+            Belt beltscript = OutputObj.GetComponent<Belt>();
+            if (beltscript != null)
+            {
+                float spot = itemID.y - timeTotravel;
+                spot /= timeTotravel;
+                if (Mathf.Abs(OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 90 || Mathf.Abs(OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 270)
+                {
+                    spot = itemID.y - timeTotravel;
+                    spot /= timeTotravel;
+                }
+                else if (Mathf.Abs(OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 180)
+                {
+                    spot = 0.9f;
+                }
+                if (beltscript.inputItem(initemID, spot))
+                {
+                    return true;
+                }
+            }
+            Splitter splitter = OutputObj.GetComponent<Splitter>();
+            if (splitter != null)
+            {
+                if (Mathf.Abs(OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 0)
+                {
+                    if (splitter.inputItem(initemID, 0))
+                    {
+                        return true;
+                    }
+                }
+
+            }
+            Assembler assembler = OutputObj.GetComponent<Assembler>();
             if (assembler != null)
             {
                 if (assembler.InputItem(initemID, 1, pos))
@@ -275,48 +349,22 @@ public class Belt : MonoBehaviour
                     return true;
                 }
             }
-            if (beltscript != null)
-            {
-                float spot = itemID.y - timeTotravel;
-                spot /= timeTotravel;
-                if(Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 90 || Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 270)
-                {
-                    spot = itemID.y-timeTotravel;
-                    spot/= timeTotravel;
-                }
-                else if(Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 180)
-                {
-                    spot= 0.9f;
-                }
-                if (beltscript.inputItem(initemID, spot))
-                {
-                  return true;
-                }
-            }
-            else if (refineryScript != null)
+            Refinery refineryScript = OutputObj.GetComponent<Refinery>();
+            if (refineryScript != null)
             {
                 if (refineryScript.InputItem(initemID, 1, pos))
                 {
                     return true;
                 }
             }
-            else if (splitter != null)
-            {
-                if (Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 0)
-                {
-                    if (splitter.inputItem(initemID,0))
-                    {
-                        return true;
-                    }
-                }
-
-            }
-            else if (core != null)
+            Core core = OutputObj.GetComponent<Core>();
+            if (core != null)
             {
                 core.InputItem(initemID);
                 return true;
             }
         }
+        */
         return false;
 
     }

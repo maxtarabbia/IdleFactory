@@ -41,6 +41,16 @@ public class ObjectPlacement : MonoBehaviour
         bool isClear = true;
         Vector2 coord;
 
+        if (world.selectedBuildableIndex == 6)
+        {
+            Vector3 rotatedpos = Quaternion.Euler(0, 0, buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
+            Vector2 Vec2 = rotatedpos;
+            if (world.OccupiedCells.ContainsKey((Vector2)(Vector2Int.RoundToInt(Vec2))))
+            {
+                isClear = false;
+            }
+        }
+
         for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
         {
             for (int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
@@ -84,6 +94,16 @@ public class ObjectPlacement : MonoBehaviour
             bool isClear = true;
             Vector2 coord;
 
+            if (world.selectedBuildableIndex == 6)
+            {
+                Vector3 rotatedpos = Quaternion.Euler(0, 0, buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
+                Vector2 Vec2 = rotatedpos;
+                if (world.OccupiedCells.ContainsKey((Vector2)(Vector2Int.RoundToInt(Vec2))))
+                {
+                    isClear = false;
+                }
+            }
+
             for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
             {
                 for (int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
@@ -110,6 +130,16 @@ public class ObjectPlacement : MonoBehaviour
 
         bool isClear = true;
         Vector2 coord;
+
+        if (world.selectedBuildableIndex == 6)
+        {
+            Vector3 rotatedpos = Quaternion.Euler(0, 0,buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
+            Vector2 Vec2 = rotatedpos;
+            if (world.OccupiedCells.ContainsKey((Vector2)(Vector2Int.RoundToInt(Vec2))))
+            {
+                isClear = false;
+            }
+        }
 
         for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
         {
@@ -228,6 +258,9 @@ public class ObjectPlacement : MonoBehaviour
     
     void placeObject()
     {
+
+
+
         Vector3 Transposition = gameObject.transform.position;
         if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0) Transposition += new Vector3(0.5f, 0.5f, 0f);
 
@@ -246,6 +279,13 @@ public class ObjectPlacement : MonoBehaviour
             {
                 world.OccupiedCells[new Vector2(gameObject.transform.position.x + i, gameObject.transform.position.y + j)] = instancedObj;
             }
+        }
+
+        if (world.selectedBuildableIndex == 6)
+        {
+            Vector3 rotatedpos = Quaternion.Euler(0, 0, buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
+            Vector2 Vec2 = rotatedpos;
+            world.OccupiedCells.Add((Vector2)Vector2Int.RoundToInt(Vec2), instancedObj);
         }
     }
 }

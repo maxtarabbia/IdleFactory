@@ -1211,6 +1211,10 @@ MonoBehaviour:
     name: Copper Wire
     sprite: {fileID: 21300000, guid: d40ef36820c2a7e418908410dc6aaeb9, type: 3}
     value: 20
+  - ID: 6
+    name: Circuit
+    sprite: {fileID: 21300000, guid: 8291b923c9a8fb24bb91d91570b3e5b9, type: 3}
+    value: 50
   selectedBuildableIndex: 0
   UICanvas: {fileID: 232368677}
   UIImage: {fileID: 806666827}
@@ -1238,7 +1242,7 @@ MonoBehaviour:
       cost: 1
       speedScale: 1.1
       costScale: 1.5
-  GodMode: 0
+  GodMode: 1
   OOBprefab: {fileID: 2401475535027312438, guid: c60f62e42587fbe4c8f5de09c9f0d1c9,
     type: 3}
   OrePrefab: {fileID: 4149706894383282587, guid: e4f3d4dee813b414990c37c688573968,
@@ -1311,6 +1315,15 @@ MonoBehaviour:
       y: 2
     - x: 4
       y: 2
+    rotation: 0
+    count: 0
+  - name: UndergroundBelt
+    prefab: {fileID: 1457912811186902903, guid: a8f273b5b0a3ad44f9f0b331551b63a9,
+      type: 3}
+    size: 1
+    cost:
+    - x: 4
+      y: 1
     rotation: 0
     count: 0
 --- !u!114 &1298894907
