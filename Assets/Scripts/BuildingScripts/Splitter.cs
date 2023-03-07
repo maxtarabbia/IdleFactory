@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 
 public class Splitter : MonoBehaviour
@@ -20,10 +21,9 @@ public class Splitter : MonoBehaviour
 
     GameObject sprite;
     SpriteRenderer SR;
+    float justAdded;
+    public int blockedIndex;
 
-    int blockedIndex;
-
-    GameObject OutputObj;
 
     bool canOutput;
 
@@ -100,7 +100,7 @@ public class Splitter : MonoBehaviour
     {
         timeSinceFixed += Time.deltaTime;
         SetSpritePos(timeSinceFixed);
-        UpdateSprites();
+      //  UpdateSprites();
     }
     void UpdateSprites()
     {
@@ -108,13 +108,20 @@ public class Splitter : MonoBehaviour
         {
             SR.sprite = spriteAssets[(int)itemID.x];
             sprite.transform.localPosition = GetPosition(0);
-            if (blockedIndex > 3)
-                sprite.transform.localScale = Vector3.one * Mathf.Pow(0.95f, blockedIndex);
+            if (blockedIndex > 0)
+                sprite.transform.localScale = Vector3.zero;
         }
     }
     Vector2 GetPosition(float Offset)
     {
-        Vector2 Dir = (OutputPos[OutIter] - pos)/2;
+        Vector2[] LocalPos = new Vector2[3] 
+        {
+            new Vector2(0, 1),
+            new Vector2(-1, 0),
+            new Vector2(0, -1)
+        };
+
+        Vector2 Dir = (LocalPos[OutIter])/2;
         Vector2 output = new Vector2();
 
         output.x = 0.5f - ((itemID.y + Offset) / timeTotravel);
@@ -133,8 +140,15 @@ public class Splitter : MonoBehaviour
     }
     void OnTick()
     {
+        if (justAdded == Time.fixedTime)
+        {
+            timeSinceFixed = 0;
+            return;
+        }
+        Profiler.BeginSample("Splitter Tick Logic");
         UpdateSpritePositions(true);
         timeSinceFixed = 0;
+        Profiler.EndSample();
     }
     void UpdateSpritePositions(bool moveForward)
     {
@@ -195,6 +209,7 @@ public class Splitter : MonoBehaviour
     {
         if (itemID.x == -1)
         {
+            justAdded = Time.fixedTime;
             itemID.y = time;
             itemID.x = initemID;
             UpdateSpritePositions(false);
@@ -224,6 +239,7 @@ public class Splitter : MonoBehaviour
             else
             {
                 blockedIndex = 0;
+                sprite.transform.localScale = Vector3.one;
                 o = true;
             }
         }

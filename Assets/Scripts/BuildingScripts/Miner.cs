@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.VFX;
 
 public class Miner : MonoBehaviour
@@ -160,7 +161,8 @@ public class Miner : MonoBehaviour
     
     void OnTick()
     {
-        if(this == null)
+        Profiler.BeginSample("Miner Tick Logic");
+        if (this == null)
         {
             tickEvents.MyEvent -= OnTick;
             return;
@@ -182,6 +184,7 @@ public class Miner : MonoBehaviour
                 inv.RemoveItem(new int2[] { new int2(inv.items[0].ID, 1) }, 1);
             }
         }
+        Profiler.EndSample();
     }
     void MiningAnimation()
     {

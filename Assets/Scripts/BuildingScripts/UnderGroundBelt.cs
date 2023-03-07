@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class UnderGroundBelt : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class UnderGroundBelt : MonoBehaviour
     public int distance;
 
     TickEvents tickEvents;
-
+    float TimeAdded;
     SpriteRenderer SR;
 
     float timeSinceFixed;
@@ -108,8 +109,15 @@ public class UnderGroundBelt : MonoBehaviour
     }
     void OnTick()
     {
+        if (TimeAdded == Time.fixedTime)
+        {
+            timeSinceFixed = 0;
+            return;
+        }
+        Profiler.BeginSample("Underground Tick Logic");
         UpdateSpritePositions(true);
         timeSinceFixed = 0;
+        Profiler.EndSample();
     }
     void SetSpritePos(float Offset)
     {
@@ -179,6 +187,7 @@ public class UnderGroundBelt : MonoBehaviour
     {
         if (itemID.x == -1)
         {
+            TimeAdded = Time.fixedTime;
             itemID.y = time * timeTotravel;
             itemID.x = initemID;
             UpdateSpritePositions(false);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class Belt : MonoBehaviour
 {
@@ -15,11 +16,11 @@ public class Belt : MonoBehaviour
 
     TickEvents tickEvents;
 
-    SpriteRenderer SR;
+    SpriteRenderer spriteSR;
 
     public Sprite[] BeltRotations;
     int BeltRotationState = 0;
-
+    float justAdded;
     float timeSinceFixed;
     bool canOutput;
     // Start is called before the first frame update
@@ -37,9 +38,9 @@ public class Belt : MonoBehaviour
             sprite.transform.parent = gameObject.transform;
             sprite.transform.eulerAngles = (Vector3.zero);
         }
-        SR = sprite.AddComponent<SpriteRenderer>();
-        SR.sortingLayerName = "Buildings";
-        SR.sortingOrder = 1;
+        spriteSR = sprite.AddComponent<SpriteRenderer>();
+        spriteSR.sortingLayerName = "Buildings";
+        spriteSR.sortingOrder = 1;
         if(itemID == Vector2.zero)
             itemID = new Vector2(-1, 0);
         UpdateBeltInput();
@@ -160,13 +161,17 @@ public class Belt : MonoBehaviour
 
 
     }
-    private void FixedUpdate()
-    {
-    }
     void OnTick()
     {
+        if(justAdded == Time.fixedTime)
+        {
+            timeSinceFixed = 0;
+            return;
+        }
+        Profiler.BeginSample("Belt Tick Logic");
         UpdateSpritePositions(true);
         timeSinceFixed = 0;
+        Profiler.EndSample();
     }
     void SetSpritePos(float Offset)
     {
@@ -200,12 +205,13 @@ public class Belt : MonoBehaviour
     }
     public void UpdateSpritePositions(bool moveForward)
     {
+        Profiler.BeginSample("Move Forward");
         //progress forward
         if (itemID.x != -1)
         {
             if (moveForward)
                 itemID.y += Time.fixedDeltaTime;
-            sprite.GetComponent<SpriteRenderer>().sprite = world.items[(int)itemID.x].sprite;
+            spriteSR.sprite = world.items[(int)itemID.x].sprite;
 
             float xVal = 0;
             float yVal = 0;
@@ -233,14 +239,18 @@ public class Belt : MonoBehaviour
 
 
         }
-
+        Profiler.EndSample();
+        Profiler.BeginSample("Check For Output");
         //check to output
         if (itemID.y >= timeTotravel)
         {
-            if (OutputItem((int)itemID.x))
+            Profiler.BeginSample("Check Output Spot");
+            bool outBool = OutputItem((int) itemID.x);
+            Profiler.EndSample();
+            if (outBool)
             {
                 timeSinceFixed = 0;
-                sprite.GetComponent<SpriteRenderer>().sprite = null;
+                spriteSR.sprite = null;
                 itemID = new Vector2(-1, 0);
                 canOutput= true;
             }
@@ -250,16 +260,17 @@ public class Belt : MonoBehaviour
                 itemID.y = timeTotravel;
             }
         }
+        Profiler.EndSample();
     }
     public bool inputItem(int initemID, float time)
     {
-            if (itemID.x == -1)
+        if (itemID.x == -1)
             {
+                justAdded = Time.fixedTime;
                 itemID.y = time * timeTotravel;
                 itemID.x = initemID;
                 UpdateSpritePositions(false);
-
-
+                
                 return true;
 
             }
@@ -294,77 +305,15 @@ public class Belt : MonoBehaviour
         {
             return true;
         }
-
-
         return false;
     }
     bool OutputItem(int initemID)
     {
-        GameObject OutputObj = null;
-        world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
+        GameObject OutputObj;
 
-        if (OutputObj != null)
+        if (world.OccupiedCells.TryGetValue(outputCoord, out OutputObj))
             return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos));
-        /*
-        if(!world.OccupiedCells.TryGetValue(outputCoord, out OutputObj))
-            return false;
-        if (OutputObj != null)
-        {
-            Belt beltscript = OutputObj.GetComponent<Belt>();
-            if (beltscript != null)
-            {
-                float spot = itemID.y - timeTotravel;
-                spot /= timeTotravel;
-                if (Mathf.Abs(OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 90 || Mathf.Abs(OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 270)
-                {
-                    spot = itemID.y - timeTotravel;
-                    spot /= timeTotravel;
-                }
-                else if (Mathf.Abs(OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 180)
-                {
-                    spot = 0.9f;
-                }
-                if (beltscript.inputItem(initemID, spot))
-                {
-                    return true;
-                }
-            }
-            Splitter splitter = OutputObj.GetComponent<Splitter>();
-            if (splitter != null)
-            {
-                if (Mathf.Abs(OutputObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 0)
-                {
-                    if (splitter.inputItem(initemID, 0))
-                    {
-                        return true;
-                    }
-                }
-
-            }
-            Assembler assembler = OutputObj.GetComponent<Assembler>();
-            if (assembler != null)
-            {
-                if (assembler.InputItem(initemID, 1, pos))
-                {
-                    return true;
-                }
-            }
-            Refinery refineryScript = OutputObj.GetComponent<Refinery>();
-            if (refineryScript != null)
-            {
-                if (refineryScript.InputItem(initemID, 1, pos))
-                {
-                    return true;
-                }
-            }
-            Core core = OutputObj.GetComponent<Core>();
-            if (core != null)
-            {
-                core.InputItem(initemID);
-                return true;
-            }
-        }
-        */
+        
         return false;
 
     }

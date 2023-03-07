@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class Refinery : MonoBehaviour
 {
@@ -31,8 +32,6 @@ public class Refinery : MonoBehaviour
 
     bool isJammed = false;
 
-    public int inCount;
-    public int outCount;
     [Serializable]
     public struct Recipes
     {
@@ -117,26 +116,34 @@ public class Refinery : MonoBehaviour
     }
     void OnTick()
     {
-        inCount = inputInv.items[0].count;
-        outCount = outputInv.items[0].count;
+        Profiler.BeginSample("Refinery Tick Logic");
 
-
+        
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
+        {
+            Profiler.EndSample();
             return;
+        }
         if (!isJammed)
             RProgress += Time.fixedDeltaTime;
         if (RProgress >= RTime)
         {
+            Profiler.BeginSample("AttemptSmelt");
             RefreshRecipe();
             AttemptSmelt();
+            Profiler.EndSample();
         }
         if (outputInv.items[0].count > 0)
         {
+            Profiler.BeginSample("AttemptOutput");
             if (OutputItem())
             {
                 outputInv.RemoveItem(new int2[] { new int2(outputInv.items[0].ID, 1) }, 1.0f);
             }
+            Profiler.EndSample();
         }
+        Profiler.EndSample();
+
     }
     void AttemptSmelt()
     {

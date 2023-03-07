@@ -284,8 +284,9 @@ public class StateSaveLoad : MonoBehaviour
         {
             PlayerPrefs.SetInt("isloaded", 1);
         }
+        int TPS = Mathf.RoundToInt(1 / Time.fixedDeltaTime);
         print("Simulating " + seconds + " seconds\nActually simulating " + Mathf.Clamp((int)seconds, 5, 3600 * MaxHours) + " seconds");
-        ticksToJam = Mathf.Clamp((int)seconds,5,3600 * MaxHours) * 50;
+        ticksToJam = Mathf.Clamp((int)seconds,5,3600 * MaxHours) * TPS;
         totalTicks = ticksToJam;
         world.inv.SortInv();
     }
@@ -325,7 +326,7 @@ public class StateSaveLoad : MonoBehaviour
     {
         if(ticksToJam != 0)
         {
-            int optimaltick = math.clamp(Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50,5,5000);
+            int optimaltick = math.clamp(Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50,1,1000);
             if (ticksAtATime != optimaltick)
             {
                 ticksAtATime = optimaltick;

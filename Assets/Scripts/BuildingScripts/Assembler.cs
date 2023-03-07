@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class Assembler : MonoBehaviour
 {
@@ -116,9 +117,13 @@ public class Assembler : MonoBehaviour
     }
     void OnTick()
     {
+        Profiler.BeginSample("Assembler Tick Logic");
 
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
+        {
+            Profiler.EndSample();
             return;
+        }
         if(!isJammed)
             RProgress += Time.fixedDeltaTime;
         if (RProgress >= RTime)
@@ -132,9 +137,11 @@ public class Assembler : MonoBehaviour
                 outputInv.RemoveItem(new int2[] { new int2(outputInv.items[0].ID, 1) }, 1.0f);
             }
         }
+        Profiler.EndSample();
     }
     void AttemptBuild()
     {
+        SetRecipe();
         int outID = recipies.values[recipies.selectedRecipe].outputItemID;
         if (!inputInv2.CheckRemoveItem(new int2[] { new int2(recipies.values[recipies.selectedRecipe].inputItemID2, recipies.values[recipies.selectedRecipe].inCount2) }, 1f))
             return;
@@ -268,6 +275,19 @@ public class Assembler : MonoBehaviour
         */
         return false;
     }
+    void SetRecipe()
+    {
+        isJammed = true;
+        for (int i = 0; i < recipies.values.Length; i++)
+        {
+            if (inputInv.items[0].ID == recipies.values[i].inputItemID)
+            {
+                recipies.selectedRecipe = i;
+                isJammed = false;
+                break;
+            }
+        }
+    }
     public bool InputItem(int ID, int count, Vector2 inPos)
     {
         if ((inPos - inputCoord).sqrMagnitude <= 0.05f)
@@ -275,15 +295,7 @@ public class Assembler : MonoBehaviour
             if (inputInv.AddItem(ID, count))
             {
                 isJammed= true;
-                for (int i = 0; i < recipies.values.Length; i++)
-                {
-                    if (ID == recipies.values[i].inputItemID)
-                    {
-                        recipies.selectedRecipe = i;
-                        isJammed= false;
-                        break;
-                    }
-                }
+                SetRecipe();
                 return true;
             }
             else

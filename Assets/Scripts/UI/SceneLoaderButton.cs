@@ -20,12 +20,8 @@ public class SceneLoaderButton : MonoBehaviour
     }
     public void LoadMainScene()
     {
-
-        //print("attempting to Launch: " + SceneToLoad);
         PlayerPrefs.SetString("Level", SceneToLoad);
-
         SceneManager.LoadScene("LoadingScene");
-
     }
     public void NewGame()
     {
