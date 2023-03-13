@@ -112,6 +112,7 @@ public class UnderGroundBelt : MonoBehaviour
         if (TimeAdded == Time.fixedTime)
         {
             timeSinceFixed = 0;
+            TimeAdded += 0.01f;
             return;
         }
         Profiler.BeginSample("Underground Tick Logic");
@@ -145,6 +146,7 @@ public class UnderGroundBelt : MonoBehaviour
         {
             xVal = 0.5f - ((itemID.y + Offset) / timeTotravel);
         }
+        size = Mathf.Clamp01(size);
         return xVal;
     }
     public void UpdateSpritePositions(bool moveForward)
@@ -231,13 +233,45 @@ public class UnderGroundBelt : MonoBehaviour
 
         return false;
     }
+    public bool inputItem(int inItem, Vector2Int inPos, float Offset)
+    {
+        Vector2Int relativepos = inPos - Vector2Int.RoundToInt(pos);
+        Vector2Int outputpos = new Vector2Int(-1, 0);
+        switch (gameObject.transform.rotation.eulerAngles.z)
+        {
+            case 0:
+                outputpos = new Vector2Int(-1, 0);
+                break;
+            case 90:
+                outputpos = new Vector2Int(0, -1);
+                break;
+            case 180:
+                outputpos = new Vector2Int(1, 0);
+                break;
+            case 270:
+                outputpos = new Vector2Int(0, 1);
+                break;
+        }
+
+        if (relativepos == outputpos)
+        {
+            Offset = 0.9f;
+        }
+        if (inputItem(inItem, Offset))
+        {
+            return true;
+        }
+
+
+        return false;
+    }
     bool OutputItem(int initemID)
     {
         GameObject OutputObj = null;
         world.OccupiedCells.TryGetValue(OutputCoord, out OutputObj);
 
         if (OutputObj != null)
-            return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos + outFrom));
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos + outFrom), itemID.y - timeTotravel);
         /*
         if(!world.OccupiedCells.TryGetValue(outputCoord, out OutputObj))
             return false;
@@ -303,19 +337,21 @@ public class UnderGroundBelt : MonoBehaviour
     }
     public void RotateCW()
     {
+        /*
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         FixRotations();
         UpdateBeltInput();
         UpdateAdjacentBelts();
-
+        */
     }
     public void RotateCCW()
     {
+        /*
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         FixRotations();
         UpdateBeltInput();
         UpdateAdjacentBelts();
-
+        */
     }
     public void DeleteThis()
     {
@@ -323,6 +359,7 @@ public class UnderGroundBelt : MonoBehaviour
         world.inv.AddItem((int)builds.AllBuildings[1].cost[0].x, (int)builds.AllBuildings[1].cost[0].y);
 
         world.OccupiedCells.Remove(pos);
+        world.OccupiedCells.Remove(pos + outFrom);
 
         builds.AllBuildings[1].count--;
 

@@ -100,16 +100,13 @@ public class Splitter : MonoBehaviour
     {
         timeSinceFixed += Time.deltaTime;
         SetSpritePos(timeSinceFixed);
-      //  UpdateSprites();
+        UpdatedBlockedSprite();
     }
-    void UpdateSprites()
+    void UpdatedBlockedSprite()
     {
-        if (itemID.x != -1)
+        if (itemID.x != -1 && blockedIndex > 0)
         {
-            SR.sprite = spriteAssets[(int)itemID.x];
-            sprite.transform.localPosition = GetPosition(0);
-            if (blockedIndex > 0)
-                sprite.transform.localScale = Vector3.zero;
+            sprite.transform.localScale = Vector3.zero;
         }
     }
     Vector2 GetPosition(float Offset)
@@ -134,15 +131,12 @@ public class Splitter : MonoBehaviour
         }
         return output;
     }
-    private void FixedUpdate()
-    {
-        //OnTick();
-    }
     void OnTick()
     {
         if (justAdded == Time.fixedTime)
         {
             timeSinceFixed = 0;
+            justAdded += 0.01f;
             return;
         }
         Profiler.BeginSample("Splitter Tick Logic");
@@ -205,6 +199,32 @@ public class Splitter : MonoBehaviour
         }
         return false;
     }
+    public bool inputItem(int inItem, Vector2Int inPos, float Offset)
+    {
+        Vector2Int relativepos = inPos - Vector2Int.RoundToInt(pos);
+        Vector2Int inputpos = new Vector2Int(-1, 0);
+        switch (gameObject.transform.rotation.eulerAngles.z)
+        {
+            case 0:
+                inputpos = new Vector2Int(1, 0);
+                break;
+            case 90:
+                inputpos = new Vector2Int(0, 1);
+                break;
+            case 180:
+                inputpos = new Vector2Int(-1, 0);
+                break;
+            case 270:
+                inputpos = new Vector2Int(0, -1);
+                break;
+        }
+
+        if (relativepos == inputpos)
+        {
+            return inputItem(inItem, Offset);
+        }
+        return false;
+    }
     public bool inputItem(int initemID, float time)
     {
         if (itemID.x == -1)
@@ -231,7 +251,7 @@ public class Splitter : MonoBehaviour
         world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
         if (OutputObj != null)
         {
-            if(!ItemReceiver.CanObjectAcceptItem(OutputObj, itemID, Vector2Int.RoundToInt(pos)))
+            if(!ItemReceiver.CanObjectAcceptItem(OutputObj, itemID, Vector2Int.RoundToInt(pos), this.itemID.y - timeTotravel))
             {
                 o = false;
                 blockedIndex++;

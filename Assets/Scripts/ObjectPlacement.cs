@@ -211,7 +211,7 @@ public class ObjectPlacement : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        if (Input.GetMouseButtonDown(0) && !isTouch)
+        if (Input.GetMouseButtonDown(0) && !isTouch && !FindObjectOfType<Controls>().areSelectedBuildings)
         {
             testToPlace();
         }

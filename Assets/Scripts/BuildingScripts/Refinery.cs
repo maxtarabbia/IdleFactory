@@ -38,6 +38,7 @@ public class Refinery : MonoBehaviour
         public RefineryRecipe[] values;
         public int selectedRecipe;
     }
+
     [Serializable]
     public struct RefineryRecipe
     {

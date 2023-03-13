@@ -9,16 +9,17 @@ public class Controls : MonoBehaviour
     WorldGeneration world;
     public Image UIsprite;
     public TextMeshProUGUI UIText;
-    Buildings buildings;
+    
     public GameObject PauseMenu;
     public GameObject InventoryMenu;
+
+    float mouseClickTime = 0;
+
+    public bool areSelectedBuildings;
     // Start is called before the first frame update
     void Start()
     {
         world = FindObjectOfType<WorldGeneration>();
-        //UIsprite = GameObject.Find("InventoryDisplay").GetComponent<Image>();
-        //UIText = GameObject.Find("SelectedBuildingText").GetComponent<TextMeshPro>();
-        buildings = FindObjectOfType<Buildings>();
     }
 
     // Update is called once per frame
@@ -64,7 +65,7 @@ public class Controls : MonoBehaviour
         if (Input.GetKey(KeyCode.F))
         {
             TickEvents events = GetComponent<TickEvents>();
-            events.TickJam(10);
+            events.TickJam(100);
         }
         if(Input.GetKeyDown(KeyCode.K))
         {
@@ -90,7 +91,21 @@ public class Controls : MonoBehaviour
                 Destroy(IM);
             }
         }
-
+        if (Input.GetMouseButtonDown(0))
+            mouseClickTime += Time.deltaTime;
+        if(Input.GetMouseButtonUp(0) && mouseClickTime < 0.2f)
+        {
+            var objs = FindObjectsOfType<hoveringSprites>();
+            foreach (var obj in objs)
+            {
+                if (obj.isSelected)
+                {
+                    obj.isSelected = false;
+                    obj.Unhover(true);
+                }
+                areSelectedBuildings = false;
+            }
+        }
 
     }
 }

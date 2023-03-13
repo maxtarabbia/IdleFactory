@@ -143,8 +143,8 @@ Transform:
   m_GameObject: {fileID: 4493797932493061329}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1435.85, y: 1435.85, z: 1435.85}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1435.85, y: 1435.85, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7829883642403473275}
   m_RootOrder: -1
@@ -260,6 +260,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FullscreenToggleButton: {fileID: 6342073326888440278, guid: 3dda4e937eca697409a6bee4a5b76a44,
+    type: 3}
+  AAButton: {fileID: 7919625953787628514, guid: 6785a3da174b017469cdd4b7a7e7459f,
     type: 3}
 --- !u!1 &7504287408099500532
 GameObject:

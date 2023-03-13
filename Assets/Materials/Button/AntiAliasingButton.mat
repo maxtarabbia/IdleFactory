@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4260978539893468209
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SellButton
+  m_Name: AntiAliasingButton
   m_Shader: {fileID: -6465566751694194690, guid: 87bef3f6fea46f042bb1248e15b90403,
     type: 3}
   m_Parent: {fileID: 0}
@@ -56,12 +43,25 @@ Material:
     m_Ints: []
     m_Floats:
     - _Bevel: 0.05
-    - _OutlineDepth: 0.025
+    - _OutlineDepth: 0.01
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ShadowDist: 0.03
+    - _ShadowDist: 0.05
     m_Colors:
-    - _MainColor: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 0}
+    - _MainColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 0}
     - _OutlineColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
-    - _Size: {r: 0.35, g: 0.27, b: 0, a: 0}
+    - _Size: {r: 0.35, g: 0.13, b: 0, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &7140259190078068564
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
