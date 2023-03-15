@@ -120,18 +120,20 @@ public class Miner : MonoBehaviour
     }
     public void RotateCW()
     {
+        OutputObj = null;
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
     }
     public void RotateCCW()
     {
+        OutputObj = null;
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
     }
     public void Delete()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem((int)builds.AllBuildings[0].cost[0].x, (int)builds.AllBuildings[0].cost[0].y);
+        world.inv.AddItem(builds.AllBuildings[0].cost[0].x, builds.AllBuildings[0].cost[0].y);
 
         world.OccupiedCells.Remove(pos);
         world.OccupiedCells.Remove(pos + new Vector2(0, 1));

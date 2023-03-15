@@ -10,7 +10,7 @@ public class TickEvents : MonoBehaviour
     public event TickEventHandler MyEvent;
     private void Start()
     {
-        Time.fixedDeltaTime = 0.2f;
+        Time.fixedDeltaTime = 0.1f;
     }
     void FixedUpdate()
     {

@@ -214,6 +214,10 @@ public class Refinery : MonoBehaviour
         world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, (int)builds.AllBuildings[2].cost[0].y);
         world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, (int)builds.AllBuildings[2].cost[1].y);
 
+        world.inv.AddItem(inputInv.items[0].ID, inputInv.items[0].count);
+        world.inv.AddItem(outputInv.items[0].ID, outputInv.items[0].count);
+
+
         world.OccupiedCells.Remove(pos);
         world.OccupiedCells.Remove(pos + new Vector2(0, 1));
         world.OccupiedCells.Remove(pos + new Vector2(1, 0));
@@ -227,7 +231,7 @@ public class Refinery : MonoBehaviour
     {
         int itemID = outputInv.items[0].ID;
 
-        GameObject OutputObj = null;
+        GameObject OutputObj;
         world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
 
         if (OutputObj != null)

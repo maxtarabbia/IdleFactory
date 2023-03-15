@@ -3,31 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class SetAA : MonoBehaviour
+public class SetCamAA : MonoBehaviour
 {
-    public enum AAtype
+    // Start is called before the first frame update
+    void Start()
     {
-        None,
-        FXAA,
-        SMAA
-    }
-    public AAtype AA;
-    public void activateAA()
-    {
-        PlayerPrefs.SetInt("AA", (int)AA);
-        var camdata = Camera.main.GetUniversalAdditionalCameraData();
+        SetAA.AAtype AA = (SetAA.AAtype)PlayerPrefs.GetInt("AA");
+        var camdata = GetComponent<Camera>().GetUniversalAdditionalCameraData();
         switch (AA)
         {
-            case AAtype.None:
+            case SetAA.AAtype.None:
                 camdata.antialiasing = AntialiasingMode.None;
                 break;
-            case AAtype.FXAA:
+            case SetAA.AAtype.FXAA:
                 camdata.antialiasing = AntialiasingMode.FastApproximateAntialiasing;
                 break;
-            case AAtype.SMAA:
+            case SetAA.AAtype.SMAA:
                 camdata.antialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
                 break;
         }
-
     }
+
+
 }

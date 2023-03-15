@@ -96,14 +96,15 @@ public class Controls : MonoBehaviour
         if(Input.GetMouseButtonUp(0) && mouseClickTime < 0.2f)
         {
             var objs = FindObjectsOfType<hoveringSprites>();
+            areSelectedBuildings = false;
             foreach (var obj in objs)
-            {
+            { 
                 if (obj.isSelected)
                 {
                     obj.isSelected = false;
                     obj.Unhover(true);
                 }
-                areSelectedBuildings = false;
+                
             }
         }
 

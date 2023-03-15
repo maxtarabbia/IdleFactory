@@ -17,6 +17,8 @@ public class Camera_Movement : MonoBehaviour
     public float movementSpeed = 0.01f;
     public float zoomSpeed = 1f;
 
+    public int worldsize;
+
     public float timeMoving;
     public float distanceMoved;
 
@@ -36,6 +38,7 @@ public class Camera_Movement : MonoBehaviour
     {
         GameObject.Find("Background").GetComponent<SpriteRenderer>().material.SetFloat("_Seed", PlayerPrefs.GetInt("Seed"));
         world = FindObjectOfType<WorldGeneration>();
+        worldsize = world.Worldsize + 5;
         cam = GetComponent<Camera>();
         updateCamSize();
         isTouch = world.isTouch;
@@ -93,6 +96,20 @@ public class Camera_Movement : MonoBehaviour
 
         Profiler.BeginSample("Updating cammovement");
         gameObject.transform.position += frameOffset * Time.deltaTime;
+
+        Vector2 camPos = gameObject.transform.position;
+
+        if(gameObject.transform.position.x > worldsize)
+            camPos.x = worldsize;
+        if (gameObject.transform.position.x < -worldsize)
+            camPos.x = -worldsize;
+
+        if (gameObject.transform.position.y > worldsize)
+            camPos.y = worldsize;
+        if (gameObject.transform.position.y < -worldsize)
+            camPos.y = -worldsize;
+
+        gameObject.transform.position = camPos;
 
         if (frameOffset.magnitude > 0)
         {

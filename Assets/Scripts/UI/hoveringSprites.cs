@@ -115,10 +115,13 @@ public class hoveringSprites : MonoBehaviour
         isHovered= true;
         UpdateColors();
         BracketOffset = 0.1f;
+        if (Input.GetKey(KeyCode.LeftControl))
+            isSelected = true;
         foreach (GameObject sprite in sprites)
         {
             sprite.SetActive(true);
         }
+
     }
     public void Unhover(bool globalCall)
     {
@@ -243,6 +246,7 @@ public class hoveringSprites : MonoBehaviour
             if (timeHeld > 0.5f)
             {
                 Delete?.Invoke();
+                FindObjectOfType<Controls>().areSelectedBuildings = false;
                 FindObjectOfType<StateSaveLoad>().LateSave();
             }
         }

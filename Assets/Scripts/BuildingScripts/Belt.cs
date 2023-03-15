@@ -66,9 +66,9 @@ public class Belt : MonoBehaviour
             if (cell != null)
             {
                 Belt belt;
-                if (cell.TryGetComponent<Belt>(out belt))
+                if (cell.TryGetComponent(out belt))
                 {
-                    cell.GetComponent<Belt>().UpdateBeltInput();
+                    belt.UpdateBeltInput();
                 }
             }
         }
@@ -191,12 +191,12 @@ public class Belt : MonoBehaviour
 
                 break;
             case 1:
-                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
+                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.7f, 0);
                 yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) / timeTotravel), 0, 0.5f);
 
                 break;
             case 2:
-                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
+                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.7f, 0);
                 yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) / timeTotravel), 0, 0.5f) * -1;
 
                 break;
@@ -214,29 +214,7 @@ public class Belt : MonoBehaviour
                 itemID.y += Time.fixedDeltaTime;
             spriteSR.sprite = world.items[(int)itemID.x].sprite;
 
-            float xVal = 0;
-            float yVal = 0;
-
-
-            switch (BeltRotationState)
-            {
-                case 0:
-                    xVal = 0.5f - (itemID.y / timeTotravel);
-                    yVal = 0;
-
-                    break;
-                case 1:
-                    xVal = Mathf.Clamp((0.5f - (itemID.y / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
-                    yVal = Mathf.Clamp(0.5f - (itemID.y / timeTotravel), 0, 0.5f);
-
-                    break;
-                case 2:
-                    xVal = Mathf.Clamp((0.5f - (itemID.y / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
-                    yVal = Mathf.Clamp(0.5f - (itemID.y / timeTotravel), 0, 0.5f) * -1;
-
-                    break;
-            }
-            sprite.transform.localPosition = new Vector3(xVal, yVal, itemID.y);
+            SetSpritePos(0);
 
 
         }
@@ -268,7 +246,8 @@ public class Belt : MonoBehaviour
         if (itemID.x == -1)
             {
                 justAdded = Time.fixedTime;
-                itemID.y = time * timeTotravel;
+                //itemID.y = time * timeTotravel;
+                itemID.y = time;
                 itemID.x = initemID;
                 UpdateSpritePositions(false);
                 
@@ -367,7 +346,9 @@ public class Belt : MonoBehaviour
     public void DeleteThis()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem((int)builds.AllBuildings[1].cost[0].x, (int)builds.AllBuildings[1].cost[0].y);
+        world.inv.AddItem(builds.AllBuildings[1].cost[0].x, builds.AllBuildings[1].cost[0].y);
+        world.inv.AddItem((int)itemID.x, 1);
+
 
         world.OccupiedCells.Remove(pos);
 

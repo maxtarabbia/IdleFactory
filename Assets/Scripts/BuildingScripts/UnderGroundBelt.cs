@@ -190,7 +190,7 @@ public class UnderGroundBelt : MonoBehaviour
         if (itemID.x == -1)
         {
             TimeAdded = Time.fixedTime;
-            itemID.y = time * timeTotravel;
+            itemID.y = time;
             itemID.x = initemID;
             UpdateSpritePositions(false);
 
@@ -357,6 +357,8 @@ public class UnderGroundBelt : MonoBehaviour
     {
         Buildings builds = FindObjectOfType<Buildings>();
         world.inv.AddItem((int)builds.AllBuildings[1].cost[0].x, (int)builds.AllBuildings[1].cost[0].y);
+
+        world.inv.AddItem((int)itemID.x, 1);
 
         world.OccupiedCells.Remove(pos);
         world.OccupiedCells.Remove(pos + outFrom);

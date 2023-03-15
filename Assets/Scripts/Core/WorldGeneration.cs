@@ -13,7 +13,7 @@ public class WorldGeneration : MonoBehaviour
 {
     [SerializeField]
     public Dictionary<Vector2, Cell> oreMap = new Dictionary<Vector2, Cell>();
-    int Spawnsize = 20;
+    public int Worldsize = 40;
 
     public int Seed = -1;
 
@@ -50,8 +50,6 @@ public class WorldGeneration : MonoBehaviour
     public GameObject OOBprefab;
     public GameObject OrePrefab;
     public bool isTouch;
-
-
 
     void Start()
     {
@@ -192,7 +190,7 @@ public class WorldGeneration : MonoBehaviour
                 newcell.ID = 0;
                 newcell.name = "Air";
             }
-            float dist = Vector2.Distance(math.clamp(position, new float2(-100, -100), new float2(100, 100)), position) + noise.cnoise(new Vector2(Seed * -23, Seed - 800) + position * scale * 1f) * 4;
+            float dist = Vector2.Distance(math.clamp(position, new float2(Worldsize, Worldsize) * -1, new float2(Worldsize, Worldsize)), position) + noise.cnoise(new Vector2(Seed * -23, Seed - 800) + position * scale * 1f) * 4;
             if (dist > 20)
             {
                 newcell.ID = 3;

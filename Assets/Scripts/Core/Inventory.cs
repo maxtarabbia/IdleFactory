@@ -27,6 +27,8 @@ public class Inventory
 
     public bool AddItem(int ID, int count)
     {
+        if(ID == -1)
+            return true;
         bool foundspot = false;
         foreach(var item in items)
         {

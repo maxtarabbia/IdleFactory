@@ -328,6 +328,8 @@ public class Splitter : MonoBehaviour
         Buildings builds = FindObjectOfType<Buildings>();
         world.inv.AddItem((int)builds.AllBuildings[3].cost[0].x, (int)builds.AllBuildings[3].cost[0].y);
 
+        world.inv.AddItem((int)itemID.x, 1);
+
         world.OccupiedCells.Remove(pos);
 
         builds.AllBuildings[3].count--;
