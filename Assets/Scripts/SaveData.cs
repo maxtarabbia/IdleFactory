@@ -4,6 +4,8 @@ public class SaveData : MonoBehaviour
     public long time;
     public int seed;
 
+    public TutorialState.State state;
+
     public Vector2 CamCoord;
     public float CamScale;
 
@@ -28,6 +30,8 @@ public class SaveData : MonoBehaviour
 
         datatoSave.time = time;
         datatoSave.seed = seed;
+
+        datatoSave.state = state;
 
         datatoSave.UBdata = UBdata;
         datatoSave.minerdata= minerdata;
@@ -64,6 +68,7 @@ public class SaveData : MonoBehaviour
         assemblerdata= savedData.assemblerdata;
         UBdata = savedData.UBdata;
 
+        state = savedData.state;
 
         time = savedData.time;
         seed = savedData.seed;
@@ -90,6 +95,7 @@ public struct DatatoSave
     public AssemblerData[] assemblerdata;
     public UBData[] UBdata;
 
+    public TutorialState.State state;
     public SpeedStates speedstates;
 
     public Vector2 CamCoord;

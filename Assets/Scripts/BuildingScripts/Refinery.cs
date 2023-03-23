@@ -5,6 +5,7 @@ using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
+using UnityEngine.UIElements;
 
 public class Refinery : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class Refinery : MonoBehaviour
     Vector2Int outputCoord = new Vector2Int();
     Vector2Int inputCoord = new Vector2Int();
     Vector2Int outFromCoord = new Vector2Int();
+
+    Vector3 basePos;
+    Transform[] transforms;
 
     TickEvents tickEvents;
 
@@ -51,6 +55,9 @@ public class Refinery : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transforms = GetComponentsInChildren<Transform>();
+        basePos = transforms[1].localPosition + new Vector3(0, 0.6f, 0);
+
         if (File.Exists(recipepath + saveExtention))
         {
             recipies = (Recipes)JsonUtility.FromJson(System.IO.File.ReadAllText(recipepath + saveExtention), typeof(Recipes));
@@ -78,7 +85,13 @@ public class Refinery : MonoBehaviour
         FindObjectOfType<StateSaveLoad>().Save();
 
     }
-
+    private void Update()
+    {
+        if (inputInv.items[0].count > 0)
+        {
+            SmeltingAnimation();
+        }
+    }
     void FixedUpdate()
     {
         // OnTick();
@@ -145,6 +158,12 @@ public class Refinery : MonoBehaviour
         }
         Profiler.EndSample();
 
+    }
+    void SmeltingAnimation()
+    {
+        transforms[4].localPosition = basePos + new Vector3(Mathf.Sin(Time.frameCount * 0.0984f + pos.x * 85.584f), Mathf.Sin(Time.frameCount * 0.132f + pos.y * 85.584f)) * 0.005f;
+        transforms[2].localPosition = basePos + new Vector3(Mathf.Sin(Time.frameCount * 0.186f + pos.x * 1.4f), Mathf.Sin(Time.frameCount * 0.1f + pos.y * 12.544f)) * 0.01f;
+        transforms[3].localPosition = basePos + new Vector3(Mathf.Sin(Time.frameCount * 0.3f + pos.x * 1.8f), Mathf.Sin(Time.frameCount * 0.12f + pos.y * 10.544f)) * 0.01f;
     }
     void AttemptSmelt()
     {

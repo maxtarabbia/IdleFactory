@@ -17,6 +17,9 @@ public class InventorySeller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(FindObjectOfType<TutorialState>().currentState == TutorialState.State.Inventory)
+            FindObjectOfType<TutorialState>().setState(TutorialState.State.Done);
+
         Camera cam = FindObjectOfType<Camera>();
         gameObject.transform.position = new Vector3(cam.gameObject.transform.position.x, cam.gameObject.transform.position.y, transform.position.z);
         gameObject.transform.localScale *= cam.orthographicSize;

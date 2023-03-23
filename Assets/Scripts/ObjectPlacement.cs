@@ -159,14 +159,16 @@ public class ObjectPlacement : MonoBehaviour
                 }
             }
         }
-
+        //default color is green
         Color col = new Color(0.5f, 1, 0.8f);
         if (!isClear)
         {
+            //set color to red
             col = new Color(1f, 0.5f, 0.5f);
         }
         else if (!world.inv.CheckRemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
         {
+            //set color to yellow
             col = new Color(1f, 1f, 0.5f);
         }
         return col;

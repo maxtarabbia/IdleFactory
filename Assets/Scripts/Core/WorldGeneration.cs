@@ -29,8 +29,6 @@ public class WorldGeneration : MonoBehaviour
 
     public Canvas UICanvas;
 
-    public Image UIImage;
-    public TextMeshProUGUI UIText;
 
     public Inventory inv;
     public int Currency;
@@ -53,6 +51,7 @@ public class WorldGeneration : MonoBehaviour
 
     void Start()
     {
+
         if(Seed == -1)
         {
             Seed = PlayerPrefs.GetInt("Seed");
@@ -72,12 +71,12 @@ public class WorldGeneration : MonoBehaviour
         UpdateNewBlocks();
 
         SetInventory();
+        FindObjectOfType<Hotbar>().HighlightItem(0);
     }
     public void setBuildableIndex(int index)
     {
         selectedBuildableIndex = index;
-        UIImage.sprite = GetComponent<Buildings>().AllBuildings[index].prefab.GetComponent<SpriteRenderer>().sprite;
-        UIText.text = GetComponent<Buildings>().AllBuildings[index].name;
+        FindObjectOfType<Hotbar>().HighlightItem(index);
     }
     public void SetInventory()
     {
@@ -138,7 +137,9 @@ public class WorldGeneration : MonoBehaviour
         {
             for (int y = 0; y < (CamSize.y+1) * 2; y++)
             {
-                if(!oreMap.ContainsKey(new Vector2(x,y)+startingcoord))
+                Cell selCell;
+                oreMap.TryGetValue(new Vector2(x, y) + startingcoord, out selCell);
+                if (selCell == null)
                 {
                     Profiler.BeginSample("Making New Block");
                     SetDefaultCell(new Vector2(x, y) + startingcoord);
@@ -146,23 +147,25 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else
                 {
-                    if(!oreMap[(new Vector2(x, y) + startingcoord)].gameobject.activeInHierarchy)
+                    if(!selCell.gameobject.activeInHierarchy)
                         SetDefaultCell(new Vector2(x, y) + startingcoord);
-                    oreMap[(new Vector2(x, y) + startingcoord)].setToDelete = false;
+                    selCell.setToDelete = false;
                 }
             }
         }
-        Profiler.BeginSample("Culling Blocks");
         List<Cell> keys = oreMap.Values.ToList();
+        List<bool> bools = keys.Select(obj => obj.setToDelete).ToList();
+        List<GameObject> GOs = keys.Select(obj => obj.gameobject.gameObject).ToList();
         Profiler.BeginSample("looping Blocks");
-        foreach (var key in keys)
+        for (int i = 0; i< keys.Count;i++) 
         {
-            if (key.setToDelete)
+            if (bools[i])
             {
-                key.gameobject.gameObject.SetActive(false);
+                Profiler.BeginSample("Deactivating Cell");
+                //GOs[i].SetActive(false);
+                Profiler.EndSample();
             }
         }
-        Profiler.EndSample();
         Profiler.EndSample();
         Profiler.EndSample();
     }

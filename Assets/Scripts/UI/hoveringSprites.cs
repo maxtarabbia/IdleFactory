@@ -242,7 +242,7 @@ public class hoveringSprites : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             timeHeld += Time.deltaTime;
-            DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
+            DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);   
             if (timeHeld > 0.5f)
             {
                 Delete?.Invoke();

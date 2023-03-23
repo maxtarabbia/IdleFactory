@@ -17,7 +17,7 @@ public class Camera_Movement : MonoBehaviour
     public float movementSpeed = 0.01f;
     public float zoomSpeed = 1f;
 
-    public int worldsize;
+    public Vector2Int worldsize;
 
     public float timeMoving;
     public float distanceMoved;
@@ -38,7 +38,7 @@ public class Camera_Movement : MonoBehaviour
     {
         GameObject.Find("Background").GetComponent<SpriteRenderer>().material.SetFloat("_Seed", PlayerPrefs.GetInt("Seed"));
         world = FindObjectOfType<WorldGeneration>();
-        worldsize = world.Worldsize + 5;
+        worldsize = new Vector2Int(5 + world.Worldsize, 5 + world.Worldsize);
         cam = GetComponent<Camera>();
         updateCamSize();
         isTouch = world.isTouch;
@@ -99,15 +99,15 @@ public class Camera_Movement : MonoBehaviour
 
         Vector2 camPos = gameObject.transform.position;
 
-        if(gameObject.transform.position.x > worldsize)
-            camPos.x = worldsize;
-        if (gameObject.transform.position.x < -worldsize)
-            camPos.x = -worldsize;
+        if(gameObject.transform.position.x > worldsize.x)
+            camPos.x = worldsize.x;
+        if (gameObject.transform.position.x < -worldsize.x)
+            camPos.x = -worldsize.x;
 
-        if (gameObject.transform.position.y > worldsize)
-            camPos.y = worldsize;
-        if (gameObject.transform.position.y < -worldsize)
-            camPos.y = -worldsize;
+        if (gameObject.transform.position.y > worldsize.y)
+            camPos.y = worldsize.y;
+        if (gameObject.transform.position.y < -worldsize.y)
+            camPos.y = -worldsize.y;
 
         gameObject.transform.position = camPos;
 
@@ -127,6 +127,7 @@ public class Camera_Movement : MonoBehaviour
             if (Input.mouseScrollDelta.sqrMagnitude > 0)
             {
                 updateCamSize();
+                
                 ZoomCam(Input.mouseScrollDelta.y * -0.01f * zoomSpeed);
             }
         }
@@ -187,6 +188,8 @@ public class Camera_Movement : MonoBehaviour
                 cam.orthographicSize = MinMaxSize.x;
             }
         }
+        worldsize.x = world.Worldsize - Mathf.RoundToInt(cam.orthographicSize * cam.aspect) + 35;
+        worldsize.y = world.Worldsize - Mathf.RoundToInt(cam.orthographicSize) + 35;
         Profiler.EndSample();
     }
     void MoveCam (int direction) 

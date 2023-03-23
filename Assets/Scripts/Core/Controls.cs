@@ -13,8 +13,6 @@ public class Controls : MonoBehaviour
     public GameObject PauseMenu;
     public GameObject InventoryMenu;
 
-    float mouseClickTime = 0;
-
     public bool areSelectedBuildings;
     // Start is called before the first frame update
     void Start()
@@ -91,9 +89,7 @@ public class Controls : MonoBehaviour
                 Destroy(IM);
             }
         }
-        if (Input.GetMouseButtonDown(0))
-            mouseClickTime += Time.deltaTime;
-        if(Input.GetMouseButtonUp(0) && mouseClickTime < 0.2f)
+        if(Input.GetMouseButtonUp(0))
         {
             var objs = FindObjectsOfType<hoveringSprites>();
             areSelectedBuildings = false;

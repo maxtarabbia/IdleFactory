@@ -23,6 +23,7 @@ public class StateSaveLoad : MonoBehaviour
     public List<UBData> UBdata = new List<UBData>();
 
 
+
     Buildings buildings;
     WorldGeneration world;
 
@@ -30,7 +31,7 @@ public class StateSaveLoad : MonoBehaviour
     public long ticksToJam;
     long ticksAtATime = 5000;
 
-    int MaxHours = 2;
+    int MaxHours = 4;
 
     SaveData saveData;
     void Start()
@@ -75,6 +76,8 @@ public class StateSaveLoad : MonoBehaviour
         Camera cam = FindObjectOfType<Camera>();
         data.CamScale = cam.orthographicSize;
         data.CamCoord = cam.gameObject.transform.localPosition;
+
+        data.state = FindObjectOfType<TutorialState>().currentState;
 
         data.time = Gettime();
         data.seed = world.Seed;
@@ -141,8 +144,8 @@ public class StateSaveLoad : MonoBehaviour
                 SplitterData splitterdat = new SplitterData();
                 splitterdat.Position = splitter.transform.position;
                 splitterdat.Rotation = Mathf.RoundToInt(splitter.gameObject.transform.eulerAngles.z);
-                splitterdat.Progress = splitter.itemID.y;
-                splitterdat.itemID = Mathf.RoundToInt(splitter.itemID.x);
+                splitterdat.Progress = splitter.itemsID[0].y;
+                splitterdat.itemID = Mathf.RoundToInt(splitter.itemsID[0].x);
                 splitterdat.Speed = splitter.timeTotravel;
                 splitterData.Add(splitterdat);
             }
@@ -233,8 +236,8 @@ public class StateSaveLoad : MonoBehaviour
         foreach (SplitterData splitterData in saveData.splitterdata)
         {
             GameObject newSplitter = PlaceObjectManual(splitterData.Position,3, splitterData.Rotation);
-            newSplitter.GetComponent<Splitter>().itemID.x = splitterData.itemID;
-            newSplitter.GetComponent<Splitter>().itemID.y = splitterData.Progress;
+            newSplitter.GetComponent<Splitter>().itemsID[0].x = splitterData.itemID;
+            newSplitter.GetComponent<Splitter>().itemsID[0].y = splitterData.Progress;
             newSplitter.GetComponent<Splitter>().timeTotravel = splitterData.Speed;
             newSplitter.GetComponent<Splitter>().world = world;
 
@@ -269,6 +272,8 @@ public class StateSaveLoad : MonoBehaviour
         world.Seed = saveData.seed;
 
         world.speedstates = saveData.speedstates;
+
+        FindObjectOfType<TutorialState>().currentState = saveData.state;
 
         FindObjectOfType<Camera_Movement>().updateCamSize();
         //FindObjectOfType<WorldGeneration>().Initialize(24);
@@ -326,7 +331,7 @@ public class StateSaveLoad : MonoBehaviour
     {
         if(ticksToJam != 0)
         {
-            int optimaltick = math.clamp(Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50,1,1000);
+            int optimaltick = Mathf.RoundToInt(MathF.Ceiling(totalTicks / 200f));
             if (ticksAtATime != optimaltick)
             {
                 ticksAtATime = optimaltick;

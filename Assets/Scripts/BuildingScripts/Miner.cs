@@ -12,7 +12,7 @@ public class Miner : MonoBehaviour
     public Vector2 pos;
     public int[] coveredTileID;
 
-    Vector3 basePos;
+    public bool hasRotated = false;
 
     VisualEffect effect;
     WorldGeneration world;
@@ -21,6 +21,7 @@ public class Miner : MonoBehaviour
 
     TickEvents tickEvents;
 
+    Vector3 basePos;
     Transform[] transforms;
 
     public float miningProgress;
@@ -123,11 +124,13 @@ public class Miner : MonoBehaviour
         OutputObj = null;
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+        hasRotated= true;
     }
     public void RotateCCW()
     {
         OutputObj = null;
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+        hasRotated = true;
         FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
     }
     public void Delete()
@@ -190,7 +193,6 @@ public class Miner : MonoBehaviour
     }
     void MiningAnimation()
     {
-
         transforms[1].localPosition = basePos + new Vector3(Mathf.Sin(Time.frameCount*0.0984f + pos.x*85.584f), Mathf.Sin(Time.frameCount * 0.132f + pos.y * 85.584f)) * 0.005f;
         transforms[2].localPosition = basePos + new Vector3(Mathf.Sin(Time.frameCount * 0.186f + pos.x * 1.4f), Mathf.Sin(Time.frameCount * 0.1f+ pos.x * 12.544f)) * 0.01f;
         transforms[3].Rotate(Vector3.forward * (200/secondsPerItem) * Time.deltaTime);
