@@ -17,11 +17,8 @@ public class ItemSellButton : MonoBehaviour
     }
     public void Sell()
     {
-       bool abletoSell = world.inv.RemoveItem(new int2[] {new int2(ID,count)},1f);
-        if (abletoSell)
-        {
-            world.Currency += (count * world.items[ID].value);
-            world.GetComponent<StateSaveLoad>().Save();
-        }
+        int SellCount = world.inv.ForceRemoveItem(new int2(ID,count));
+        world.Currency += (SellCount * world.items[ID].value * world.prestigeState);
+        world.GetComponent<StateSaveLoad>().Save();
     }
 }

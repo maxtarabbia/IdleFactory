@@ -346,7 +346,7 @@ public class Belt : MonoBehaviour
     public void DeleteThis()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem(builds.AllBuildings[1].cost[0].x, builds.AllBuildings[1].cost[0].y);
+        world.inv.AddItem(builds.AllBuildings[1].cost[0].x, Mathf.Clamp(builds.AllBuildings[2].count - 2, 1, int.MaxValue));
         world.inv.AddItem((int)itemID.x, 1);
 
 

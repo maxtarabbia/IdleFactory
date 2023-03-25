@@ -100,7 +100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1500110416535904200
 Transform:
   m_ObjectHideFlags: 0
@@ -393,7 +393,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   DeletingBarMaterial: {fileID: 2100000, guid: 42e6050e923f88f478d3c7bb32b5ad0b, type: 2}
-  BarOffset: 0.6
+  BarOffset: -0.25
   inputCoords: []
   outputCoord:
     x: 0
@@ -558,7 +558,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6009199886796068157
 RectTransform:
   m_ObjectHideFlags: 0

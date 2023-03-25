@@ -26,6 +26,8 @@ public class Refinery : MonoBehaviour
     Vector2Int inputCoord = new Vector2Int();
     Vector2Int outFromCoord = new Vector2Int();
 
+    bool isSmelting;
+
     Vector3 basePos;
     Transform[] transforms;
 
@@ -132,12 +134,13 @@ public class Refinery : MonoBehaviour
     {
         Profiler.BeginSample("Refinery Tick Logic");
 
-        
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
         {
+            isSmelting = false;
             Profiler.EndSample();
             return;
         }
+        isSmelting = false;
         if (!isJammed)
             RProgress += Time.fixedDeltaTime;
         if (RProgress >= RTime)
@@ -230,8 +233,8 @@ public class Refinery : MonoBehaviour
     public void Delete()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, (int)builds.AllBuildings[2].cost[0].y);
-        world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, (int)builds.AllBuildings[2].cost[1].y);
+        world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, Mathf.Clamp(builds.AllBuildings[2].count - 2, 1, int.MaxValue));
+        world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, Mathf.Clamp(builds.AllBuildings[2].count - 2, 1, int.MaxValue));
 
         world.inv.AddItem(inputInv.items[0].ID, inputInv.items[0].count);
         world.inv.AddItem(outputInv.items[0].ID, outputInv.items[0].count);

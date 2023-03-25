@@ -295,7 +295,7 @@ public class Splitter : MonoBehaviour
     public void Delete()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem((int)builds.AllBuildings[3].cost[0].x, (int)builds.AllBuildings[3].cost[0].y);
+        world.inv.AddItem((int)builds.AllBuildings[3].cost[0].x, Mathf.Clamp(builds.AllBuildings[3].count - 2, 1, int.MaxValue));
 
         world.inv.AddItem((int)itemsID[0].x, 1);
 

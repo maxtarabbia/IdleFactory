@@ -136,7 +136,7 @@ public class Miner : MonoBehaviour
     public void Delete()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem(builds.AllBuildings[0].cost[0].x, builds.AllBuildings[0].cost[0].y);
+        world.inv.AddItem(builds.AllBuildings[0].cost[0].x, builds.AllBuildings[0].cost[0].y * Mathf.Clamp(builds.AllBuildings[0].count - 2,1,int.MaxValue));
 
         world.OccupiedCells.Remove(pos);
         world.OccupiedCells.Remove(pos + new Vector2(0, 1));

@@ -286,8 +286,7 @@ public class ObjectPlacement : MonoBehaviour
         if (world.selectedBuildableIndex == 6)
         {
             Vector3 rotatedpos = Quaternion.Euler(0, 0, buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
-            Vector2 Vec2 = rotatedpos;
-            world.OccupiedCells.Add((Vector2)Vector2Int.RoundToInt(Vec2), instancedObj);
+            world.OccupiedCells.Add((Vector2)Vector2Int.RoundToInt((Vector2)rotatedpos), instancedObj);
         }
     }
 }

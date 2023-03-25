@@ -76,6 +76,7 @@ public class StateSaveLoad : MonoBehaviour
         Camera cam = FindObjectOfType<Camera>();
         data.CamScale = cam.orthographicSize;
         data.CamCoord = cam.gameObject.transform.localPosition;
+        data.prestigeState = world.prestigeState;
 
         data.state = FindObjectOfType<TutorialState>().currentState;
 
@@ -208,6 +209,7 @@ public class StateSaveLoad : MonoBehaviour
         WorldGeneration world = FindObjectOfType<WorldGeneration>();
 
         PlayerPrefs.SetInt("Seed", saveData.seed);
+        world.prestigeState = saveData.prestigeState;
         world.Initialize(24, saveData.seed);
         world.SetInventory();
 
@@ -294,6 +296,7 @@ public class StateSaveLoad : MonoBehaviour
         ticksToJam = Mathf.Clamp((int)seconds,5,3600 * MaxHours) * TPS;
         totalTicks = ticksToJam;
         world.inv.SortInv();
+
     }
     long Gettime()
     {

@@ -194,21 +194,21 @@ public class Assembler : MonoBehaviour
     {
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         SetOutput();
-        FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+        FindObjectOfType<Buildings>().AllBuildings[5].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
 
     }
     public void RotateCCW()
     {
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         SetOutput();
-        FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+        FindObjectOfType<Buildings>().AllBuildings[5].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
 
     }
     public void Delete()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, (int)builds.AllBuildings[2].cost[0].y);
-        world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, (int)builds.AllBuildings[2].cost[1].y);
+        world.inv.AddItem((int)builds.AllBuildings[5].cost[0].x, Mathf.Clamp(builds.AllBuildings[5].count - 2, 1, int.MaxValue));
+        world.inv.AddItem((int)builds.AllBuildings[5].cost[1].x, Mathf.Clamp(builds.AllBuildings[5].count - 2, 1, int.MaxValue));
 
         world.inv.AddItem(inputInv.items[0].ID, inputInv.items[0].count);
         world.inv.AddItem(inputInv2.items[0].ID, inputInv2.items[0].count);
@@ -219,7 +219,7 @@ public class Assembler : MonoBehaviour
         world.OccupiedCells.Remove(pos + new Vector2(1, 0));
         world.OccupiedCells.Remove(pos + new Vector2(1, 1));
 
-        builds.AllBuildings[2].count--;
+        builds.AllBuildings[5].count--;
 
         Destroy(gameObject);
     }

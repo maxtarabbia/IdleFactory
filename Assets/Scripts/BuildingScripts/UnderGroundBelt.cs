@@ -253,9 +253,9 @@ public class UnderGroundBelt : MonoBehaviour
                 break;
         }
 
-        if (relativepos == outputpos)
+        if (Vector2.Distance(relativepos, outFrom) < 1.1f)
         {
-            Offset = 0.9f;
+            Offset = 0.98f;
         }
         if (inputItem(inItem, Offset))
         {
@@ -337,33 +337,33 @@ public class UnderGroundBelt : MonoBehaviour
     }
     public void RotateCW()
     {
-        /*
-        gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
-        FixRotations();
-        UpdateBeltInput();
-        UpdateAdjacentBelts();
-        */
+        Flip();
     }
     public void RotateCCW()
     {
-        /*
-        gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
-        FixRotations();
+        Flip();
+    }
+    public void Flip()
+    {
+        gameObject.transform.Rotate(0, 0, 180f);
+        gameObject.transform.position += (Vector3)outFrom;
+        pos = transform.position;
+
+        sprite.transform.eulerAngles = (Vector3.zero);
         UpdateBeltInput();
         UpdateAdjacentBelts();
-        */
     }
     public void DeleteThis()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem((int)builds.AllBuildings[1].cost[0].x, (int)builds.AllBuildings[1].cost[0].y);
+        world.inv.AddItem((int)builds.AllBuildings[6].cost[0].x, Mathf.Clamp(builds.AllBuildings[6].count - 2, 1, int.MaxValue));
 
         world.inv.AddItem((int)itemID.x, 1);
 
         world.OccupiedCells.Remove(pos);
         world.OccupiedCells.Remove(pos + outFrom);
 
-        builds.AllBuildings[1].count--;
+        builds.AllBuildings[6].count--;
 
         Destroy(gameObject);
     }

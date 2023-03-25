@@ -61,7 +61,7 @@ public class MinerTutorial : MonoBehaviour
                 break;
             case 2:
                 TextBox.text = strings[1];
-                if (timeSinceStart > 3)
+                if (timeSinceStart > 1)
                 {
                     currentstate = 3;
                     timeSinceStart = 0;

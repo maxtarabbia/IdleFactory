@@ -3,13 +3,14 @@ public class SaveData : MonoBehaviour
 {
     public long time;
     public int seed;
+    public int prestigeState;
 
     public TutorialState.State state;
 
     public Vector2 CamCoord;
     public float CamScale;
 
-    public int Currency;
+    public long Currency;
 
     public MinerData[] minerdata;
     public BeltData[] beltdata;
@@ -30,6 +31,7 @@ public class SaveData : MonoBehaviour
 
         datatoSave.time = time;
         datatoSave.seed = seed;
+        datatoSave.prestigeState = prestigeState;
 
         datatoSave.state = state;
 
@@ -68,6 +70,8 @@ public class SaveData : MonoBehaviour
         assemblerdata= savedData.assemblerdata;
         UBdata = savedData.UBdata;
 
+        prestigeState = savedData.prestigeState;
+
         state = savedData.state;
 
         time = savedData.time;
@@ -86,6 +90,7 @@ public struct DatatoSave
 {
     public long time;
     public int seed;
+    public int prestigeState;
 
     public MinerData[] minerdata;
     public BeltData[] beltdata;
@@ -101,7 +106,7 @@ public struct DatatoSave
     public Vector2 CamCoord;
     public float CamScale;
 
-    public int Currency;
+    public long Currency;
 
     [SerializeField]
     public Inventory worldinv;

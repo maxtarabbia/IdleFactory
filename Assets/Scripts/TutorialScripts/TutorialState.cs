@@ -30,22 +30,22 @@ public class TutorialState : MonoBehaviour
         switch (state)
         {
             case State.Miner:
-                textMeshProUGUI.text = "Use Mouse1 to place a Miner(1) on some iron. The \"(#)\" indicates the number key to select it";
+                textMeshProUGUI.text = "Use Mouse1 to place a Miner on some iron. The \"(#)\" indicates the number key to select it. \nuse WASD to move around and scroll wheel to zoom";
                 break;
             case State.Belt:
-                textMeshProUGUI.text = "Place a belt(2). You'll have to mine some copper first. Use mouse2 to delete constructed buildings";
+                textMeshProUGUI.text = "Place a belt. You'll have to mine some copper first. Use mouse2 to delete constructed buildings";
                 break;
             case State.Refinery:
-                textMeshProUGUI.text = "Place a refinery(3). It'll cost 5 iron and 5 copper";
+                textMeshProUGUI.text = "Place a refinery. It'll cost 5 iron and 5 copper";
                 break;
             case State.Splitter:
-                textMeshProUGUI.text = "Refine a few iron ingot and belt them into a HUB(5). then place a splitter(4)\nYou can hold CTRL and hover over buildings to select multiple and delete them all at once.";
+                textMeshProUGUI.text = "Refine a few iron ingot and belt them into a HUB. then place a splitter\nYou can hold CTRL and hover over buildings to select multiple and delete them all at once.";
                 break;
             case State.Assembler:
-                textMeshProUGUI.text = "You'll need some steel and copper ingots to make assemblers. once you've refined some steel by running iron ingots through a refinery, place an assembler(6)";
+                textMeshProUGUI.text = "You'll need some steel and copper ingots to make assemblers. once you've refined some steel by running iron ingots through a refinery, place an assembler";
                 break;
             case State.Underground:
-                textMeshProUGUI.text = "Underground belts(7) will also require steel. place one down to see how it works";
+                textMeshProUGUI.text = "Underground belts will also require steel. place one down to see how it works";
                 break;
             case State.Inventory:
                 textMeshProUGUI.text = "You can use \"E\" to open the inventory where you can sell items and upgrade various buildings";

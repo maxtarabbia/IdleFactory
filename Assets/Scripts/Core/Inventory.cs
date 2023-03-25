@@ -61,6 +61,24 @@ public class Inventory
         items = sorteditems.OrderBy(i => i.ID == -1).ToArray();
         //items = sorteditems.ToArray();
     }
+    public int ForceRemoveItem(int2 ID)
+    {
+        int itemcount = ID.y;
+        foreach (var item in items)
+        {
+            if (item.ID != ID.x)
+                continue;
+            if (ID.y > item.count)
+            {
+                itemcount = item.count;
+            }
+            item.count -= itemcount;
+            checkvoids();
+            return itemcount;
+        }
+        checkvoids();
+        return 0;
+    }
     public bool RemoveItem(int2[] IDs, float multiplier)
     {
         //check to make sure there are enough of each item;

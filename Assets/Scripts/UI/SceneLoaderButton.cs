@@ -27,7 +27,8 @@ public class SceneLoaderButton : MonoBehaviour
     {
         PlayerPrefs.SetInt("Seed", new System.Random().Next(9999));
         string path = Application.persistentDataPath + "/Saves";
-        System.IO.File.Delete(path + "/Save1.dat");
+        if(System.IO.File.Exists(path + "/Save1.dat"))
+            System.IO.File.Delete(path + "/Save1.dat");
         LoadMainScene();
     }
 }
