@@ -334,7 +334,7 @@ public class StateSaveLoad : MonoBehaviour
     {
         if(ticksToJam != 0)
         {
-            int optimaltick = Mathf.RoundToInt(MathF.Ceiling(totalTicks / 200f));
+            int optimaltick = Mathf.RoundToInt(MathF.Ceiling(totalTicks / 100f));
             if (ticksAtATime != optimaltick)
             {
                 ticksAtATime = optimaltick;

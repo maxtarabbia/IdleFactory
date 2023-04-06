@@ -117,6 +117,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  playclick: 1
+  isGrayedOut: 0
 --- !u!61 &8107530977641924334
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -511,6 +513,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  playclick: 1
+  isGrayedOut: 0
 --- !u!61 &2701832289769985391
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -873,6 +877,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  playclick: 1
+  isGrayedOut: 0
 --- !u!61 &7635583707805318088
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1146,7 +1152,7 @@ Transform:
   m_GameObject: {fileID: 4529266545341399472}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.38, y: 2.38, z: 2.38}
+  m_LocalScale: {x: 2.24, y: 2.24, z: 2.24}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1369991511455059185}
@@ -1945,6 +1951,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  playclick: 1
+  isGrayedOut: 0
 --- !u!61 &1560284909026766975
 BoxCollider2D:
   m_ObjectHideFlags: 0

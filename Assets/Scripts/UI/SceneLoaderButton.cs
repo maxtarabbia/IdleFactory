@@ -8,7 +8,8 @@ public class SceneLoaderButton : MonoBehaviour
 {
     [SerializeField]
     public string SceneString;
-    public static string SceneToLoad; 
+    public static string SceneToLoad;
+
     private void Start()
     {
         SceneToLoad = SceneString;

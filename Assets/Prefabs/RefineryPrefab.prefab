@@ -274,6 +274,8 @@ MonoBehaviour:
     selectedRecipe: 0
   RProgress: 0
   RTime: 1
+  RecipeDisplay: {fileID: 9186752040647465056, guid: 9ae7ba67b7226794d88d29d3bf98b095,
+    type: 3}
 --- !u!61 &-1451229560485884586
 BoxCollider2D:
   m_ObjectHideFlags: 0

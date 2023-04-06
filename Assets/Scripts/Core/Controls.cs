@@ -23,6 +23,7 @@ public class Controls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GameObject IM = GameObject.Find("World Inv(Clone)");
         GameObject PM = GameObject.Find("PauseMenu(Clone)");
         if (PM != null)
         {
@@ -75,11 +76,18 @@ public class Controls : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Instantiate(PauseMenu);
+            if (IM == null)
+            {
+                Instantiate(PauseMenu);
+            }
+            else
+            {
+                Destroy(IM);
+            }
+            return;
         }
         if(Input.GetKeyDown(KeyCode.E))
         {
-            GameObject IM = GameObject.Find("World Inv(Clone)");
             if(IM == null)
             {
                 Instantiate(InventoryMenu);

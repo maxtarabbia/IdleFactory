@@ -10,11 +10,15 @@ public class PrestigeScript : MonoBehaviour
     public TextMeshPro CostText;
     public long PrestigeCost;
     WorldGeneration world;
+    MenuButtons button;
     // Start is called before the first frame update
     void Start()
     {
         world = FindObjectOfType<WorldGeneration>();
         CostText.text = "$" + IntLib.IntToString(PrestigeCost);
+        button =GetComponent<MenuButtons>();
+        button.isGrayedOut = world.Currency < PrestigeCost;
+        button.updateGraying();
     }
     public void Prestige()
     {
@@ -54,5 +58,21 @@ public class PrestigeScript : MonoBehaviour
         }
         world.inv.AddItem(0,20);
         world.speedstates = world.defaultSpeeds;
+        SpeedWarpButton[] SWBs = FindObjectsOfType<SpeedWarpButton>();
+        foreach(SpeedWarpButton swb in SWBs) 
+        {
+            swb.Initialize();
+        }
+
+        button.isGrayedOut = world.Currency < PrestigeCost;
+        button.updateGraying();
+    }
+    private void Update()
+    {
+        if(button.isGrayedOut && world.Currency >= PrestigeCost)
+        {
+            button.isGrayedOut= false;
+            button.updateGraying();
+        }
     }
 }

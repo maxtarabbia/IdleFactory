@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,9 @@ public class Miner : MonoBehaviour
     Vector3 basePos;
     Transform[] transforms;
 
+    AudioSource AS;
+    float timesinceplayed;
+
     public float miningProgress;
     public float secondsPerItem = 4;
 
@@ -37,10 +41,15 @@ public class Miner : MonoBehaviour
     //Start is called before the first frame update
     void Awake()
     {
+        
         coveredTileID = Enumerable.Repeat(-1, 4).ToArray();
         transforms = GetComponentsInChildren<Transform>();
         basePos = transforms[1].localPosition;
         //gameObject.transform.position = new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), Mathf.Round(gameObject.transform.position.z));
+    }
+    private void Start()
+    {
+        AS = GetComponent<AudioSource>();
     }
     void Initialize()
     {
@@ -160,6 +169,7 @@ public class Miner : MonoBehaviour
         }
         if(isOnOre)
         {
+
             MiningAnimation();
         }
     }
@@ -217,9 +227,10 @@ public class Miner : MonoBehaviour
         switch (minedItemID)
         {
             case 0: //blank tile
+                /*
                 calls++;
                 MineItem();
-
+                */
                 break;
             case 1: //iron ore
                 calls = 0;
@@ -258,6 +269,11 @@ public class Miner : MonoBehaviour
             if (tile > 0)
                 isOnOre= true;
             
+        }
+        if (isOnOre)
+        {
+            AS.time = (float)new System.Random().NextDouble() * AS.clip.length;
+            AS.Play();
         }
     }
     bool OutputItem(int itemID)

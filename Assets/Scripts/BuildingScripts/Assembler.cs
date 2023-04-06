@@ -13,7 +13,7 @@ public class Assembler : MonoBehaviour
     public Inventory inputInv2;
     public Inventory outputInv;
 
-    bool isJammed = false;
+    public bool isJammed = false;
 
     [SerializeField]
     public Recipes recipies;
@@ -30,6 +30,9 @@ public class Assembler : MonoBehaviour
 
     public float RProgress;
     public float RTime = 1;
+
+    public GameObject RecipeDisplay;
+    float timeHovering;
 
     [Serializable]
     public struct Recipes
@@ -119,7 +122,12 @@ public class Assembler : MonoBehaviour
     {
         Profiler.BeginSample("Assembler Tick Logic");
 
-        if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
+        if (inputInv.items[0].ID != recipies.values[recipies.selectedRecipe].inputItemID || inputInv2.items[0].ID != recipies.values[recipies.selectedRecipe].inputItemID2)
+        {
+            Profiler.EndSample();
+            return;
+        }
+        if(inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount || inputInv2.items[0].count < recipies.values[recipies.selectedRecipe].inCount2)
         {
             Profiler.EndSample();
             return;
@@ -158,37 +166,28 @@ public class Assembler : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        /*
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
-            SetOutput();
-            FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-             
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
-            SetOutput();
-            FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-             
-        }
-        if (Input.GetKey(KeyCode.Delete))
-        {
-            Buildings builds = FindObjectOfType<Buildings>();
-            world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, (int)builds.AllBuildings[2].cost[0].y);
-            world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, (int)builds.AllBuildings[2].cost[1].y);
+        timeHovering += Time.deltaTime;
+        if (timeHovering < 1)
+            return;
 
-            world.OccupiedCells.Remove(pos);
-            world.OccupiedCells.Remove(pos + new Vector2(0, 1));
-            world.OccupiedCells.Remove(pos + new Vector2(1, 0));
-            world.OccupiedCells.Remove(pos + new Vector2(1, 1));
+        if (GetComponentInChildren<DisplayRecipes>() != null)
+            return;
 
-            builds.AllBuildings[2].count--;
-             
-            Destroy(gameObject);
+            GameObject rec = Instantiate(RecipeDisplay,transform);
+            rec.transform.rotation = Quaternion.identity;
+            rec.transform.position = new Vector3(3, 3, -0.01f) + gameObject.transform.position;
+            rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Assembler;
+        
+    }
+    private void OnMouseExit()
+    {
+        timeHovering = 0;
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
         }
-        */
+        catch { }
+        
     }
     public void RotateCW()
     {
@@ -284,7 +283,7 @@ public class Assembler : MonoBehaviour
         isJammed = true;
         for (int i = 0; i < recipies.values.Length; i++)
         {
-            if (inputInv.items[0].ID == recipies.values[i].inputItemID)
+            if (inputInv.items[0].ID == recipies.values[i].inputItemID && inputInv2.items[0].ID == recipies.values[i].inputItemID2)
             {
                 recipies.selectedRecipe = i;
                 isJammed = false;
@@ -311,6 +310,7 @@ public class Assembler : MonoBehaviour
         {
             if (inputInv2.AddItem(ID, count))
             {
+                SetRecipe();
                 return true;
             }
             else

@@ -299,6 +299,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  hoversound: {fileID: 0}
+  pressedSound: {fileID: 0}
 --- !u!114 &5519733175139566598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,6 +478,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  hoversound: {fileID: 0}
+  pressedSound: {fileID: 0}
 --- !u!114 &3623579660470353278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1265,3 +1269,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  hoversound: {fileID: 0}
+  pressedSound: {fileID: 0}

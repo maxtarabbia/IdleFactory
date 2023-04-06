@@ -636,11 +636,14 @@ MonoBehaviour:
   outputInv:
     items: []
     maxStackSize: 0
+  isJammed: 0
   recipies:
     values: []
     selectedRecipe: 0
   RProgress: 0
   RTime: 1
+  RecipeDisplay: {fileID: 9186752040647465056, guid: 9ae7ba67b7226794d88d29d3bf98b095,
+    type: 3}
 --- !u!114 &9103843297449255192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,10 +816,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextBox: {fileID: 2005408722456225765}
   strings:
-  - The assembler has a main input diagonal from the output and a secondary input
-    directly across
+  - The assembler combine two inputs into a product
   - Input copper ingots into the main input to make copper wire
-  - Iron ingots in the main input can be combined with copper wire to create circuits
+  - Iron ingots  can be combined with copper wire to create circuits
   doTutorial: 0
   arrow: {fileID: 8059552192174787488}
 --- !u!1 &8059552192174787488

@@ -21,6 +21,8 @@ public class hoveringSprites : MonoBehaviour
     public Material DeletingBarMaterial;
     SpriteRenderer BarSR;
 
+
+
     public float BarOffset;
 
     float timeHeld;
@@ -29,7 +31,6 @@ public class hoveringSprites : MonoBehaviour
     public int2[] inputCoords;
     public int2 outputCoord;
 
-    float THDelSave;
     float BracketOffset;
 
     bool isTouch;
@@ -201,7 +202,7 @@ public class hoveringSprites : MonoBehaviour
     }
     void MouseCheck()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Rotate","R"))))
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
@@ -214,7 +215,7 @@ public class hoveringSprites : MonoBehaviour
             FindObjectOfType<StateSaveLoad>().Save();
             AlignDeletingBar();
         }
-        if (Input.GetMouseButtonDown(2))
+        if (Input.GetMouseButtonDown(2) || Input.GetKey(System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Pick","Q"))))
         {
             WorldGeneration world = FindObjectOfType<WorldGeneration>();
 
@@ -222,22 +223,6 @@ public class hoveringSprites : MonoBehaviour
             FindObjectOfType<Buildings>().AllBuildings[objectID].rotation = rotation;
 
             world.setBuildableIndex(objectID);
-        }
-        if (Input.GetKey(KeyCode.Delete))
-        {
-            if (THDelSave == -1)
-                return;
-            THDelSave += Time.deltaTime;
-            if (THDelSave > 3)
-            {
-                THDelSave = -1;
-                FindObjectOfType<StateSaveLoad>().DeleteSave();
-            }
-            print("Deleting save in: " + (3 - THDelSave));
-        }
-        else
-        {
-            THDelSave = 0;
         }
         if (Input.GetMouseButton(1))
         {

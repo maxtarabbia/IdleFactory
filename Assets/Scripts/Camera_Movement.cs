@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Profiling;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
+using System;
 
 public class Camera_Movement : MonoBehaviour
 {
@@ -36,6 +35,10 @@ public class Camera_Movement : MonoBehaviour
 
     void Start()
     {
+        Up = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveUp","W"));
+        Down = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveDown","S"));
+        Left = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveLeft", "A"));
+        Right = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveRight", "D"));
         GameObject.Find("Background").GetComponent<SpriteRenderer>().material.SetFloat("_Seed", PlayerPrefs.GetInt("Seed"));
         world = FindObjectOfType<WorldGeneration>();
         worldsize = new Vector2Int(5 + world.Worldsize, 5 + world.Worldsize);

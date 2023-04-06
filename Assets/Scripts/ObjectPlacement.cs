@@ -12,9 +12,11 @@ public class ObjectPlacement : MonoBehaviour
     GameObject SpriteGhost;
     int LastBuildableIndex;
     public bool isTouch;
-
+    KeyCode RotateKey;
     void Start()
     {
+        RotateKey = System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Rotate", "R"));
+
     }
     private void OnMouseExit()
     {
@@ -221,15 +223,17 @@ public class ObjectPlacement : MonoBehaviour
 
     private void Update()
     {
-        
 
-        if (world != null)
+
+        if (world == null)
         {
+            return;
+        }
             if (world.selectedBuildableIndex != LastBuildableIndex)
             {
                 ResetSprite();
             }
-            if(Input.GetKeyDown(KeyCode.R) && SpriteGhost != null)
+            if(Input.GetKeyDown(RotateKey) && SpriteGhost != null)
             {
                 if(Input.GetKey(KeyCode.LeftShift))
                 {
@@ -247,7 +251,7 @@ public class ObjectPlacement : MonoBehaviour
             {
                 SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", GetColor());
             }
-        }
+        
     }
     public void ResetSprite()
     {
