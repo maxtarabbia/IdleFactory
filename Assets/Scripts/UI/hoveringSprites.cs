@@ -21,7 +21,10 @@ public class hoveringSprites : MonoBehaviour
     public Material DeletingBarMaterial;
     SpriteRenderer BarSR;
 
+    KeyCode Rotate;
+    KeyCode Pick;
 
+    StateSaveLoad SSL;
 
     public float BarOffset;
 
@@ -40,6 +43,9 @@ public class hoveringSprites : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SSL = FindObjectOfType<StateSaveLoad>();
+        Rotate = System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Rotate", "R"));
+        Pick = System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Pick", "Q"));
         BracketOffset = 0.1f;
         InitializeMaterial();
         AlignDeletingBar();
@@ -188,7 +194,7 @@ public class hoveringSprites : MonoBehaviour
             if (timeHeld > 0.5f)
             {
                 Delete?.Invoke();
-                FindObjectOfType<StateSaveLoad>().LateSave();
+                SSL.LateSave();
             }
         }
         else
@@ -202,7 +208,7 @@ public class hoveringSprites : MonoBehaviour
     }
     void MouseCheck()
     {
-        if (Input.GetKeyDown(System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Rotate","R"))))
+        if (Input.GetKeyDown(Rotate))
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
@@ -212,10 +218,10 @@ public class hoveringSprites : MonoBehaviour
             {
                 RotateCW?.Invoke();
             }
-            FindObjectOfType<StateSaveLoad>().Save();
+            SSL.LateSave();
             AlignDeletingBar();
         }
-        if (Input.GetMouseButtonDown(2) || Input.GetKey(System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Pick","Q"))))
+        if (Input.GetMouseButtonDown(2) || Input.GetKey(Pick))
         {
             WorldGeneration world = FindObjectOfType<WorldGeneration>();
 
@@ -232,7 +238,7 @@ public class hoveringSprites : MonoBehaviour
             {
                 Delete?.Invoke();
                 FindObjectOfType<Controls>().areSelectedBuildings = false;
-                FindObjectOfType<StateSaveLoad>().LateSave();
+                SSL.LateSave();
             }
         }
         else

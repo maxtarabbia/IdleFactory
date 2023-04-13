@@ -25,7 +25,7 @@ public class ItemIconSeller : MonoBehaviour
         SR.sprite = SR.sprite = world.items[ID].sprite;
         inv = world.inv;
         Count.text = IntLib.IntToString(inv.GetCount(ID));
-        Value.text = "Value:\n" + IntLib.IntToString(world.items[ID].value);
+        Value.text = "Value:\n" + IntLib.IntToString(world.items[ID].value * world.prestigeState);
     }
     private void Update()
     { 

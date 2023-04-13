@@ -6,7 +6,8 @@ public class RefineryTutorial : MonoBehaviour
 {
     Vector3 basePos;
     public TextMeshPro TextBox;
-    float timeSinceStart;
+    float timeSinceState;
+    float timesinceStart;
     public List<string> strings;
     public GameObject arrow;
     public bool doTutorial;
@@ -22,54 +23,62 @@ public class RefineryTutorial : MonoBehaviour
             doTutorial = true;
         if (doTutorial)
         {
-            arrow.SetActive(true);
             currentstate = 0;
             TextBox.gameObject.SetActive(true);
             tutstate.isTutorialActive = true;
         }
         basePos = arrow.transform.localPosition;
+        arrow.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        timesinceStart += Time.deltaTime;
         if (!doTutorial)
+        {
+            if(timesinceStart >= 2)
+                arrow.SetActive(false);
+            else
+                arrow.transform.localPosition = basePos + new Vector3(Mathf.Sin(Time.time * 4) / 12, 0, 0);
             return;
+        }
+            
         TextBox.gameObject.transform.rotation = Quaternion.identity;
         arrow.transform.localPosition = basePos + new Vector3( Mathf.Sin(Time.time * 4) / 12, 0,0);
 
-        timeSinceStart += Time.deltaTime;
+        timeSinceState += Time.deltaTime;
 
         switch (currentstate)
         {
             case 0:
                 TextBox.text = strings[0];
-                if (timeSinceStart > 5)
+                if (timeSinceState > 5)
                 {
                     currentstate = 1;
-                    timeSinceStart = 0;
+                    timeSinceState = 0;
                 }
                 break;
             case 1:
                 TextBox.text = strings[1];
-                if (timeSinceStart > 5)
+                if (timeSinceState > 5)
                 {
                     currentstate = 2;
-                    timeSinceStart = 0;
+                    timeSinceState = 0;
                 }
                 break;
             case 2:
                 TextBox.text = strings[2];
-                if (timeSinceStart > 5)
+                if (timeSinceState > 5)
                 {
                     currentstate = 4;
-                    timeSinceStart = 0;
+                    timeSinceState = 0;
                 }
                 break;
             case 4:
 
                 TextBox.text = strings[3];
-                if (timeSinceStart > 5)
+                if (timeSinceState > 5)
                     currentstate = 5;
                 break;
             case 5:

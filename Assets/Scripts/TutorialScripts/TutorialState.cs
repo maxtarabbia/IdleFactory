@@ -36,7 +36,7 @@ public class TutorialState : MonoBehaviour
                 textMeshProUGUI.text = "Place a belt. You'll have to mine some copper first. Use mouse2 to delete constructed buildings";
                 break;
             case State.Refinery:
-                textMeshProUGUI.text = "Place a refinery. It'll cost 5 iron and 5 copper";
+                textMeshProUGUI.text = "Place a refinery. The cost is displayed in the top left next to the item quantities";
                 break;
             case State.Splitter:
                 textMeshProUGUI.text = "Refine a few iron ingot and belt them into a HUB. then place a splitter\nYou can hold CTRL and hover over buildings to select multiple and delete them all at once.";

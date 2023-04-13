@@ -25,7 +25,7 @@ public class AudioManager : MonoBehaviour
 
         for(int i = 0; i < audioParams.Length; i++)
         {
-            mixerGroup.audioMixer.SetFloat(audioParams[i], math.remap(0, 3, -40, 20, PlayerPrefs.GetFloat(audioParams[i], 0f)));
+            mixerGroup.audioMixer.SetFloat(audioParams[i], math.remap(0, 3, -80, 20, PlayerPrefs.GetFloat(audioParams[i], 0f)));
         }
     }
     public void PlayHover()
@@ -42,6 +42,8 @@ public class AudioManager : MonoBehaviour
     }
     private void Update()
     {
+
+
         if (!isUnloaded)
             return;
         if (!HoverSource.isPlaying && !PlaySource.isPlaying)

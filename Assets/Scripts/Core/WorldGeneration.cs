@@ -174,6 +174,7 @@ public class WorldGeneration : MonoBehaviour
                 }
             }
         }
+        /*
         List<Cell> keys = oreMap.Values.ToList();
         List<bool> bools = keys.Select(obj => obj.setToDelete).ToList();
         List<GameObject> GOs = keys.Select(obj => obj.gameobject.gameObject).ToList();
@@ -183,11 +184,12 @@ public class WorldGeneration : MonoBehaviour
             if (bools[i])
             {
                 Profiler.BeginSample("Deactivating Cell");
-                //GOs[i].SetActive(false);
+                GOs[i].SetActive(false);
                 Profiler.EndSample();
             }
         }
         Profiler.EndSample();
+        */
         Profiler.EndSample();
     }
     public void SetDefaultCell(Vector2 position)
@@ -204,7 +206,7 @@ public class WorldGeneration : MonoBehaviour
                 newcell.name = "Iron Ore";
 
             }
-            else if (noise.cnoise(new Vector2(50 + Seed * 20 + prestigeState * -10, prestigeState *Seed - 85) + position * scale) > 0.55)
+            else if (noise.cnoise(new Vector2(50 + Seed * 20 + prestigeState * -10, 9 * prestigeState - 85) + position * scale) > 0.55)
             {
                 newcell.ID = 2;
                 newcell.name = "Copper Ore";

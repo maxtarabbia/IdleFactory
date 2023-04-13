@@ -15,7 +15,7 @@ public class Refinery : MonoBehaviour
     public Inventory inputInv;
     public Inventory outputInv;
 
-
+    AudioSource AS;
 
     [SerializeField]
     public Recipes recipies;
@@ -62,6 +62,7 @@ public class Refinery : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AS = GetComponent<AudioSource>();
         transforms = GetComponentsInChildren<Transform>();
         basePos = transforms[1].localPosition + new Vector3(0, 0.6f, 0);
 
@@ -97,13 +98,18 @@ public class Refinery : MonoBehaviour
         SmeltingAnimation();
         if (isSmelting)
         {
-            
+            AS.volume += Time.deltaTime;
+            if(AS.volume > 1)
+                AS.volume = 1;
             smeltAnimationSpeed += Time.deltaTime;
             if(smeltAnimationSpeed > 1)
                 smeltAnimationSpeed = 1;
         }
         else
         {
+            AS.volume -= Time.deltaTime;
+            if (AS.volume < 0)
+                AS.volume = 0;
             smeltAnimationSpeed -= Time.deltaTime;
             if (smeltAnimationSpeed < 0)
                 smeltAnimationSpeed = 0;
@@ -145,15 +151,29 @@ public class Refinery : MonoBehaviour
                 break;
         }
     }
+    void UpdateSound()
+    {
+        if (isSmelting)
+        {
+            if (!AS.isPlaying)
+            {
+                AS.time = (float)new System.Random().NextDouble() * AS.clip.length;
+                AS.Play();
+            }
+        }
+    }
     void OnTick()
     {
         
+
+
         Profiler.BeginSample("Refinery Tick Logic");
 
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
         {
             isSmelting = false;
             Profiler.EndSample();
+            UpdateSound();
             return;
         }
         if (!isJammed)
@@ -178,7 +198,7 @@ public class Refinery : MonoBehaviour
             Profiler.EndSample();
         }
         Profiler.EndSample();
-
+        UpdateSound();
     }
     void SmeltingAnimation()
     {

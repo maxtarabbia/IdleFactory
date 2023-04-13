@@ -14,9 +14,11 @@ public class Controls : MonoBehaviour
     public GameObject InventoryMenu;
 
     public bool areSelectedBuildings;
+    TickEvents events;
     // Start is called before the first frame update
     void Start()
     {
+        events = GetComponent<TickEvents>();
         world = FindObjectOfType<WorldGeneration>();
     }
 
@@ -63,8 +65,46 @@ public class Controls : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.F))
         {
-            TickEvents events = GetComponent<TickEvents>();
-            events.TickJam(100);
+            if(Input.GetKey(KeyCode.Alpha1))
+            {
+                events.TickJam(100);
+            }
+            if (Input.GetKey(KeyCode.Alpha2))
+            {
+                events.TickJam(200);
+            }
+            if (Input.GetKey(KeyCode.Alpha3))
+            {
+                events.TickJam(300);
+            }
+            if (Input.GetKey(KeyCode.Alpha4))
+            {
+                events.TickJam(400);
+            }
+            if (Input.GetKey(KeyCode.Alpha5))
+            {
+                events.TickJam(500);
+            }
+            if (Input.GetKey(KeyCode.Alpha6))
+            {
+                events.TickJam(600);
+            }
+            if (Input.GetKey(KeyCode.Alpha7))
+            {
+                events.TickJam(700);
+            }
+            if (Input.GetKey(KeyCode.Alpha8))
+            {
+                events.TickJam(800);
+            }
+            if (Input.GetKey(KeyCode.Alpha9))
+            {
+                events.TickJam(900);
+            }
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.KeypadPlus))
+            {
+                world.Currency += 100_000;
+            }
         }
         if(Input.GetKeyDown(KeyCode.K))
         {

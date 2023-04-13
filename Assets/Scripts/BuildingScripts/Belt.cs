@@ -50,11 +50,12 @@ public class Belt : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
-        FindObjectOfType<StateSaveLoad>().Save();
+        FindObjectOfType<StateSaveLoad>().LateSave();
     }
 
     public void UpdateAdjacentBelts()
     {
+        Profiler.BeginSample("UpdateAdjacentBelts");
         GameObject[] cells = new GameObject[4];
         world.OccupiedCells.TryGetValue(pos + new Vector2(0, 1), out cells[0]);
         world.OccupiedCells.TryGetValue(pos + new Vector2(0, -1), out cells[1]);
@@ -72,6 +73,7 @@ public class Belt : MonoBehaviour
                 }
             }
         }
+        Profiler.EndSample();
     }
 
     // Update is called once per frame
@@ -82,6 +84,7 @@ public class Belt : MonoBehaviour
     }
     public void UpdateBeltInput()
     {
+        Profiler.BeginSample("UpdateBeltInput");
         Vector2 Offset = Vector2.zero;
         switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
@@ -159,7 +162,7 @@ public class Belt : MonoBehaviour
             BeltRotationState = 0;
         }
 
-
+        Profiler.EndSample();
     }
     void OnTick()
     {

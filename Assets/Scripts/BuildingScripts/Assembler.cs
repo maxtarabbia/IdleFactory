@@ -8,12 +8,21 @@ public class Assembler : MonoBehaviour
 {
     WorldGeneration world;
     public Vector2Int pos;
+ 
+
 
     public Inventory inputInv;
     public Inventory inputInv2;
     public Inventory outputInv;
 
     public bool isJammed = false;
+
+    Vector3 startingPos;
+    bool isAssembling;
+    float animationStrength = 0f;
+    float MaxStrength = 0.1f;
+
+    AudioSource AS;
 
     [SerializeField]
     public Recipes recipies;
@@ -54,11 +63,12 @@ public class Assembler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AS = GetComponent<AudioSource>();
         if (File.Exists(recipepath + saveExtention))
         {
             recipies = (Recipes)JsonUtility.FromJson(System.IO.File.ReadAllText(recipepath + saveExtention), typeof(Recipes));
         }
-
+        startingPos = transform.localPosition;
         world = FindObjectOfType<WorldGeneration>();
         pos = Vector2Int.RoundToInt((Vector2)gameObject.transform.position + new Vector2(-0.5f, -0.5f));
         if (inputInv2 == null || inputInv2.items.Length == 0)
@@ -80,9 +90,35 @@ public class Assembler : MonoBehaviour
         FindObjectOfType<StateSaveLoad>().Save();
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        // OnTick();
+        if(isAssembling)
+        {
+            AS.volume += Time.deltaTime;
+            if (AS.volume > 1)
+                AS.volume = 1;
+            animationStrength += Time.deltaTime * MaxStrength;
+        }
+        else
+        {
+            AS.volume -= Time.deltaTime;
+            if (AS.volume < 0)
+                AS.volume = 0;
+            animationStrength -= Time.deltaTime * MaxStrength;
+        }
+        animationStrength = Mathf.Clamp(animationStrength, 0, MaxStrength);
+        transform.localPosition = startingPos + new Vector3(math.sin(Time.time*50/RTime), math.cos(Time.time*50/RTime),0) * animationStrength * .2f;
+    }
+    void UpdateSound()
+    {
+        if (isAssembling)
+        {
+            if (!AS.isPlaying)
+            {
+                AS.time = (float)new System.Random().NextDouble() * AS.clip.length;
+                AS.Play();
+            }
+        }
     }
     void SetOutput()
     {
@@ -124,16 +160,23 @@ public class Assembler : MonoBehaviour
 
         if (inputInv.items[0].ID != recipies.values[recipies.selectedRecipe].inputItemID || inputInv2.items[0].ID != recipies.values[recipies.selectedRecipe].inputItemID2)
         {
+            //wrong items
+            isAssembling = false;
+            UpdateSound();
             Profiler.EndSample();
             return;
         }
         if(inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount || inputInv2.items[0].count < recipies.values[recipies.selectedRecipe].inCount2)
         {
+            //not enough items
+            isAssembling = false;
+            UpdateSound();
             Profiler.EndSample();
             return;
         }
         if(!isJammed)
             RProgress += Time.fixedDeltaTime;
+        isAssembling = true;
         if (RProgress >= RTime)
         {
             AttemptBuild();
@@ -144,7 +187,12 @@ public class Assembler : MonoBehaviour
             {
                 outputInv.RemoveItem(new int2[] { new int2(outputInv.items[0].ID, 1) }, 1.0f);
             }
+            else
+            {
+
+            }
         }
+        UpdateSound();
         Profiler.EndSample();
     }
     void AttemptBuild()
@@ -161,6 +209,7 @@ public class Assembler : MonoBehaviour
         }
         else
         {
+            isAssembling = false;
             RProgress = RTime;
         }
     }

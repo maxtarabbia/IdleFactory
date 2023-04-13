@@ -9,10 +9,11 @@ using UnityEngine.UIElements;
 
 public class StateSaveLoad : MonoBehaviour
 {
+
     string path = "/Saves";
     // Start is called before the first frame update
 
-    bool SaveNext = false;
+    public bool SaveNext = false;
 
     public List<MinerData> minerData = new List<MinerData>();
     public List<BeltData> beltData = new List<BeltData>();
