@@ -27,6 +27,8 @@ public class Refinery : MonoBehaviour
     Vector2Int inputCoord = new Vector2Int();
     Vector2Int outFromCoord = new Vector2Int();
 
+    ResourceStats stats;
+    
     bool isSmelting;
     float smeltAnimationSpeed;
 
@@ -42,6 +44,10 @@ public class Refinery : MonoBehaviour
 
     public GameObject RecipeDisplay;
     float timeHovering;
+
+    public GameObject RefBase;
+    public GameObject RefElements;
+    public GameObject SmokeStack;
 
     [Serializable]
     public struct Recipes
@@ -62,6 +68,7 @@ public class Refinery : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        stats = FindObjectOfType<ResourceStats>();
         AS = GetComponent<AudioSource>();
         transforms = GetComponentsInChildren<Transform>();
         basePos = transforms[1].localPosition + new Vector3(0, 0.6f, 0);
@@ -217,6 +224,7 @@ public class Refinery : MonoBehaviour
         int outID = recipies.values[recipies.selectedRecipe].outputItemID;
         if (outputInv.AddItem(outID, recipies.values[recipies.selectedRecipe].outCount))
         {
+            stats.Additem(outID, recipies.values[recipies.selectedRecipe].outCount);
             inputInv.RemoveItem(new int2[] { new int2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
             RProgress -= RTime;
         }

@@ -5,6 +5,10 @@ public class SaveData : MonoBehaviour
     public int seed;
     public int prestigeState;
 
+    public Achievement[] achievements;
+    public Vector2Int[] ResourceStats;
+    public bool[] SelectedSkins;
+
     public TutorialState.State state;
 
     public Vector2 CamCoord;
@@ -32,6 +36,11 @@ public class SaveData : MonoBehaviour
         datatoSave.time = time;
         datatoSave.seed = seed;
         datatoSave.prestigeState = prestigeState;
+
+        datatoSave.achievements = achievements;
+        datatoSave.ResourceStats = ResourceStats;
+        datatoSave.SelectedSkins = SelectedSkins;
+
 
         datatoSave.state = state;
 
@@ -70,6 +79,11 @@ public class SaveData : MonoBehaviour
         assemblerdata= savedData.assemblerdata;
         UBdata = savedData.UBdata;
 
+        SelectedSkins = savedData.SelectedSkins;
+
+        achievements= savedData.achievements;
+        ResourceStats = savedData.ResourceStats;
+
         prestigeState = savedData.prestigeState;
 
         state = savedData.state;
@@ -91,6 +105,10 @@ public struct DatatoSave
     public long time;
     public int seed;
     public int prestigeState;
+
+    public Achievement[] achievements;
+    public Vector2Int[] ResourceStats;
+    public bool[] SelectedSkins;
 
     public MinerData[] minerdata;
     public BeltData[] beltdata;

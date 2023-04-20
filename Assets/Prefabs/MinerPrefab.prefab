@@ -923,6 +923,9 @@ MonoBehaviour:
   hasRotated: 0
   miningProgress: 0
   secondsPerItem: 4
+  Frame: {fileID: 6432214006276148771}
+  Hopper: {fileID: 1218354525639471260}
+  Drill: {fileID: 2769195005133678721}
   OreSprites:
   - {fileID: 21300000, guid: 1166c45cd8faced4eb7f954116d407c1, type: 3}
   - {fileID: 21300000, guid: 6a567ab51f18e4c408630d2fc227782b, type: 3}

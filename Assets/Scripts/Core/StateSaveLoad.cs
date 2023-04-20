@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -73,6 +74,7 @@ public class StateSaveLoad : MonoBehaviour
 
         data.speedstates = world.speedstates;
 
+        data.SelectedSkins = FindObjectOfType<Skins>().allSkins.Select(o => o.isSelected).ToArray();
 
         Camera cam = FindObjectOfType<Camera>();
         data.CamScale = cam.orthographicSize;
@@ -80,6 +82,9 @@ public class StateSaveLoad : MonoBehaviour
         data.prestigeState = world.prestigeState;
 
         data.state = FindObjectOfType<TutorialState>().currentState;
+
+        data.achievements = FindObjectOfType<ResourceStats>().achievements;
+        data.ResourceStats = FindObjectOfType<ResourceStats>().createdItemsTotal.ToArray();
 
         data.time = Gettime();
         data.seed = world.Seed;
@@ -214,6 +219,8 @@ public class StateSaveLoad : MonoBehaviour
         world.Initialize(24, saveData.seed);
         world.SetInventory();
 
+        FindObjectOfType<Skins>().SetSelected(saveData.SelectedSkins);
+
         foreach (MinerData minerData in saveData.minerdata)
         {
             GameObject newMiner = PlaceObjectManual(minerData.Position, 0, minerData.Rotation);
@@ -273,6 +280,10 @@ public class StateSaveLoad : MonoBehaviour
         world.inv = saveData.worldinv;
         world.Currency = saveData.Currency;
         world.Seed = saveData.seed;
+
+        ResourceStats RS = FindObjectOfType<ResourceStats>();
+        RS.createdItemsTotal = saveData.ResourceStats.ToList();
+        RS.achievements = saveData.achievements;
 
         world.speedstates = saveData.speedstates;
 
@@ -357,7 +368,7 @@ public class StateSaveLoad : MonoBehaviour
             asyncsave();
         }
     }
-    async void asyncsave()
+    void asyncsave()
     {
         Profiler.BeginSample("Saving");
         Save();

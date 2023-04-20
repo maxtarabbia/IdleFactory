@@ -392,6 +392,9 @@ MonoBehaviour:
   RTime: 1
   RecipeDisplay: {fileID: 9186752040647465056, guid: 9ae7ba67b7226794d88d29d3bf98b095,
     type: 3}
+  RefBase: {fileID: 7687143222981285375}
+  RefElements: {fileID: 2648360865877853044}
+  SmokeStack: {fileID: 3887160951080917543}
 --- !u!61 &-1451229560485884586
 BoxCollider2D:
   m_ObjectHideFlags: 0

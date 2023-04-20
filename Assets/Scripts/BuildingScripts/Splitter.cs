@@ -24,6 +24,7 @@ public class Splitter : MonoBehaviour
     float justAdded;
 
     int inIter;
+    public GameObject splitterTop;
 
     bool[] canOutput;
 
@@ -36,6 +37,7 @@ public class Splitter : MonoBehaviour
     }
     void Start()
     {
+        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Belt, gameObject);
         canOutput = new bool[3];
         world = FindObjectOfType<WorldGeneration>();
         spriteAssets = world.items.GroupBy(o => o.sprite).Select(g=>g.First().sprite).ToArray();

@@ -35,13 +35,19 @@ public class Miner : MonoBehaviour
 
     int calls;
 
+    ResourceStats stats;
+
     Inventory inv;
+
+    public GameObject Frame;
+    public GameObject Hopper;
+    public GameObject Drill;
 
     public Sprite[] OreSprites;
     //Start is called before the first frame update
     void Awake()
     {
-        
+        stats = FindObjectOfType<ResourceStats>();
         coveredTileID = Enumerable.Repeat(-1, 4).ToArray();
         transforms = GetComponentsInChildren<Transform>();
         basePos = transforms[1].localPosition;
@@ -49,6 +55,7 @@ public class Miner : MonoBehaviour
     }
     private void Start()
     {
+
         AS = GetComponent<AudioSource>();
     }
     void Initialize()
@@ -59,6 +66,8 @@ public class Miner : MonoBehaviour
         world = FindObjectOfType<WorldGeneration>();
         worldmap = world.oreMap;
         gameObject.transform.localScale = Vector3.one;
+
+        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Miner, gameObject);
 
         effect = GetComponent<VisualEffect>();
 
@@ -234,11 +243,13 @@ public class Miner : MonoBehaviour
                 break;
             case 1: //iron ore
                 calls = 0;
+                stats.Additem(0, 1);
                 if (!OutputItem(0))
                 {
                     if (!inv.AddItem(0, 1))
                     { 
                     world.inv.AddItem(0, 1);
+                    
                     effect.SetTexture("spriteTex", OreSprites[0].texture);
                     if (PlayerPrefs.GetInt("isLoaded") == 1)
                         effect.Play();
@@ -247,11 +258,13 @@ public class Miner : MonoBehaviour
                 break;
             case 2: //copper ore
                 calls = 0;
+                stats.Additem(1, 1);
                 if (!OutputItem(1))
                 {
                     if (!inv.AddItem(1, 1))
                     {
                         world.inv.AddItem(1, 1);
+                        
                         effect.SetTexture("spriteTex", OreSprites[1].texture);
                         if (PlayerPrefs.GetInt("isLoaded") == 1)
                             effect.Play();

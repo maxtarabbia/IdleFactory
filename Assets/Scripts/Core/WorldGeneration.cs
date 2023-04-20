@@ -44,6 +44,8 @@ public class WorldGeneration : MonoBehaviour
     [SerializeField]
     public Dictionary<Vector2, GameObject> OccupiedCells = new Dictionary<Vector2, GameObject>();
 
+    public TextMeshProUGUI tmpUI;
+
     public bool GodMode;
 
     public GameObject OOBprefab;
@@ -271,7 +273,6 @@ public class WorldGeneration : MonoBehaviour
     void UpdateUI()
     {
         string UItext = new string("");
-        var tmpUI = UICanvas.GetComponentInChildren<TextMeshProUGUI>();
 
         Vector2[] costs = CountCosts();
 

@@ -334,6 +334,9 @@ MonoBehaviour:
   itemID: {x: 0, y: 0}
   OutputCoord: {x: 0, y: 0}
   distance: 3
+  OutputGO: {fileID: 4449911350100691387}
+  InputTop: {fileID: 1202517679216328292}
+  OutputTop: {fileID: 2101916135950648737}
 --- !u!114 &7389100541417040437
 MonoBehaviour:
   m_ObjectHideFlags: 0

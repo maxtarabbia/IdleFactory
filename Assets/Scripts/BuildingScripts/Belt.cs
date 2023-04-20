@@ -30,6 +30,7 @@ public class Belt : MonoBehaviour
         pos = transform.position;
         //x is ID
         //y is time spent on belt
+        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Belt, gameObject);
 
         if (sprite == null)
         {

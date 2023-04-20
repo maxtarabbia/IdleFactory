@@ -21,6 +21,10 @@ public class UnderGroundBelt : MonoBehaviour
     float TimeAdded;
     SpriteRenderer SR;
 
+    public GameObject OutputGO;
+    public GameObject InputTop;
+    public GameObject OutputTop;
+
     float timeSinceFixed;
     bool canOutput;
     // Start is called before the first frame update
@@ -30,6 +34,7 @@ public class UnderGroundBelt : MonoBehaviour
         pos = transform.position;
         //x is ID
         //y is time spent on belt
+        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Belt, gameObject);
 
         if (sprite == null)
         {

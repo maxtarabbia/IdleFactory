@@ -27,6 +27,8 @@ public class Assembler : MonoBehaviour
     [SerializeField]
     public Recipes recipies;
 
+    ResourceStats stats;
+
     string recipepath = "Recipes";
     string saveExtention = "/Assembler.dat";
 
@@ -63,6 +65,7 @@ public class Assembler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        stats = FindObjectOfType<ResourceStats>();
         AS = GetComponent<AudioSource>();
         if (File.Exists(recipepath + saveExtention))
         {
@@ -203,6 +206,7 @@ public class Assembler : MonoBehaviour
             return;
         if (outputInv.AddItem(outID, recipies.values[recipies.selectedRecipe].outCount))
         {
+            stats.Additem(outID, recipies.values[recipies.selectedRecipe].outCount);
             inputInv2.RemoveItem(new int2[] { new int2(recipies.values[recipies.selectedRecipe].inputItemID2, recipies.values[recipies.selectedRecipe].inCount2) }, 1f);
             inputInv.RemoveItem(new int2[] { new int2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
             RProgress -= RTime;

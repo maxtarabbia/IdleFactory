@@ -207,6 +207,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1167266351}
   - {fileID: 1736114158}
   - {fileID: 752898355}
   - {fileID: 1985949603}
@@ -869,6 +870,142 @@ LightingSettings:
   m_PVRTiledBaking: 0
   m_NumRaysToShootPerTexel: -1
   m_RespectSceneVisibilityWhenBakingGI: 0
+--- !u!1 &1167266350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1167266351}
+  - component: {fileID: 1167266353}
+  - component: {fileID: 1167266352}
+  m_Layer: 5
+  m_Name: AchievementText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1167266351
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167266350}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 232368674}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 131.7}
+  m_SizeDelta: {x: 360.2, y: 50}
+  m_Pivot: {x: 0, y: 0}
+--- !u!114 &1167266352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167266350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Achievement info goes here
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8a39be6695a7baf47a966c3355855a07, type: 2}
+  m_sharedMaterial: {fileID: -5530275386899717260, guid: 8a39be6695a7baf47a966c3355855a07,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 29.51
+  m_fontSizeBase: 29.51
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1167266353
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167266350}
+  m_CullTransparentMesh: 1
 --- !u!1 &1298894903
 GameObject:
   m_ObjectHideFlags: 0
@@ -884,6 +1021,8 @@ GameObject:
   - component: {fileID: 1298894908}
   - component: {fileID: 1298894909}
   - component: {fileID: 1298894910}
+  - component: {fileID: 1298894911}
+  - component: {fileID: 1298894912}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -1000,6 +1139,7 @@ MonoBehaviour:
       cost: 10
       speedScale: 1.1
       costScale: 1.1
+  tmpUI: {fileID: 1736114159}
   GodMode: 0
   OOBprefab: {fileID: 2401475535027312438, guid: c60f62e42587fbe4c8f5de09c9f0d1c9,
     type: 3}
@@ -1152,6 +1292,8 @@ MonoBehaviour:
   time: 0
   seed: 0
   prestigeState: 0
+  achievements: []
+  ResourceStats: []
   state: 0
   CamCoord: {x: 0, y: 0}
   CamScale: 0
@@ -1182,6 +1324,118 @@ MonoBehaviour:
   worldinv:
     items: []
     maxStackSize: 0
+--- !u!114 &1298894911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298894903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4e35999c2857874bb7cc3f788c26ffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createdItemsThisTick: []
+  createdItemsTotal: []
+  achievements:
+  - name: Million Iron
+    ItemID: 0
+    ItemCount: 1000000
+    hasBeenAchieved: 0
+    UnlockSkinID: -1
+  - name: Million Copper
+    ItemID: 1
+    ItemCount: 1000000
+    hasBeenAchieved: 0
+    UnlockSkinID: 4
+  TMPGUI: {fileID: 1167266352}
+--- !u!114 &1298894912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298894903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a16e57a4b17204aa976d4e2d4916bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allSkins:
+  - Thumbnail: {fileID: 21300000, guid: 8a0d61173558da44db266e621702bcfc, type: 3}
+    name: Base Miner
+    sprites:
+    - {fileID: 21300000, guid: a64a3d6002b2a3e46ac4e95ddb6d6ad7, type: 3}
+    - {fileID: 21300000, guid: 8db3416049fe0454b9616a0f8b7d87ed, type: 3}
+    - {fileID: 21300000, guid: 35b7ed3d658d9c74d94d8b8360835aa4, type: 3}
+    type: 0
+    isSelected: 0
+    isUnlocked: 1
+  - Thumbnail: {fileID: 21300000, guid: 2dd440489eb135a41aa8bbcb6da675f2, type: 3}
+    name: BaseRefinery
+    sprites:
+    - {fileID: 21300000, guid: 14d3e26667c625e419d0b1ea4cf8bd30, type: 3}
+    - {fileID: 21300000, guid: 75160c07b9993274ebbb5a52e7212f9a, type: 3}
+    - {fileID: 21300000, guid: 086b6696f907f25419520b6f0da0f115, type: 3}
+    type: 1
+    isSelected: 0
+    isUnlocked: 1
+  - Thumbnail: {fileID: 21300000, guid: b7893a3a18d111b49818c004aa215faa, type: 3}
+    name: BaseBelt
+    sprites:
+    - {fileID: 21300000, guid: b7893a3a18d111b49818c004aa215faa, type: 3}
+    - {fileID: 21300000, guid: 006de6b81006ebb458c6c66c15e17355, type: 3}
+    - {fileID: 21300000, guid: 4b25072d6bc3ab44bb513ec6ea9ec01b, type: 3}
+    - {fileID: 21300000, guid: e7fe3595bc78edb47955437e66406cd7, type: 3}
+    - {fileID: 21300000, guid: 46a899495ad409841be2668cf614996f, type: 3}
+    - {fileID: 21300000, guid: 308449b01e577ae4397a7bb7dcb64ff7, type: 3}
+    - {fileID: 21300000, guid: 0d9405accd7e9574f9e5bb8dde22e2e6, type: 3}
+    - {fileID: 21300000, guid: e1cae1a593daea64fa18b0a318b867f7, type: 3}
+    - {fileID: 21300000, guid: 060649025610bb04891c142f1e417ae8, type: 3}
+    type: 2
+    isSelected: 0
+    isUnlocked: 1
+  - Thumbnail: {fileID: 21300000, guid: e00d325f98da3f94ea19648ffd0f7613, type: 3}
+    name: BaseAssembler
+    sprites:
+    - {fileID: 21300000, guid: e00d325f98da3f94ea19648ffd0f7613, type: 3}
+    type: 3
+    isSelected: 0
+    isUnlocked: 1
+  - Thumbnail: {fileID: 21300000, guid: 692cdb95348e7754fbfdf1cca99c5298, type: 3}
+    name: Neon Miner
+    sprites:
+    - {fileID: 21300000, guid: e8f076e50b097144f99765eb13ecf457, type: 3}
+    - {fileID: 21300000, guid: 5462a15ea82b93048b617ce6029ae54a, type: 3}
+    - {fileID: 21300000, guid: e33c2f1c538bc8549bd2bc567928e14f, type: 3}
+    type: 0
+    isSelected: 0
+    isUnlocked: 0
+  - Thumbnail: {fileID: 21300000, guid: a74d05266e0e2194985fd0fd1ef88d24, type: 3}
+    name: Pixel Miner
+    sprites:
+    - {fileID: 21300000, guid: 5196f588c0c9ca5469ce7baae91ba4cf, type: 3}
+    - {fileID: 21300000, guid: 6d815b28f94fb39438c5e7381a9d266e, type: 3}
+    - {fileID: 21300000, guid: ba2b9c3fd68c0e14ba7af70a3d7c8def, type: 3}
+    type: 0
+    isSelected: 0
+    isUnlocked: 1
+  - Thumbnail: {fileID: 21300000, guid: a86eabb2f8c80ff4f9df063e24680a22, type: 3}
+    name: Neon Belt
+    sprites:
+    - {fileID: 21300000, guid: a86eabb2f8c80ff4f9df063e24680a22, type: 3}
+    - {fileID: 21300000, guid: f5dd68be9f6c03c459d6a60d1073d630, type: 3}
+    - {fileID: 21300000, guid: 1d644ec724bb53d4195a164f3d5bae0e, type: 3}
+    - {fileID: 21300000, guid: c44633f401332b14984cab22efac8e61, type: 3}
+    - {fileID: 21300000, guid: 707c5a90f49debb4dacd46495f5278cf, type: 3}
+    - {fileID: 21300000, guid: 414f0205df7d7a04680c471d8936fe4e, type: 3}
+    - {fileID: 21300000, guid: 6d54f12b13ff6aa419c1b338fd57574a, type: 3}
+    - {fileID: 21300000, guid: 68b9b88ccd6f9a946a5660afb62c6c76, type: 3}
+    - {fileID: 21300000, guid: aef5477e075cf5042a8de2a57ce7769d, type: 3}
+    type: 2
+    isSelected: 0
+    isUnlocked: 1
 --- !u!1 &1325679998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1577,7 +1831,9 @@ MonoBehaviour:
   music:
   - {fileID: 8300000, guid: 04980d6be23b6a441a1315d6b59a83aa, type: 3}
   - {fileID: 8300000, guid: e4c0b6fe597b6124e8a7e2412bec3e1a, type: 3}
+  timeToPlay: 0
   AM: {fileID: -2025809408932102131, guid: acab48b66793fc34eaa9f50b9766e598, type: 2}
+  selectedSource: 0
 --- !u!1 &1736114157
 GameObject:
   m_ObjectHideFlags: 0

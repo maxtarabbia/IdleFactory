@@ -628,6 +628,7 @@ MonoBehaviour:
   world: {fileID: 0}
   timeTotravel: 2
   itemsID: []
+  splitterTop: {fileID: 1923571080545981965}
 --- !u!61 &3308151135024893115
 BoxCollider2D:
   m_ObjectHideFlags: 0

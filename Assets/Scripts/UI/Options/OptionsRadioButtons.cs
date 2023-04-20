@@ -18,4 +18,8 @@ public class OptionsRadioButtons : MonoBehaviour
     {
         menuController.AddKeybinds();
     }
+    public void SetSkins()
+    {
+        menuController.AddSkinOptions();
+    }
 }
