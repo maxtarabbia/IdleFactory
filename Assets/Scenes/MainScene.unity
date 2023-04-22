@@ -1109,8 +1109,8 @@ MonoBehaviour:
   CamSize: {x: 0, y: 0}
   speedstates:
     MinerInfo:
-      speed: 3
-      cost: 1
+      speed: 2
+      cost: 10
       speedScale: 1.05
       costScale: 1.5
     RefineryInfo:
@@ -1294,6 +1294,7 @@ MonoBehaviour:
   prestigeState: 0
   achievements: []
   ResourceStats: []
+  SelectedSkins: 
   state: 0
   CamCoord: {x: 0, y: 0}
   CamScale: 0
@@ -1343,12 +1344,12 @@ MonoBehaviour:
     ItemID: 0
     ItemCount: 1000000
     hasBeenAchieved: 0
-    UnlockSkinID: -1
+    UnlockSkinID: 0400000006000000080000000a000000
   - name: Million Copper
     ItemID: 1
     ItemCount: 1000000
     hasBeenAchieved: 0
-    UnlockSkinID: 4
+    UnlockSkinID: 0500000007000000090000000b000000
   TMPGUI: {fileID: 1167266352}
 --- !u!114 &1298894912
 MonoBehaviour:
@@ -1363,8 +1364,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allSkins:
-  - Thumbnail: {fileID: 21300000, guid: 8a0d61173558da44db266e621702bcfc, type: 3}
-    name: Base Miner
+  - name: Base Miner
+    Thumbnail: {fileID: 21300000, guid: 8a0d61173558da44db266e621702bcfc, type: 3}
     sprites:
     - {fileID: 21300000, guid: a64a3d6002b2a3e46ac4e95ddb6d6ad7, type: 3}
     - {fileID: 21300000, guid: 8db3416049fe0454b9616a0f8b7d87ed, type: 3}
@@ -1372,8 +1373,8 @@ MonoBehaviour:
     type: 0
     isSelected: 0
     isUnlocked: 1
-  - Thumbnail: {fileID: 21300000, guid: 2dd440489eb135a41aa8bbcb6da675f2, type: 3}
-    name: BaseRefinery
+  - name: BaseRefinery
+    Thumbnail: {fileID: 21300000, guid: 2dd440489eb135a41aa8bbcb6da675f2, type: 3}
     sprites:
     - {fileID: 21300000, guid: 14d3e26667c625e419d0b1ea4cf8bd30, type: 3}
     - {fileID: 21300000, guid: 75160c07b9993274ebbb5a52e7212f9a, type: 3}
@@ -1381,8 +1382,8 @@ MonoBehaviour:
     type: 1
     isSelected: 0
     isUnlocked: 1
-  - Thumbnail: {fileID: 21300000, guid: b7893a3a18d111b49818c004aa215faa, type: 3}
-    name: BaseBelt
+  - name: BaseBelt
+    Thumbnail: {fileID: 21300000, guid: b7893a3a18d111b49818c004aa215faa, type: 3}
     sprites:
     - {fileID: 21300000, guid: b7893a3a18d111b49818c004aa215faa, type: 3}
     - {fileID: 21300000, guid: 006de6b81006ebb458c6c66c15e17355, type: 3}
@@ -1396,15 +1397,15 @@ MonoBehaviour:
     type: 2
     isSelected: 0
     isUnlocked: 1
-  - Thumbnail: {fileID: 21300000, guid: e00d325f98da3f94ea19648ffd0f7613, type: 3}
-    name: BaseAssembler
+  - name: BaseAssembler
+    Thumbnail: {fileID: 21300000, guid: e00d325f98da3f94ea19648ffd0f7613, type: 3}
     sprites:
     - {fileID: 21300000, guid: e00d325f98da3f94ea19648ffd0f7613, type: 3}
     type: 3
     isSelected: 0
     isUnlocked: 1
-  - Thumbnail: {fileID: 21300000, guid: 692cdb95348e7754fbfdf1cca99c5298, type: 3}
-    name: Neon Miner
+  - name: Neon Miner
+    Thumbnail: {fileID: 21300000, guid: 692cdb95348e7754fbfdf1cca99c5298, type: 3}
     sprites:
     - {fileID: 21300000, guid: e8f076e50b097144f99765eb13ecf457, type: 3}
     - {fileID: 21300000, guid: 5462a15ea82b93048b617ce6029ae54a, type: 3}
@@ -1412,17 +1413,17 @@ MonoBehaviour:
     type: 0
     isSelected: 0
     isUnlocked: 0
-  - Thumbnail: {fileID: 21300000, guid: a74d05266e0e2194985fd0fd1ef88d24, type: 3}
-    name: Pixel Miner
+  - name: Pixel Miner
+    Thumbnail: {fileID: 21300000, guid: a74d05266e0e2194985fd0fd1ef88d24, type: 3}
     sprites:
     - {fileID: 21300000, guid: 5196f588c0c9ca5469ce7baae91ba4cf, type: 3}
     - {fileID: 21300000, guid: 6d815b28f94fb39438c5e7381a9d266e, type: 3}
     - {fileID: 21300000, guid: ba2b9c3fd68c0e14ba7af70a3d7c8def, type: 3}
     type: 0
     isSelected: 0
-    isUnlocked: 1
-  - Thumbnail: {fileID: 21300000, guid: a86eabb2f8c80ff4f9df063e24680a22, type: 3}
-    name: Neon Belt
+    isUnlocked: 0
+  - name: Neon Belt
+    Thumbnail: {fileID: 21300000, guid: a86eabb2f8c80ff4f9df063e24680a22, type: 3}
     sprites:
     - {fileID: 21300000, guid: a86eabb2f8c80ff4f9df063e24680a22, type: 3}
     - {fileID: 21300000, guid: f5dd68be9f6c03c459d6a60d1073d630, type: 3}
@@ -1435,7 +1436,54 @@ MonoBehaviour:
     - {fileID: 21300000, guid: aef5477e075cf5042a8de2a57ce7769d, type: 3}
     type: 2
     isSelected: 0
-    isUnlocked: 1
+    isUnlocked: 0
+  - name: Pixel Belt
+    Thumbnail: {fileID: 21300000, guid: df0d969691ae4de45b2935baa9d5ae6d, type: 3}
+    sprites:
+    - {fileID: 21300000, guid: df0d969691ae4de45b2935baa9d5ae6d, type: 3}
+    - {fileID: 21300000, guid: ac6c947fcf3eb8446b6c7b91956df6df, type: 3}
+    - {fileID: 21300000, guid: c906a7b2045ad3c4a9a19d9ffe356da2, type: 3}
+    - {fileID: 21300000, guid: 7de40ce7108d13d46a3fed2ec50d4212, type: 3}
+    - {fileID: 21300000, guid: df5f4f3c43386b442b73ad416de97a99, type: 3}
+    - {fileID: 21300000, guid: 97c4089c23fb9074999d2b8e39766456, type: 3}
+    - {fileID: 21300000, guid: 9b753d132e7e0c543b339407f99d3780, type: 3}
+    - {fileID: 21300000, guid: 4b6d80388340e954ebdc4b0ca54f42f8, type: 3}
+    - {fileID: 21300000, guid: 0fc7ac823c19fd64aa0cd89d1710a560, type: 3}
+    type: 2
+    isSelected: 0
+    isUnlocked: 0
+  - name: Neon Refinery
+    Thumbnail: {fileID: 21300000, guid: 98626ec58371679458fa1c74e6a8b85c, type: 3}
+    sprites:
+    - {fileID: 21300000, guid: 3b324ed958b7a3348963eea719bf4fa3, type: 3}
+    - {fileID: 21300000, guid: 76c80d78808f89d4fa6ff05e572def0d, type: 3}
+    - {fileID: 21300000, guid: 3c6d107d8e0e2464a932f85e486abb1c, type: 3}
+    type: 1
+    isSelected: 0
+    isUnlocked: 0
+  - name: PixelRefinery
+    Thumbnail: {fileID: 21300000, guid: c0d7556d1989a6f4b9e8fc021d2536f2, type: 3}
+    sprites:
+    - {fileID: 21300000, guid: e108dfb72b7b64249b12bb4776c99a38, type: 3}
+    - {fileID: 21300000, guid: 3f2c5b02db548b945a7e5e86aac56095, type: 3}
+    - {fileID: 21300000, guid: cfcec81cb76621548baa1b41a9f538f3, type: 3}
+    type: 1
+    isSelected: 0
+    isUnlocked: 0
+  - name: Neon Assembler
+    Thumbnail: {fileID: 21300000, guid: bee4c4f972f056449855cc383dde0ff6, type: 3}
+    sprites:
+    - {fileID: 21300000, guid: bee4c4f972f056449855cc383dde0ff6, type: 3}
+    type: 3
+    isSelected: 0
+    isUnlocked: 0
+  - name: Pixel Assembler
+    Thumbnail: {fileID: 21300000, guid: cce82f136e61d75419289e7c0bb4173a, type: 3}
+    sprites:
+    - {fileID: 21300000, guid: cce82f136e61d75419289e7c0bb4173a, type: 3}
+    type: 3
+    isSelected: 0
+    isUnlocked: 0
 --- !u!1 &1325679998
 GameObject:
   m_ObjectHideFlags: 0

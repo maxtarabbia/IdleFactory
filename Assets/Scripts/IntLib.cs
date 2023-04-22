@@ -3,8 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public static class IntLib
 {
+    public static string RoundToString (float x)
+    {
+        float o =  Mathf.Round(x * 100)/100;
+        return o.ToString();
+    }
     public static string IntToString(int value)
     {
         string output = value.ToString();

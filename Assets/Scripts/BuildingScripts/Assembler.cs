@@ -81,6 +81,8 @@ public class Assembler : MonoBehaviour
         if (outputInv == null || outputInv.items.Length == 0)
             outputInv = new Inventory(1);
 
+        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Assembler, gameObject);
+
         inputInv.maxStackSize = 10;
         inputInv2.maxStackSize= 10;
         outputInv.maxStackSize = 10;
@@ -247,10 +249,19 @@ public class Assembler : MonoBehaviour
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[5].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
     }
     public void RotateCCW()
     {
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[5].rotation = (int)gameObject.transform.rotation.eulerAngles.z;

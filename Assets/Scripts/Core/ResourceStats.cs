@@ -22,8 +22,12 @@ public class ResourceStats : MonoBehaviour
         Ticks.MyEvent += OnTick;
         foreach(Achievement achievement in achievements)
         {
-            if(achievement.hasBeenAchieved && achievement.UnlockSkinID != -1)
-                world.GetComponent<Skins>().allSkins[achievement.UnlockSkinID].isUnlocked= true;
+            if (!achievement.hasBeenAchieved)
+                continue;
+            for (int j = 0; j < achievement.UnlockSkinID.Count; j++)
+            {
+                world.GetComponent<Skins>().allSkins[achievement.UnlockSkinID[j]].isUnlocked = true;
+            }
         }
     }
     void OnTick()
@@ -62,15 +66,16 @@ public class ResourceStats : MonoBehaviour
                 if (createdItemsTotal[i].x == achievement.ItemID && createdItemsTotal[i].y >= achievement.ItemCount && !achievement.hasBeenAchieved)
                 {
                     achievement.hasBeenAchieved = true;
-                    if (achievement.UnlockSkinID != -1)
+
+                    string achievementText = achievement.name + " has been achieved!";
+
+                    for (int j = 0; j < achievement.UnlockSkinID.Count; j++)
                     {
-                        world.GetComponent<Skins>().allSkins[achievement.UnlockSkinID].isUnlocked = true;
-                        TMPGUI.text = achievement.name + " has been achieved!\n" + world.GetComponent<Skins>().allSkins[achievement.UnlockSkinID].name + " has been unlocked!";
+                        world.GetComponent<Skins>().allSkins[achievement.UnlockSkinID[j]].isUnlocked = true;
+                        achievementText += "\n" + world.GetComponent<Skins>().allSkins[achievement.UnlockSkinID[j]].name + " has been unlocked!";
                     }
-                    else
-                    {
-                        TMPGUI.text = achievement.name + " has been achieved!";
-                    }
+
+                    TMPGUI.text = achievementText;
                     TMPGUI.color = new Color(1f, 1f, 1f, 1f);
                     print(achievement.name + " has been achieved!");
                 }
@@ -111,6 +116,6 @@ public class Achievement
     public int ItemID;
     public int ItemCount;
     public bool hasBeenAchieved;
-    public int UnlockSkinID = -1;
+    public List<int> UnlockSkinID = new List<int>();
 }
 

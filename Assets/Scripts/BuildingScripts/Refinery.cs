@@ -89,6 +89,8 @@ public class Refinery : MonoBehaviour
         if (outputInv == null || outputInv.items.Length == 0)
             outputInv = new Inventory(1);
 
+        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Refinery, gameObject);
+
         inputInv.maxStackSize = 10;
         outputInv.maxStackSize = 10;
         SetOutput();
@@ -263,14 +265,22 @@ public class Refinery : MonoBehaviour
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
     }
     public void RotateCCW()
     {
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
     }
     public void Delete()
     {

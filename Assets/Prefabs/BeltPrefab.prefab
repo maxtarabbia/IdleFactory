@@ -581,6 +581,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b7893a3a18d111b49818c004aa215faa, type: 3}
   - {fileID: 21300000, guid: 006de6b81006ebb458c6c66c15e17355, type: 3}
   - {fileID: 21300000, guid: 4b25072d6bc3ab44bb513ec6ea9ec01b, type: 3}
+  RecipeDisplay: {fileID: 9186752040647465056, guid: 9ae7ba67b7226794d88d29d3bf98b095,
+    type: 3}
 --- !u!61 &5891399416402255133
 BoxCollider2D:
   m_ObjectHideFlags: 0

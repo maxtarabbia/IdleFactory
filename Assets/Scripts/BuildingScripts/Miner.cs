@@ -13,6 +13,8 @@ public class Miner : MonoBehaviour
     public Vector2 pos;
     public int[] coveredTileID;
 
+
+
     public bool hasRotated = false;
 
     VisualEffect effect;
@@ -108,9 +110,35 @@ public class Miner : MonoBehaviour
         FindObjectOfType<StateSaveLoad>().Save();
 
     }
-    // On Hover Events
+    public GameObject RecipeDisplay;
+    float timeHovering;
     private void OnMouseOver()
     {
+        timeHovering += Time.deltaTime;
+        if (timeHovering < 1)
+            return;
+
+        if (GetComponentInChildren<DisplayRecipes>() != null)
+            return;
+
+        GameObject rec = Instantiate(RecipeDisplay, transform);
+        rec.transform.rotation = Quaternion.identity;
+        rec.transform.position = new Vector3(3, 2, -0.01f) + gameObject.transform.position;
+        rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Miner;
+
+    }
+    private void OnMouseExit()
+    {
+        timeHovering = 0;
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
+
+    }
+    // On Hover Events
+
        /* if (Input.GetKeyDown(KeyCode.R))
         {
             gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
@@ -136,16 +164,26 @@ public class Miner : MonoBehaviour
             Destroy(gameObject);
         }
        */
-    }
+    
     public void RotateCW()
     {
         OutputObj = null;
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
         hasRotated= true;
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
     }
     public void RotateCCW()
     {
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
         OutputObj = null;
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         hasRotated = true;

@@ -66,7 +66,7 @@ public class Skins : MonoBehaviour
     {
         for(int i =0; i< allSkins.Length; i++)
         {
-            if(booleans.Length >= i)
+            if(booleans.Length > i)
             {
                 allSkins[i].isSelected = booleans[i];
             }

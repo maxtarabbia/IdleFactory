@@ -360,38 +360,32 @@ public class Belt : MonoBehaviour
          
         Destroy(gameObject);
     }
+    public GameObject RecipeDisplay;
+    float timeHovering;
     private void OnMouseOver()
     {
-        /*
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
-            FixRotations();
-            UpdateBeltInput();
-            UpdateAdjacentBelts();
-             
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
-            FixRotations();
-            UpdateBeltInput();
-            UpdateAdjacentBelts();
-             
-        }
-        if (Input.GetKey(KeyCode.Delete))
-        {
-            Buildings builds = FindObjectOfType<Buildings>();
-            world.inv.AddItem((int)builds.AllBuildings[1].cost[0].x, (int)builds.AllBuildings[1].cost[0].y);
+        timeHovering += Time.deltaTime;
+        if (timeHovering < 1)
+            return;
 
-            world.OccupiedCells.Remove(pos);
+        if (GetComponentInChildren<DisplayRecipes>() != null)
+            return;
 
-            builds.AllBuildings[1].count--;
-             
-            Destroy(gameObject);
+        GameObject rec = Instantiate(RecipeDisplay, transform);
+        rec.transform.rotation = Quaternion.identity;
+        rec.transform.position = new Vector3(3, 2, -0.01f) + gameObject.transform.position;
+        rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Belt;
 
+    }
+    private void OnMouseExit()
+    {
+        timeHovering = 0;
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
         }
-        */
+        catch { }
+
     }
     void FixRotations()
     {

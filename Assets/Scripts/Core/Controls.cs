@@ -67,19 +67,19 @@ public class Controls : MonoBehaviour
         {
             if(Input.GetKey(KeyCode.Alpha1))
             {
-                events.TickJam(100);
+                events.TickJam(10);
             }
             if (Input.GetKey(KeyCode.Alpha2))
             {
-                events.TickJam(200);
+                events.TickJam(100);
             }
             if (Input.GetKey(KeyCode.Alpha3))
             {
-                events.TickJam(300);
+                events.TickJam(1000);
             }
             if (Input.GetKey(KeyCode.Alpha4))
             {
-                events.TickJam(400);
+                events.TickJam(10000);
             }
             if (Input.GetKey(KeyCode.Alpha5))
             {
