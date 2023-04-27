@@ -44,32 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61ec5ae72e0f9447b38cc957bf5768f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerKeybinds:
-  - MoveUp
-  - MoveDown
-  - MoveLeft
-  - MoveRight
-  - Pick
-  - Rotate
-  DefaultValues:
-  - w
-  - s
-  - a
-  - d
-  - q
-  - r
   keybindPrefab: {fileID: 7412869618696127252, guid: 840356d29202c1d4db1675aeeb12b395,
     type: 3}
   binds:
   - control: MoveUp
-    key: w
+    key: W
   - control: MoveDown
-    key: s
+    key: S
   - control: MoveLeft
-    key: a
+    key: A
   - control: MoveRight
-    key: d
+    key: D
   - control: Pick
-    key: q
+    key: Q
   - control: Rotate
-    key: r
+    key: R

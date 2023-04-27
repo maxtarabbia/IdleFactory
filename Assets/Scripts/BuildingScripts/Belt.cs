@@ -337,7 +337,12 @@ public class Belt : MonoBehaviour
         FixRotations();
         UpdateBeltInput();
         UpdateAdjacentBelts();
-         
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
+        SetDR();
     }
     public void RotateCCW()
     {
@@ -345,7 +350,13 @@ public class Belt : MonoBehaviour
         FixRotations();
         UpdateBeltInput();
         UpdateAdjacentBelts();
-         
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
+        SetDR();
+
     }
     public void DeleteThis()
     {
@@ -364,6 +375,11 @@ public class Belt : MonoBehaviour
     float timeHovering;
     private void OnMouseOver()
     {
+        SetDR();
+
+    }
+    void SetDR()
+    {
         timeHovering += Time.deltaTime;
         if (timeHovering < 1)
             return;
@@ -375,7 +391,6 @@ public class Belt : MonoBehaviour
         rec.transform.rotation = Quaternion.identity;
         rec.transform.position = new Vector3(3, 2, -0.01f) + gameObject.transform.position;
         rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Belt;
-
     }
     private void OnMouseExit()
     {

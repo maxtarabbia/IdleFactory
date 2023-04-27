@@ -7,7 +7,6 @@ using System;
 
 public class Camera_Movement : MonoBehaviour
 {
-    // Start is called before the first frame update
     KeyCode Up = KeyCode.W;
     KeyCode Left = KeyCode.A;
     KeyCode Right = KeyCode.D;

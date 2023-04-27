@@ -8,8 +8,9 @@ public class Assembler : MonoBehaviour
 {
     WorldGeneration world;
     public Vector2Int pos;
- 
 
+    public GameObject RedX;
+    float blinkingTimer;
 
     public Inventory inputInv;
     public Inventory inputInv2;
@@ -97,7 +98,8 @@ public class Assembler : MonoBehaviour
 
     void Update()
     {
-        if(isAssembling)
+        UpdateRedX();
+        if (isAssembling)
         {
             AS.volume += Time.deltaTime;
             if (AS.volume > 1)
@@ -106,6 +108,7 @@ public class Assembler : MonoBehaviour
         }
         else
         {
+            
             AS.volume -= Time.deltaTime;
             if (AS.volume < 0)
                 AS.volume = 0;
@@ -221,6 +224,11 @@ public class Assembler : MonoBehaviour
     }
     private void OnMouseOver()
     {
+        SetDR();
+        
+    }
+    void SetDR()
+    {
         timeHovering += Time.deltaTime;
         if (timeHovering < 1)
             return;
@@ -228,11 +236,10 @@ public class Assembler : MonoBehaviour
         if (GetComponentInChildren<DisplayRecipes>() != null)
             return;
 
-            GameObject rec = Instantiate(RecipeDisplay,transform);
-            rec.transform.rotation = Quaternion.identity;
-            rec.transform.position = new Vector3(3, 3, -0.01f) + gameObject.transform.position;
-            rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Assembler;
-        
+        GameObject rec = Instantiate(RecipeDisplay, transform);
+        rec.transform.rotation = Quaternion.identity;
+        rec.transform.position = new Vector3(3, 3, -0.01f) + gameObject.transform.position;
+        rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Assembler;
     }
     private void OnMouseExit()
     {
@@ -244,6 +251,28 @@ public class Assembler : MonoBehaviour
         catch { }
         
     }
+    void UpdateRedX()
+    {
+        float rate = 1;
+        if (isJammed)
+        {
+            blinkingTimer += Time.deltaTime;
+            if (blinkingTimer > rate)
+                blinkingTimer = 0;
+            if (blinkingTimer > rate / 2)
+            {
+                RedX.GetComponent<SpriteRenderer>().color = Color.clear;
+            }
+            else
+            {
+                RedX.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+        }
+        else
+        {
+            RedX.GetComponent<SpriteRenderer>().color = Color.clear;
+        }
+    }
     public void RotateCW()
     {
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
@@ -254,6 +283,7 @@ public class Assembler : MonoBehaviour
             Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
         }
         catch { }
+        SetDR();
     }
     public void RotateCCW()
     {
@@ -265,7 +295,7 @@ public class Assembler : MonoBehaviour
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[5].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-
+        SetDR();
     }
     public void Delete()
     {

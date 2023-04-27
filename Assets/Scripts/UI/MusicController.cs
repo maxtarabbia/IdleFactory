@@ -27,6 +27,8 @@ public class MusicController : MonoBehaviour
 
             AS.outputAudioMixerGroup = AM;
         }
+        selectedSource = Random.Range(0,sources.Length);
+        timeToPlay = Random.Range(10, 30);
     }
 
     // Update is called once per frame
@@ -45,6 +47,6 @@ public class MusicController : MonoBehaviour
 
         //selectedSource = Random.Range(0, music.Length - 1);
         sources[selectedSource].GetComponent<AudioSource>().Play();
-        timeToPlay = Random.Range(0, 20) + sources[selectedSource].GetComponent<AudioSource>().clip.length;
+        timeToPlay = Random.Range(10, 30) + sources[selectedSource].GetComponent<AudioSource>().clip.length;
     }
 }

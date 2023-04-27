@@ -49,6 +49,9 @@ public class Refinery : MonoBehaviour
     public GameObject RefElements;
     public GameObject SmokeStack;
 
+    public GameObject RedX;
+    float blinkingTimer;
+
     [Serializable]
     public struct Recipes
     {
@@ -116,6 +119,7 @@ public class Refinery : MonoBehaviour
         }
         else
         {
+            UpdateRedX();
             AS.volume -= Time.deltaTime;
             if (AS.volume < 0)
                 AS.volume = 0;
@@ -123,6 +127,7 @@ public class Refinery : MonoBehaviour
             if (smeltAnimationSpeed < 0)
                 smeltAnimationSpeed = 0;
         }
+
     }
     void FixedUpdate()
     {
@@ -173,8 +178,6 @@ public class Refinery : MonoBehaviour
     }
     void OnTick()
     {
-        
-
 
         Profiler.BeginSample("Refinery Tick Logic");
 
@@ -238,6 +241,11 @@ public class Refinery : MonoBehaviour
     }
     private void OnMouseOver()
     {
+
+        SetDR();
+    }
+    void SetDR()
+    {
         timeHovering += Time.deltaTime;
         if (timeHovering < 1)
             return;
@@ -245,11 +253,10 @@ public class Refinery : MonoBehaviour
         if (GetComponentInChildren<DisplayRecipes>() != null)
             return;
 
-            GameObject rec = Instantiate(RecipeDisplay, transform);
-            rec.transform.rotation = Quaternion.identity;
-            rec.transform.position = new Vector3(3, 3, -0.01f) + gameObject.transform.position;
-            rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Refinery;
-        
+        GameObject rec = Instantiate(RecipeDisplay, transform);
+        rec.transform.rotation = Quaternion.identity;
+        rec.transform.position = new Vector3(3, 3, -0.01f) + gameObject.transform.position;
+        rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Refinery;
     }
     private void OnMouseExit()
     {
@@ -270,6 +277,7 @@ public class Refinery : MonoBehaviour
             Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
         }
         catch { }
+        SetDR();
     }
     public void RotateCCW()
     {
@@ -281,6 +289,7 @@ public class Refinery : MonoBehaviour
             Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
         }
         catch { }
+        SetDR();
     }
     public void Delete()
     {
@@ -379,6 +388,24 @@ public class Refinery : MonoBehaviour
     private void OnDestroy()
     {
         tickEvents.MyEvent -= OnTick;
+    }
+    void UpdateRedX()
+    {
+        float rate = 1;
+        if(isJammed)
+        {
+            blinkingTimer += Time.deltaTime;
+            if(blinkingTimer > rate)
+                blinkingTimer= 0;
+            if(blinkingTimer > rate/2)
+            {
+                RedX.GetComponent<SpriteRenderer>().color = Color.clear;
+            }
+            else
+            {
+                RedX.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+        }
     }
     void RefreshRecipe()
     {

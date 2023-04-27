@@ -1879,9 +1879,11 @@ MonoBehaviour:
   music:
   - {fileID: 8300000, guid: 04980d6be23b6a441a1315d6b59a83aa, type: 3}
   - {fileID: 8300000, guid: e4c0b6fe597b6124e8a7e2412bec3e1a, type: 3}
-  timeToPlay: 0
+  - {fileID: 8300000, guid: a981814a3bbe7db4d9ade795e8c84105, type: 3}
+  - {fileID: 8300000, guid: f9f41cf11ef6f9b4ead51593bddb2b79, type: 3}
+  timeToPlay: 30
   AM: {fileID: -2025809408932102131, guid: acab48b66793fc34eaa9f50b9766e598, type: 2}
-  selectedSource: 0
+  selectedSource: 1
 --- !u!1 &1736114157
 GameObject:
   m_ObjectHideFlags: 0
