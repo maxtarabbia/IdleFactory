@@ -1636,7 +1636,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: miner
+  m_text: 'Tutorial Text
+
+'
+
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a39be6695a7baf47a966c3355855a07, type: 2}
   m_sharedMaterial: {fileID: -5530275386899717260, guid: 8a39be6695a7baf47a966c3355855a07,
