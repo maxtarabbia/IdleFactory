@@ -41,6 +41,7 @@ public class Hotbar : MonoBehaviour
                 HE[i].sprite.transform.localScale = Vector3.one;
             HE[i].sprite.GetComponent<SpriteRenderer>().sprite = buildings.AllBuildings[i].prefab.GetComponent<SpriteRenderer>().sprite;
             HE[i].text = "(" + (i+1) + ")";
+            HE[i].ID= i;
             hotbarIcons[i].transform.localPosition = new Vector3(-iconOffset + (i+0.5f) * spreadDist, 0, 0);
         }
     }

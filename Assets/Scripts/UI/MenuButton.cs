@@ -14,13 +14,15 @@ public class MenuButtons : MonoBehaviour
     public bool playclick = true;
 
     public bool isGrayedOut = false;
-    void Start()
+    void Awake()
     {
-        if(isGrayedOut)
-            setToClicked();
-        AudioManager = (AudioManager == null) ? FindObjectOfType<AudioManager>() : AudioManager;
         SR = GetComponent<SpriteRenderer>();
-        setToDefault();
+
+        AudioManager = (AudioManager == null) ? FindObjectOfType<AudioManager>() : AudioManager;
+        if (isGrayedOut)
+            setToClicked();
+        else
+            setToDefault();
     }
     private void OnMouseEnter()
     {

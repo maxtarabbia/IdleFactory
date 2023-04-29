@@ -204,12 +204,16 @@ public class ObjectPlacement : MonoBehaviour
         {
             if (cammove.distanceMoved < 0.5f && cammove.timeMoving < 0.3f && Input.touches[0].phase == TouchPhase.Ended)
             {
-                testToPlace();
+                if (FindObjectOfType<Controls>().areSelectedBuildings)
+                {
+                    FindObjectOfType<Controls>().Unselect();
+                }
+                else
+                {
+                    testToPlace();
+                }
             }
-            else
-            {
-                
-            }
+            
 
         }
     }

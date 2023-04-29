@@ -119,6 +119,7 @@ public class hoveringSprites : MonoBehaviour
     }
     private void OnMouseEnter()
     {
+        print("MouseEnter");
         isHovered= true;
         UpdateColors();
         BracketOffset = 0.1f;
@@ -132,6 +133,9 @@ public class hoveringSprites : MonoBehaviour
     }
     public void Unhover(bool globalCall)
     {
+
+        timeHeld = 0;
+        DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
         if (globalCall && isHovered)
             return;
         if (isSelected)
@@ -162,10 +166,11 @@ public class hoveringSprites : MonoBehaviour
     }
     private void OnMouseExit()
     {
+        print("MouseExit");
         isHovered = false;
         DeletingBarMaterial.SetFloat("_Value", 0);
         bool isLingering = true;
-        if(!Input.GetKey(KeyCode.LeftControl))
+        if(!Input.GetKey(KeyCode.LeftControl) && !isTouch)
         {
             isLingering = false;
             Unhover(false);
@@ -180,7 +185,29 @@ public class hoveringSprites : MonoBehaviour
     }
     private void OnMouseUp()
     {
-        if(isTouch && cammove.distanceMoved < 0.5f && cammove.timeMoving < 0.3f)
+        if (!isTouch)
+            return;
+        print("MouseUP");
+        if(cammove.distanceMoved < 0.5f && cammove.timeMoving < 0.3f && isSelected && isHovered)
+        {
+            hoveringSprites[] HSS = FindObjectsOfType<hoveringSprites>();
+            foreach(hoveringSprites hss in HSS)
+            {
+                hss.TouchRotate();
+            }
+            //RotateCW?.Invoke();
+        }
+
+        isHovered = false;
+        DeletingBarMaterial.SetFloat("_Value", 0);
+        isSelected = true;
+        FindObjectOfType<Controls>().areSelectedBuildings = true;
+        UpdateColors();
+        timeHeld = 0;
+    }
+    public void TouchRotate()
+    {
+        if (isSelected)
         {
             RotateCW?.Invoke();
         }
@@ -189,6 +216,17 @@ public class hoveringSprites : MonoBehaviour
     {
         if (Input.touchCount == 1 && cammove.distanceMoved < 50f)
         {
+            /*
+            isHovered = true;
+            UpdateColors();
+            BracketOffset = 0.1f;
+            foreach (GameObject sprite in sprites)
+            {
+                sprite.SetActive(true);
+            }
+            */
+
+
             timeHeld += Time.deltaTime;
             DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
             if (timeHeld > 0.5f)
@@ -205,6 +243,8 @@ public class hoveringSprites : MonoBehaviour
                 timeHeld = 0;
             }
         }
+
+
     }
     void MouseCheck()
     {
@@ -252,16 +292,16 @@ public class hoveringSprites : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        /*
-        if (isTouch)
+        if (Input.touchCount == 1 && cammove.distanceMoved < 50f)
         {
-            TouchScreenCheck();
+            isHovered = true;
+            UpdateColors();
+            BracketOffset = 0.1f;
+            foreach (GameObject sprite in sprites)
+            {
+                sprite.SetActive(true);
+            }
         }
-        else
-        {
-            MouseCheck();
-        }
-        */
     }
     void AlignDeletingBar()
     {

@@ -137,20 +137,26 @@ public class Controls : MonoBehaviour
                 Destroy(IM);
             }
         }
-        if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(0) && !world.isTouch)
         {
-            var objs = FindObjectsOfType<hoveringSprites>();
-            areSelectedBuildings = false;
-            foreach (var obj in objs)
-            { 
-                if (obj.isSelected)
-                {
-                    obj.isSelected = false;
-                    obj.Unhover(true);
-                }
-                
-            }
+            Unselect();
         }
 
+    }
+    public void Unselect()
+    {
+
+        var objs = FindObjectsOfType<hoveringSprites>();
+        areSelectedBuildings = false;
+        foreach (var obj in objs)
+        {
+            if (obj.isSelected)
+            {
+
+                obj.isSelected = false;
+                obj.Unhover(true);
+            }
+
+        }
     }
 }

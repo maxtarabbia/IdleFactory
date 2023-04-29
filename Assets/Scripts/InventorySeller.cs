@@ -48,4 +48,8 @@ public class InventorySeller : MonoBehaviour
                 itemSprites[i].GetComponentInChildren<TextMeshPro>().text = IntLib.IntToString(inv.items[i].count);
         }
     }
+    private void OnMouseDown()
+    {
+        Destroy(transform.parent.gameObject);
+    }
 }
