@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Profiling;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
+using System;
 
 public class Camera_Movement : MonoBehaviour
 {
-    // Start is called before the first frame update
     KeyCode Up = KeyCode.W;
     KeyCode Left = KeyCode.A;
     KeyCode Right = KeyCode.D;
@@ -16,6 +14,8 @@ public class Camera_Movement : MonoBehaviour
     
     public float movementSpeed = 0.01f;
     public float zoomSpeed = 1f;
+
+    public Vector2Int worldsize;
 
     public float timeMoving;
     public float distanceMoved;
@@ -34,8 +34,13 @@ public class Camera_Movement : MonoBehaviour
 
     void Start()
     {
+        Up = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveUp","W"));
+        Down = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveDown","S"));
+        Left = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveLeft", "A"));
+        Right = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveRight", "D"));
         GameObject.Find("Background").GetComponent<SpriteRenderer>().material.SetFloat("_Seed", PlayerPrefs.GetInt("Seed"));
         world = FindObjectOfType<WorldGeneration>();
+        worldsize = new Vector2Int(5 + world.Worldsize, 5 + world.Worldsize);
         cam = GetComponent<Camera>();
         updateCamSize();
         isTouch = world.isTouch;
@@ -94,6 +99,20 @@ public class Camera_Movement : MonoBehaviour
         Profiler.BeginSample("Updating cammovement");
         gameObject.transform.position += frameOffset * Time.deltaTime;
 
+        Vector2 camPos = gameObject.transform.position;
+
+        if(gameObject.transform.position.x > worldsize.x)
+            camPos.x = worldsize.x;
+        if (gameObject.transform.position.x < -worldsize.x)
+            camPos.x = -worldsize.x;
+
+        if (gameObject.transform.position.y > worldsize.y)
+            camPos.y = worldsize.y;
+        if (gameObject.transform.position.y < -worldsize.y)
+            camPos.y = -worldsize.y;
+
+        gameObject.transform.position = camPos;
+
         if (frameOffset.magnitude > 0)
         {
             timeMoving += Time.deltaTime;
@@ -110,6 +129,7 @@ public class Camera_Movement : MonoBehaviour
             if (Input.mouseScrollDelta.sqrMagnitude > 0)
             {
                 updateCamSize();
+                
                 ZoomCam(Input.mouseScrollDelta.y * -0.01f * zoomSpeed);
             }
         }
@@ -170,6 +190,8 @@ public class Camera_Movement : MonoBehaviour
                 cam.orthographicSize = MinMaxSize.x;
             }
         }
+        worldsize.x = world.Worldsize - Mathf.RoundToInt(cam.orthographicSize * cam.aspect) + 35;
+        worldsize.y = world.Worldsize - Mathf.RoundToInt(cam.orthographicSize) + 35;
         Profiler.EndSample();
     }
     void MoveCam (int direction) 

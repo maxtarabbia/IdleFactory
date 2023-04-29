@@ -299,6 +299,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  hoversound: {fileID: 0}
+  pressedSound: {fileID: 0}
 --- !u!114 &5519733175139566598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,6 +478,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  hoversound: {fileID: 0}
+  pressedSound: {fileID: 0}
 --- !u!114 &3623579660470353278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -674,7 +678,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 2.5
+  m_PlaneDistance: 3
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -1265,3 +1269,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  hoversound: {fileID: 0}
+  pressedSound: {fileID: 0}

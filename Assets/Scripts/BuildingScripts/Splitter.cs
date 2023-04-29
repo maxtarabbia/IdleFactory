@@ -2,44 +2,66 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Profiling;
+using UnityEngine.Rendering;
 
 public class Splitter : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
     public float timeTotravel = 2f;
-    public Vector2 itemID;
+
+    public Vector2[] itemsID;
 
     Vector2[] OutputPos;
-    int OutIter = 0;
 
     TickEvents tickEvents;
 
     float timeSinceFixed;
 
-    GameObject sprite;
+    GameObject[] sprites;
+    SpriteRenderer[] SRs;
+    float justAdded;
 
-    bool canOutput;
+    int inIter;
+    public GameObject splitterTop;
+
+    bool[] canOutput;
 
     Sprite[] spriteAssets;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        itemsID = new Vector2[3];
+        OutputPos = new Vector2[3];
+    }
     void Start()
     {
-        OutputPos = new Vector2[3];
+        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Belt, gameObject);
+        canOutput = new bool[3];
         world = FindObjectOfType<WorldGeneration>();
         spriteAssets = world.items.GroupBy(o => o.sprite).Select(g=>g.First().sprite).ToArray();
         pos = transform.position;
+
         //x is ID
         //y is time spent on belt
 
-        sprite = new GameObject("Sprite ");
-        sprite.transform.position = pos + new Vector2(0, 0);
-        sprite.transform.parent = gameObject.transform;
-        sprite.transform.eulerAngles = (Vector3.zero);
-        sprite.AddComponent<SpriteRenderer>();
-        sprite.GetComponent<SpriteRenderer>().sortingLayerName = "Particles";
+        sprites = new GameObject[3];
+        SRs = new SpriteRenderer[3];
+        for (int i = 0; i <sprites.Length; i++)
+        {
+            canOutput[i] = true;
+            sprites[i] = new GameObject("Sprite " + i);
+            sprites[i].transform.position = pos + new Vector2(0, 0);
+            sprites[i].transform.parent = gameObject.transform;
+            sprites[i].transform.eulerAngles = (Vector3.zero);
 
-        itemID = new Vector2(-1, 0);
+            SRs[i] = sprites[i].AddComponent<SpriteRenderer>();
+            SRs[i].sortingLayerName = "Buildings";
+            SRs[i].sortingOrder = 1;
+
+            itemsID[i] = new Vector2(-1, 0);
+        }
 
         timeTotravel = world.speedstates.BeltInfo.speed;
 
@@ -47,22 +69,22 @@ public class Splitter : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
- 
+
+        FindObjectOfType<StateSaveLoad>().Save();
     }
     void SetSpritePos(float Offset)
     {
-        float xVal = 0;
-        float yVal = 0;
-
-        if ((itemID.y + Offset) >= timeTotravel && !canOutput)
+        float curOffset;
+        for (int i = 0; i < sprites.Length; i++)
         {
-            Offset = timeTotravel - itemID.y;
+            curOffset = Offset;
+            if ((itemsID[i].y + Offset) >= timeTotravel && !canOutput[i])
+            {
+                curOffset = timeTotravel - itemsID[i].y;
+            }
+            Vector2 Vec2 = GetPosition(curOffset, i);
+            sprites[i].transform.localPosition = new Vector3(Vec2.x, Vec2.y, (itemsID[i].y + curOffset));
         }
-
-                xVal = 0.5f - ((itemID.y + Offset) / timeTotravel);
-                yVal = 0;
-
-        sprite.transform.localPosition = new Vector3(xVal, yVal, (itemID.y + Offset));
     }
     void FixOutputs()
     {
@@ -97,162 +119,168 @@ public class Splitter : MonoBehaviour
     {
         timeSinceFixed += Time.deltaTime;
         SetSpritePos(timeSinceFixed);
-        UpdateSprites();
+        //UpdatedBlockedSprite();
     }
-    void UpdateSprites()
+    void UpdatedBlockedSprite()
     {
-        if (itemID.x != -1)
+        if (itemsID[0].x != -1)
         {
-            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x];
-            sprite.transform.localPosition = new Vector2(0.5f - (itemID.y / timeTotravel), 0);
+            sprites[0].transform.localScale = Vector3.zero;
         }
     }
-    private void FixedUpdate()
+    Vector2 GetPosition(float Offset, int index)
     {
-        //OnTick();
+        Vector2[] LocalPos = new Vector2[3] 
+        {
+            new Vector2(0, 1),
+            new Vector2(-1, 0),
+            new Vector2(0, -1)
+        };
+        Vector2 output = new Vector2();
+        Vector2 Dir = (LocalPos[index]) / 2;
+
+        float factor = ((itemsID[index].y + Offset) / timeTotravel);
+        output.x = 0.5f - factor;
+        output.y = 0;
+
+        if ((itemsID[index].y + Offset) / timeTotravel > 0.5)
+            {
+                output.x = 0f;
+                output = Vector2.LerpUnclamped(output, Dir,(factor - 0.5f) * 2f);
+            }
+        
+        return output;
     }
     void OnTick()
     {
+        if (justAdded == Time.fixedTime)
+        {
+            timeSinceFixed = 0;
+            justAdded += 0.01f;
+            return;
+        }
+        Profiler.BeginSample("Splitter Tick Logic");
         UpdateSpritePositions(true);
         timeSinceFixed = 0;
+        Profiler.EndSample();
     }
     void UpdateSpritePositions(bool moveForward)
     {
-        if (itemID.x != -1)
+        for (int i = 0; i < sprites.Length; i++)
         {
-            if (moveForward)
-                itemID.y += Time.fixedDeltaTime;
-            sprite.GetComponent<SpriteRenderer>().sprite = spriteAssets[(int)itemID.x];
-            sprite.transform.localPosition = new Vector2(0.5f - (itemID.y / timeTotravel), 0);
-        }
-        else
-        {
-            sprite.GetComponent<SpriteRenderer>().sprite = null;
-        }
-        if (itemID.y >= timeTotravel)
-        {
-            if (OutputItem((int)itemID.x))
+            if (itemsID[i].x != -1)
             {
-                timeSinceFixed = 0;
-                sprite.GetComponent<SpriteRenderer>().sprite = null;
-                itemID = new Vector2(-1, 0);
-                canOutput = true;
+                if (moveForward)
+                    itemsID[i].y += Time.fixedDeltaTime;
+                SRs[i].sprite = spriteAssets[(int)itemsID[i].x];
+                sprites[i].transform.localPosition = new Vector2(0.5f - (itemsID[i].y / timeTotravel), 0);
             }
             else
             {
-                itemID.y = timeTotravel;
-                canOutput = false;
+                SRs[i].sprite = null;
+            }
+            if (itemsID[i].y >= timeTotravel)
+            {
+                if (OutputItem((int)itemsID[i].x,i))
+                {
+                    timeSinceFixed = 0;
+                    SRs[i].sprite = null;
+                    itemsID[i] = new Vector2(-1, 0);
+                    canOutput[i] = true;
+                }
+                else
+                {
+                    itemsID[i].y = timeTotravel;
+                    canOutput[i] = false;
+                }
             }
         }
+    }
+    public bool inputItem(int inItem, Vector2Int inPos)
+    {
+        Vector2Int relativepos = inPos - Vector2Int.RoundToInt(pos);
+        Vector2Int inputpos = new Vector2Int(-1, 0);
+        switch (gameObject.transform.rotation.eulerAngles.z)
+        {
+            case 0:
+                inputpos = new Vector2Int(1, 0);
+                break;
+            case 90:
+                inputpos = new Vector2Int(0, 1);
+                break;
+            case 180:
+                inputpos = new Vector2Int(-1, 0);
+                break;
+            case 270:
+                inputpos = new Vector2Int(0, -1);
+                break;
+        }
+
+        if (relativepos == inputpos)
+        {
+           return inputItem(inItem, 0);
+        }
+        return false;
+    }
+    public bool inputItem(int inItem, Vector2Int inPos, float Offset)
+    {
+        Vector2Int relativepos = inPos - Vector2Int.RoundToInt(pos);
+        Vector2Int inputpos = new Vector2Int(-1, 0);
+        switch (gameObject.transform.rotation.eulerAngles.z)
+        {
+            case 0:
+                inputpos = new Vector2Int(1, 0);
+                break;
+            case 90:
+                inputpos = new Vector2Int(0, 1);
+                break;
+            case 180:
+                inputpos = new Vector2Int(-1, 0);
+                break;
+            case 270:
+                inputpos = new Vector2Int(0, -1);
+                break;
+        }
+
+        if (relativepos == inputpos)
+        {
+            return inputItem(inItem, Offset);
+        }
+        return false;
     }
     public bool inputItem(int initemID, float time)
     {
-        if (itemID.x == -1)
+        int curiter = inIter;
+        for (int i = 0; i < sprites.Length; i++)
         {
-            itemID.y = time;
-            itemID.x = initemID;
-            UpdateSpritePositions(false);
+            if (curiter + i >= 3)
+                curiter -= 3;
 
-
-            return true;
-
-        }
-        return false;
-    }
-    bool OutputItem(int itemID)
-    {
-        if(OutIter >= 3)
-        {
-            OutIter -= 3;
-        }
-
-        Vector2 outputCoord = OutputPos[OutIter];
-
-        OutIter++;
-
-        GameObject cellObj = null;
-        world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
-        if (cellObj != null)
-        {
-            Belt beltscript = cellObj.GetComponent<Belt>();
-            Refinery refineryScript = cellObj.GetComponent<Refinery>();
-            Splitter splitter = cellObj.GetComponent<Splitter>();
-            Core corescript = cellObj.GetComponent<Core>();
-            Assembler assembler = cellObj.GetComponent<Assembler>();
-            if (assembler != null)
+            if (itemsID[curiter + i].x == -1)
             {
-                if (assembler.InputItem(itemID, 1, pos))
-                {
-                    return true;
-                }
-            }
-            if (beltscript != null)
-            {
-                float spot = 0;
-                if (Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 90 || Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 270)
-                {
-                    spot = 0.5f;
-                }
-                else if (Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 180)
-                {
-                    spot = 1;
-                }
-                if (beltscript.inputItem(itemID, spot))
-                {
-                    return true;
-                }
-            }
-            else if (refineryScript != null)
-            {
-                if (refineryScript.InputItem(itemID, 1, pos))
-                {
-                    return true;
-                }
-            }
-            else if (splitter != null)
-            {
-                if (Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 0)
-                {
-                    if (splitter.inputItem(itemID, 0))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else if (corescript != null)
-            {
-                corescript.InputItem(itemID);
+                justAdded = Time.fixedTime;
+                this.itemsID[curiter + i].y = time;
+                this.itemsID[curiter + i].x = initemID;
+                inIter++;
+                if(inIter >=3)
+                    inIter= 0;
+                UpdateSpritePositions(false);
                 return true;
             }
         }
+
         return false;
     }
-    private void OnMouseOver()
-    {/*
-        if (Input.GetKeyDown(KeyCode.R))
+    bool OutputItem(int itemID, int i)
+    {
+        Vector2 outputCoord = OutputPos[i];
+        GameObject OutputObj;
+        world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
+        if (OutputObj != null)
         {
-            gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
-            FixRotations();
-     
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, itemID, Vector2Int.RoundToInt(pos), this.itemsID[i].y - timeTotravel);
         }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
-            FixRotations();
-     
-        }
-        if (Input.GetKey(KeyCode.Delete))
-        {
-            Buildings builds = FindObjectOfType<Buildings>();
-            world.inv.AddItem((int)builds.AllBuildings[3].cost[0].x, (int)builds.AllBuildings[3].cost[0].y);
-
-            world.OccupiedCells.Remove(pos);
-
-            builds.AllBuildings[3].count--;
-     
-            Destroy(gameObject);
-        }
-        */
+        return false;
     }
     public void RotateCW()
     {
@@ -269,7 +297,9 @@ public class Splitter : MonoBehaviour
     public void Delete()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem((int)builds.AllBuildings[3].cost[0].x, (int)builds.AllBuildings[3].cost[0].y);
+        world.inv.AddItem((int)builds.AllBuildings[3].cost[0].x, Mathf.Clamp(builds.AllBuildings[3].count - 2, 1, int.MaxValue));
+
+        world.inv.AddItem((int)itemsID[0].x, 1);
 
         world.OccupiedCells.Remove(pos);
 
@@ -280,7 +310,10 @@ public class Splitter : MonoBehaviour
     void FixRotations()
     {
         FindObjectOfType<Buildings>().AllBuildings[3].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-        sprite.transform.eulerAngles = (Vector3.zero);
+        foreach (GameObject sprite in sprites)
+        {
+            sprite.transform.eulerAngles = Vector3.zero;
+        }
         FixOutputs();
     }
     private void OnDestroy()
