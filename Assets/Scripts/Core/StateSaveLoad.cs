@@ -1,20 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Profiling;
-using UnityEngine.UIElements;
 
 public class StateSaveLoad : MonoBehaviour
 {
-
     string path = "/Saves";
     // Start is called before the first frame update
 
-    public bool SaveNext = false;
+    bool SaveNext = false;
 
     public List<MinerData> minerData = new List<MinerData>();
     public List<BeltData> beltData = new List<BeltData>();
@@ -22,9 +19,6 @@ public class StateSaveLoad : MonoBehaviour
     public List<SplitterData> splitterData = new List<SplitterData>();
     public List<CoreData> coreData = new List<CoreData>();
     public List<AssemblerData> assemblerData = new List<AssemblerData>();
-    public List<UBData> UBdata = new List<UBData>();
-
-
 
     Buildings buildings;
     WorldGeneration world;
@@ -52,6 +46,7 @@ public class StateSaveLoad : MonoBehaviour
     }
     public void Save()
     {
+        
         Profiler.BeginSample("Searching all builds");
         saveData = GetComponent<SaveData>();
         string stringdata;
@@ -74,17 +69,10 @@ public class StateSaveLoad : MonoBehaviour
 
         data.speedstates = world.speedstates;
 
-        data.SelectedSkins = FindObjectOfType<Skins>().allSkins.Select(o => o.isSelected).ToArray();
 
         Camera cam = FindObjectOfType<Camera>();
         data.CamScale = cam.orthographicSize;
         data.CamCoord = cam.gameObject.transform.localPosition;
-        data.prestigeState = world.prestigeState;
-
-        data.state = FindObjectOfType<TutorialState>().currentState;
-
-        data.achievements = FindObjectOfType<ResourceStats>().achievements;
-        data.ResourceStats = FindObjectOfType<ResourceStats>().createdItemsTotal.ToArray();
 
         data.time = Gettime();
         data.seed = world.Seed;
@@ -107,7 +95,6 @@ public class StateSaveLoad : MonoBehaviour
         splitterData= new List<SplitterData>();
         coreData= new List<CoreData>();
         assemblerData= new List<AssemblerData>();
-        UBdata = new List<UBData>();
 
         
 
@@ -151,8 +138,8 @@ public class StateSaveLoad : MonoBehaviour
                 SplitterData splitterdat = new SplitterData();
                 splitterdat.Position = splitter.transform.position;
                 splitterdat.Rotation = Mathf.RoundToInt(splitter.gameObject.transform.eulerAngles.z);
-                splitterdat.Progress = splitter.itemsID[0].y;
-                splitterdat.itemID = Mathf.RoundToInt(splitter.itemsID[0].x);
+                splitterdat.Progress = splitter.itemID.y;
+                splitterdat.itemID = Mathf.RoundToInt(splitter.itemID.x);
                 splitterdat.Speed = splitter.timeTotravel;
                 splitterData.Add(splitterdat);
             }
@@ -161,18 +148,6 @@ public class StateSaveLoad : MonoBehaviour
                 CoreData coredat = new CoreData();
                 coredat.Position = core.gameObject.transform.position;
                 coreData.Add(coredat);
-            }
-            else if(thisObj.TryGetComponent(out UnderGroundBelt underGroundBelt))
-            {
-                UBData UBdat = new UBData
-                {
-                    Position = underGroundBelt.transform.position,
-                    Rotation = Mathf.RoundToInt(underGroundBelt.gameObject.transform.eulerAngles.z),
-                    Progress = underGroundBelt.itemID.y,
-                    itemID = Mathf.RoundToInt(underGroundBelt.itemID.x),
-                    Speed = underGroundBelt.timeTotravel
-                };
-                UBdata.Add(UBdat);
             }
             else if (thisObj.TryGetComponent(out Assembler assembler))
             {
@@ -191,7 +166,7 @@ public class StateSaveLoad : MonoBehaviour
         SaveData saveData = GetComponent<SaveData>();
 
        
-        saveData.UBdata = UBdata.ToArray();
+
         saveData.minerdata = minerData.ToArray();
         saveData.beltdata= beltData.ToArray();
         saveData.refinerydata= refineryData.ToArray();
@@ -215,25 +190,14 @@ public class StateSaveLoad : MonoBehaviour
         WorldGeneration world = FindObjectOfType<WorldGeneration>();
 
         PlayerPrefs.SetInt("Seed", saveData.seed);
-        world.prestigeState = saveData.prestigeState;
         world.Initialize(24, saveData.seed);
         world.SetInventory();
-
-        FindObjectOfType<Skins>().SetSelected(saveData.SelectedSkins);
 
         foreach (MinerData minerData in saveData.minerdata)
         {
             GameObject newMiner = PlaceObjectManual(minerData.Position, 0, minerData.Rotation);
             newMiner.GetComponent<Miner>().secondsPerItem = minerData.Speed;
             newMiner.GetComponent<Miner>().miningProgress = minerData.Progress;
-        }
-        foreach (UBData UBdata in saveData.UBdata)
-        {
-            GameObject newUGBelt = PlaceObjectManual(UBdata.Position, 6, UBdata.Rotation);
-            newUGBelt.GetComponent<UnderGroundBelt>().itemID.x = UBdata.itemID;
-            newUGBelt.GetComponent<UnderGroundBelt>().itemID.y = UBdata.Progress;
-            newUGBelt.GetComponent<UnderGroundBelt>().timeTotravel = UBdata.Speed;
-            newUGBelt.GetComponent<UnderGroundBelt>().world = world;
         }
         foreach (BeltData beltData in saveData.beltdata)
         {
@@ -242,12 +206,13 @@ public class StateSaveLoad : MonoBehaviour
             newBelt.GetComponent<Belt>().itemID.y = beltData.Progress;
             newBelt.GetComponent<Belt>().timeTotravel = beltData.Speed;
             newBelt.GetComponent<Belt>().world = world;
+     //       newBelt.GetComponent<Belt>().UpdateSpritePositions(false);
         }
         foreach (SplitterData splitterData in saveData.splitterdata)
         {
             GameObject newSplitter = PlaceObjectManual(splitterData.Position,3, splitterData.Rotation);
-            newSplitter.GetComponent<Splitter>().itemsID[0].x = splitterData.itemID;
-            newSplitter.GetComponent<Splitter>().itemsID[0].y = splitterData.Progress;
+            newSplitter.GetComponent<Splitter>().itemID.x = splitterData.itemID;
+            newSplitter.GetComponent<Splitter>().itemID.y = splitterData.Progress;
             newSplitter.GetComponent<Splitter>().timeTotravel = splitterData.Speed;
             newSplitter.GetComponent<Splitter>().world = world;
 
@@ -281,13 +246,7 @@ public class StateSaveLoad : MonoBehaviour
         world.Currency = saveData.Currency;
         world.Seed = saveData.seed;
 
-        ResourceStats RS = FindObjectOfType<ResourceStats>();
-        RS.createdItemsTotal = saveData.ResourceStats.ToList();
-        RS.achievements = saveData.achievements;
-
         world.speedstates = saveData.speedstates;
-
-        FindObjectOfType<TutorialState>().currentState = saveData.state;
 
         FindObjectOfType<Camera_Movement>().updateCamSize();
         //FindObjectOfType<WorldGeneration>().Initialize(24);
@@ -303,12 +262,10 @@ public class StateSaveLoad : MonoBehaviour
         {
             PlayerPrefs.SetInt("isloaded", 1);
         }
-        int TPS = Mathf.RoundToInt(1 / Time.fixedDeltaTime);
         print("Simulating " + seconds + " seconds\nActually simulating " + Mathf.Clamp((int)seconds, 5, 3600 * MaxHours) + " seconds");
-        ticksToJam = Mathf.Clamp((int)seconds,5,3600 * MaxHours) * TPS;
+        ticksToJam = Mathf.Clamp((int)seconds,5,3600 * MaxHours) * 50;
         totalTicks = ticksToJam;
         world.inv.SortInv();
-
     }
     long Gettime()
     {
@@ -346,7 +303,7 @@ public class StateSaveLoad : MonoBehaviour
     {
         if(ticksToJam != 0)
         {
-            int optimaltick = Mathf.RoundToInt(MathF.Ceiling(totalTicks / 100f));
+            int optimaltick = math.clamp(Mathf.RoundToInt(MathF.Ceiling(totalTicks / 10000f)) * 50,5,5000);
             if (ticksAtATime != optimaltick)
             {
                 ticksAtATime = optimaltick;
@@ -368,7 +325,7 @@ public class StateSaveLoad : MonoBehaviour
             asyncsave();
         }
     }
-    void asyncsave()
+    async void asyncsave()
     {
         Profiler.BeginSample("Saving");
         Save();
@@ -377,9 +334,6 @@ public class StateSaveLoad : MonoBehaviour
     }
     public GameObject PlaceObjectManual(Vector3 pos, int BuildableIndex, int Rotation)
     {
-
-
-
         Vector3 Transposition = pos;
         if (buildings.AllBuildings[BuildableIndex].size % 2 == 0) Transposition += new Vector3(0.5f, 0.5f, 0f);
 
@@ -399,14 +353,6 @@ public class StateSaveLoad : MonoBehaviour
                 world.OccupiedCells[new Vector2(pos.x + i, pos.y + j)] = instancedObj;
             }
         }
-
-        if (BuildableIndex == 6)
-        {
-            Vector3 rotatedpos = Quaternion.Euler(0, 0, Rotation) * new Vector3(-3, 0, 0) + pos;
-            Vector2 Vec2 = rotatedpos;
-            world.OccupiedCells.Add((Vector2)Vector2Int.RoundToInt(Vec2), instancedObj);
-        }
-
         return instancedObj;
     }
     public void DeleteSave()

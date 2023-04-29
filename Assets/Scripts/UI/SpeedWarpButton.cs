@@ -10,8 +10,6 @@ public class SpeedWarpButton : MonoBehaviour
     int CurrentCost = 1;
     WorldGeneration world;
     public BuildingType selectedbuild;
-
-    MenuButtons button;
     public enum BuildingType
     {
         Miner,
@@ -20,32 +18,26 @@ public class SpeedWarpButton : MonoBehaviour
     }
     private void Start()
     {
-        button = GetComponent<MenuButtons>();
-        
         world = FindObjectOfType<WorldGeneration>();
 
-        Initialize();
 
-    }
-    public void Initialize()
-    {
         if (selectedbuild == BuildingType.Miner)
         {
             CurrentCost = world.speedstates.MinerInfo.cost;
-            GetComponentInChildren<TextMeshPro>().text = "Miner Speed +" + Mathf.RoundToInt((world.speedstates.MinerInfo.speedScale - 1.0f) * 100) + "%";
+            GetComponentInChildren<TextMeshPro>().text = "Miner Speed +" + Mathf.RoundToInt((world.speedstates.MinerInfo.speedScale - 1.0f)*100) + "%";
         }
         if (selectedbuild == BuildingType.Belt)
         {
             CurrentCost = world.speedstates.BeltInfo.cost;
-            GetComponentInChildren<TextMeshPro>().text = "Belt Speed +" + Mathf.RoundToInt((world.speedstates.BeltInfo.speedScale - 1.0f) * 100) + "%";
+            GetComponentInChildren<TextMeshPro>().text = "Belt Speed +" + Mathf.RoundToInt((world.speedstates.BeltInfo.speedScale - 1.0f)*100) + "%";
         }
         if (selectedbuild == BuildingType.Refinery)
         {
             CurrentCost = world.speedstates.RefineryInfo.cost;
-            GetComponentInChildren<TextMeshPro>().text = "Smelt Speed +" + Mathf.RoundToInt((world.speedstates.RefineryInfo.speedScale - 1.0f) * 100) + "%";
+            GetComponentInChildren<TextMeshPro>().text = "Smelt Speed +" + Mathf.RoundToInt((world.speedstates.RefineryInfo.speedScale - 1.0f)*100) + "%";
         }
 
-        UpdateButtonGraying();
+
 
 
         CostText.text = "$" + IntLib.IntToString(CurrentCost);
@@ -70,7 +62,6 @@ public class SpeedWarpButton : MonoBehaviour
         FindObjectOfType<StateSaveLoad>().Save();
         world.speedstates.MinerInfo = refinfo;
         print("Miner speed set to:" + 1 / refinfo.speed);
-        UpdateButtonGraying();
     }
     public void SpeedupRefinery()
     {
@@ -98,7 +89,6 @@ public class SpeedWarpButton : MonoBehaviour
         FindObjectOfType<StateSaveLoad>().Save();
         world.speedstates.RefineryInfo = refinfo;
         print("Refinery speed set to:" + 1 / refinfo.speed);
-        UpdateButtonGraying();
     }
     public void SpeedupBelt()
     {
@@ -120,11 +110,6 @@ public class SpeedWarpButton : MonoBehaviour
         {
             splitter.timeTotravel = refinfo.speed;
         }
-        UnderGroundBelt[] UBS = FindObjectsOfType<UnderGroundBelt>();
-        foreach (UnderGroundBelt ub in UBS)
-        {
-            ub.timeTotravel = refinfo.speed;
-        }
 
         world.Currency -= CurrentCost;
         CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));
@@ -135,26 +120,6 @@ public class SpeedWarpButton : MonoBehaviour
         if (belts.Length != 0)
         FindObjectOfType<StateSaveLoad>().Save();
         world.speedstates.BeltInfo= refinfo;
-        UpdateButtonGraying();
 
-    }
-    void UpdateButtonGraying()
-    {
-        if(world.Currency < CurrentCost)
-        {
-            button.isGrayedOut = true;
-            button.updateGraying();
-        }
-    }
-    private void Update()
-    {
-        if(world.Currency >= CurrentCost)
-        {
-            if (button.isGrayedOut)
-            {
-                button.isGrayedOut = false;
-                button.updateGraying();
-            }
-        }
     }
 }

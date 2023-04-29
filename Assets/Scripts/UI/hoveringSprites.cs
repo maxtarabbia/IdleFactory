@@ -7,8 +7,6 @@ using UnityEngine.UIElements;
 
 public class hoveringSprites : MonoBehaviour
 {
-    public bool isSelected;
-
     public Vector2 size;
     public Sprite CornerSprite;
     GameObject[] sprites = new GameObject[4];
@@ -21,19 +19,14 @@ public class hoveringSprites : MonoBehaviour
     public Material DeletingBarMaterial;
     SpriteRenderer BarSR;
 
-    KeyCode Rotate;
-    KeyCode Pick;
-
-    StateSaveLoad SSL;
-
     public float BarOffset;
 
     float timeHeld;
-    bool isHovered;
 
     public int2[] inputCoords;
     public int2 outputCoord;
 
+    float THDelSave;
     float BracketOffset;
 
     bool isTouch;
@@ -43,9 +36,6 @@ public class hoveringSprites : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SSL = FindObjectOfType<StateSaveLoad>();
-        Rotate = System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Rotate", "R"));
-        Pick = System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Pick", "Q"));
         BracketOffset = 0.1f;
         InitializeMaterial();
         AlignDeletingBar();
@@ -61,22 +51,11 @@ public class hoveringSprites : MonoBehaviour
     }
     private void Update()
     {
-
         if (BracketOffset >= 0)
         {
             BracketOffset -= 0.8f * Time.deltaTime;
             SetTranforms();
             //print("BracketOffset:" + BracketOffset);
-        }
-        if (!isSelected && !isHovered)
-            return;
-        if (isTouch)
-        {
-            TouchScreenCheck();
-        }
-        else
-        {
-            MouseCheck();
         }
     }
     void SetTranforms()
@@ -119,63 +98,19 @@ public class hoveringSprites : MonoBehaviour
     }
     private void OnMouseEnter()
     {
-        isHovered= true;
-        UpdateColors();
-        BracketOffset = 0.1f;
-        if (Input.GetKey(KeyCode.LeftControl))
-            isSelected = true;
-        foreach (GameObject sprite in sprites)
+        foreach(GameObject sprite in sprites)
         {
             sprite.SetActive(true);
-        }
-
-    }
-    public void Unhover(bool globalCall)
-    {
-        if (globalCall && isHovered)
-            return;
-        if (isSelected)
-            return;
-
-        foreach (GameObject sprite in sprites)
-        {
-            sprite.SetActive(false);
-        }
-    }
-    void UpdateColors()
-    {
-        if(isHovered)
-        {
-            foreach (GameObject sprite in sprites)
-            {
-                sprite.GetComponent<SpriteRenderer>().material.SetColor("_Color", Color.white);
-            }
-            return;
-        }
-        if(isSelected)
-        {
-            foreach (GameObject sprite in sprites)
-            {
-                sprite.GetComponent<SpriteRenderer>().material.SetColor("_Color", Color.green);
-            }
+            BracketOffset = 0.1f;
         }
     }
     private void OnMouseExit()
     {
-        isHovered = false;
+        foreach (GameObject sprite in sprites)
+        {
+            sprite.SetActive(false);
+        }
         DeletingBarMaterial.SetFloat("_Value", 0);
-        bool isLingering = true;
-        if(!Input.GetKey(KeyCode.LeftControl))
-        {
-            isLingering = false;
-            Unhover(false);
-        }
-        if (isLingering)
-        {
-            isSelected = true;
-            FindObjectOfType<Controls>().areSelectedBuildings = true;
-        }
-        UpdateColors();
         timeHeld = 0;
     }
     private void OnMouseUp()
@@ -185,83 +120,88 @@ public class hoveringSprites : MonoBehaviour
             RotateCW?.Invoke();
         }
     }
-    void TouchScreenCheck()
+    private void OnMouseOver()
     {
-        if (Input.touchCount == 1 && cammove.distanceMoved < 50f)
+        if (isTouch)
         {
-            timeHeld += Time.deltaTime;
-            DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
-            if (timeHeld > 0.5f)
+            if (Input.touchCount == 1 && cammove.distanceMoved < 50f)
             {
-                Delete?.Invoke();
-                SSL.LateSave();
-            }
-        }
-        else
-        {
-            if (timeHeld != 0)
-            {
-                DeletingBarMaterial.SetFloat("_Value", 0);
-                timeHeld = 0;
-            }
-        }
-    }
-    void MouseCheck()
-    {
-        if (Input.GetKeyDown(Rotate))
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                RotateCCW?.Invoke();
+                timeHeld += Time.deltaTime;
+                DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
+                if (timeHeld > 0.5f)
+                {
+                    Delete?.Invoke();
+                    FindObjectOfType<StateSaveLoad>().LateSave();
+                }
             }
             else
             {
-                RotateCW?.Invoke();
-            }
-            SSL.LateSave();
-            AlignDeletingBar();
-        }
-        if (Input.GetMouseButtonDown(2) || Input.GetKey(Pick))
-        {
-            WorldGeneration world = FindObjectOfType<WorldGeneration>();
-
-            int rotation = Mathf.RoundToInt(transform.rotation.eulerAngles.z);
-            FindObjectOfType<Buildings>().AllBuildings[objectID].rotation = rotation;
-
-            world.setBuildableIndex(objectID);
-        }
-        if (Input.GetMouseButton(1))
-        {
-            timeHeld += Time.deltaTime;
-            DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);   
-            if (timeHeld > 0.5f)
-            {
-                Delete?.Invoke();
-                FindObjectOfType<Controls>().areSelectedBuildings = false;
-                SSL.LateSave();
+                if (timeHeld != 0)
+                {
+                    DeletingBarMaterial.SetFloat("_Value", 0);
+                    timeHeld = 0;
+                }
             }
         }
         else
         {
-            if (timeHeld != 0)
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                DeletingBarMaterial.SetFloat("_Value", 0);
-                timeHeld = 0;
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    RotateCCW?.Invoke();
+                }
+                else
+                {
+                    RotateCW?.Invoke();
+                }
+                FindObjectOfType<StateSaveLoad>().Save();
+                AlignDeletingBar();
+            }
+            if (Input.GetMouseButtonDown(2))
+            {
+                WorldGeneration world = FindObjectOfType<WorldGeneration>();
+
+                int rotation = Mathf.RoundToInt(transform.rotation.eulerAngles.z);
+                FindObjectOfType<Buildings>().AllBuildings[objectID].rotation = rotation;
+
+                world.setBuildableIndex(objectID);
+            }
+            if (Input.GetKey(KeyCode.Delete))
+            {
+                if (THDelSave == -1)
+                    return;
+                THDelSave += Time.deltaTime;
+                if (THDelSave > 3)
+                {
+                    THDelSave = -1;
+                    FindObjectOfType<StateSaveLoad>().DeleteSave();
+                }
+                print("Deleting save in: " + (3 - THDelSave));
+            }
+            else
+            {
+                THDelSave = 0;
+            }
+            if (Input.GetMouseButton(1))
+            {
+                timeHeld += Time.deltaTime;
+                DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
+                if (timeHeld > 0.5f)
+                {
+                    Delete?.Invoke();
+                    FindObjectOfType<StateSaveLoad>().LateSave();
+                }
+            }
+            else
+            {
+                if (timeHeld != 0)
+                {
+                    DeletingBarMaterial.SetFloat("_Value", 0);
+                    timeHeld = 0;
+                }
             }
         }
-    }
-    private void OnMouseOver()
-    {
-        /*
-        if (isTouch)
-        {
-            TouchScreenCheck();
-        }
-        else
-        {
-            MouseCheck();
-        }
-        */
     }
     void AlignDeletingBar()
     {

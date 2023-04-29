@@ -13,7 +13,7 @@ public class WorldGeneration : MonoBehaviour
 {
     [SerializeField]
     public Dictionary<Vector2, Cell> oreMap = new Dictionary<Vector2, Cell>();
-    public int Worldsize = 40;
+    int Spawnsize = 20;
 
     public int Seed = -1;
 
@@ -24,27 +24,26 @@ public class WorldGeneration : MonoBehaviour
 
     [SerializeField]
     public Item[] items;
-    public int prestigeState;
 
     public int selectedBuildableIndex;
 
     public Canvas UICanvas;
 
+    public Image UIImage;
+    public TextMeshProUGUI UIText;
 
     public Inventory inv;
-    public long Currency;
+    public int Currency;
 
     public Vector2 CamCoord;
     public Vector2 CamSize;
 
+    public int OccCellcount;
     [SerializeField]
     public SpeedStates speedstates;
-    public SpeedStates defaultSpeeds;
 
     [SerializeField]
     public Dictionary<Vector2, GameObject> OccupiedCells = new Dictionary<Vector2, GameObject>();
-
-    public TextMeshProUGUI tmpUI;
 
     public bool GodMode;
 
@@ -52,9 +51,10 @@ public class WorldGeneration : MonoBehaviour
     public GameObject OrePrefab;
     public bool isTouch;
 
+
+
     void Start()
     {
-
         if(Seed == -1)
         {
             Seed = PlayerPrefs.GetInt("Seed");
@@ -74,16 +74,16 @@ public class WorldGeneration : MonoBehaviour
         UpdateNewBlocks();
 
         SetInventory();
-        FindObjectOfType<Hotbar>().HighlightItem(0);
     }
     public void setBuildableIndex(int index)
     {
         selectedBuildableIndex = index;
-        FindObjectOfType<Hotbar>().HighlightItem(index);
+        UIImage.sprite = GetComponent<Buildings>().AllBuildings[index].prefab.GetComponent<SpriteRenderer>().sprite;
+        UIText.text = GetComponent<Buildings>().AllBuildings[index].name;
     }
     public void SetInventory()
     {
-        inv = new Inventory(items.Length);
+        inv = new Inventory(6);
         if (GodMode)
         {
             inv.AddItem(0, 5000);
@@ -96,28 +96,8 @@ public class WorldGeneration : MonoBehaviour
         }
         else
         {
-            inv.AddItem(0, 20);
+            inv.AddItem(0, 5);
         }
-    }
-    public void Initialize(int size)
-    {
-        ObjectPlacement OP = OrePrefab.GetComponent<ObjectPlacement>();
-        OP.world = this;
-        OP.buildings = GetComponent<Buildings>();
-        OP.cammove = FindObjectOfType<Camera_Movement>();
-
-        OccupiedCells.Clear();
-        oreMap.Clear();
-
-        int offset = size / 2;
-        for (int x = 0; x < size; x++)
-        {
-            for (int y = 0; y < size; y++)
-            {
-                SetDefaultCell(new Vector2(x - offset, y - offset));
-            }
-        }
-        UpdateNewBlocks();
     }
     public void Initialize(int size, int Seed)
     {
@@ -160,9 +140,7 @@ public class WorldGeneration : MonoBehaviour
         {
             for (int y = 0; y < (CamSize.y+1) * 2; y++)
             {
-                Cell selCell;
-                oreMap.TryGetValue(new Vector2(x, y) + startingcoord, out selCell);
-                if (selCell == null)
+                if(!oreMap.ContainsKey(new Vector2(x,y)+startingcoord))
                 {
                     Profiler.BeginSample("Making New Block");
                     SetDefaultCell(new Vector2(x, y) + startingcoord);
@@ -170,28 +148,24 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else
                 {
-                    if(!selCell.gameobject.activeInHierarchy)
+                    if(!oreMap[(new Vector2(x, y) + startingcoord)].gameobject.activeInHierarchy)
                         SetDefaultCell(new Vector2(x, y) + startingcoord);
-                    selCell.setToDelete = false;
+                    oreMap[(new Vector2(x, y) + startingcoord)].setToDelete = false;
                 }
             }
         }
-        /*
+        Profiler.BeginSample("Culling Blocks");
         List<Cell> keys = oreMap.Values.ToList();
-        List<bool> bools = keys.Select(obj => obj.setToDelete).ToList();
-        List<GameObject> GOs = keys.Select(obj => obj.gameobject.gameObject).ToList();
         Profiler.BeginSample("looping Blocks");
-        for (int i = 0; i< keys.Count;i++) 
+        foreach (var key in keys)
         {
-            if (bools[i])
+            if (key.setToDelete)
             {
-                Profiler.BeginSample("Deactivating Cell");
-                GOs[i].SetActive(false);
-                Profiler.EndSample();
+                key.gameobject.gameObject.SetActive(false);
             }
         }
         Profiler.EndSample();
-        */
+        Profiler.EndSample();
         Profiler.EndSample();
     }
     public void SetDefaultCell(Vector2 position)
@@ -202,13 +176,13 @@ public class WorldGeneration : MonoBehaviour
             Profiler.BeginSample("Setting ore");
             float scale = 0.05f;
             Cell newcell = new Cell();
-            if (noise.cnoise(new Vector2(prestigeState * 57.2f - Seed, Seed + prestigeState*23) + position * scale) > 0.55)
+            if (noise.cnoise(new Vector2(Seed, Seed) + position * scale) > 0.55)
             {
                 newcell.ID = 1;
                 newcell.name = "Iron Ore";
 
             }
-            else if (noise.cnoise(new Vector2(50 + Seed * 20 + prestigeState * -10, 9 * prestigeState - 85) + position * scale) > 0.55)
+            else if (noise.cnoise(new Vector2(50 + Seed * 20, Seed - 85) + position * scale) > 0.55)
             {
                 newcell.ID = 2;
                 newcell.name = "Copper Ore";
@@ -218,7 +192,7 @@ public class WorldGeneration : MonoBehaviour
                 newcell.ID = 0;
                 newcell.name = "Air";
             }
-            float dist = Vector2.Distance(math.clamp(position, new float2(Worldsize, Worldsize) * -1, new float2(Worldsize, Worldsize)), position) + noise.cnoise(new Vector2(Seed * 41 + prestigeState * -23, prestigeState * Seed - 800) + position * scale * 1f) * 4;
+            float dist = Vector2.Distance(math.clamp(position, new float2(-100, -100), new float2(100, 100)), position) + noise.cnoise(new Vector2(Seed * -23, Seed - 800) + position * scale * 1f) * 4;
             if (dist > 20)
             {
                 newcell.ID = 3;
@@ -256,6 +230,7 @@ public class WorldGeneration : MonoBehaviour
     }
     void FixedUpdate()
     {
+        OccCellcount = OccupiedCells.Count;
         UpdateUI();
     }
     Vector2[] CountCosts()
@@ -273,6 +248,7 @@ public class WorldGeneration : MonoBehaviour
     void UpdateUI()
     {
         string UItext = new string("");
+        var tmpUI = UICanvas.GetComponentInChildren<TextMeshProUGUI>();
 
         Vector2[] costs = CountCosts();
 

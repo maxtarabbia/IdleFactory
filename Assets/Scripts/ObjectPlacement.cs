@@ -12,11 +12,9 @@ public class ObjectPlacement : MonoBehaviour
     GameObject SpriteGhost;
     int LastBuildableIndex;
     public bool isTouch;
-    KeyCode RotateKey;
+
     void Start()
     {
-        RotateKey = System.Enum.Parse<KeyCode>(PlayerPrefs.GetString("Rotate", "R"));
-
     }
     private void OnMouseExit()
     {
@@ -42,16 +40,6 @@ public class ObjectPlacement : MonoBehaviour
 
         bool isClear = true;
         Vector2 coord;
-
-        if (world.selectedBuildableIndex == 6)
-        {
-            Vector3 rotatedpos = Quaternion.Euler(0, 0, buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
-            Vector2 Vec2 = rotatedpos;
-            if (world.OccupiedCells.ContainsKey((Vector2)(Vector2Int.RoundToInt(Vec2))))
-            {
-                isClear = false;
-            }
-        }
 
         for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
         {
@@ -96,16 +84,6 @@ public class ObjectPlacement : MonoBehaviour
             bool isClear = true;
             Vector2 coord;
 
-            if (world.selectedBuildableIndex == 6)
-            {
-                Vector3 rotatedpos = Quaternion.Euler(0, 0, buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
-                Vector2 Vec2 = rotatedpos;
-                if (world.OccupiedCells.ContainsKey((Vector2)(Vector2Int.RoundToInt(Vec2))))
-                {
-                    isClear = false;
-                }
-            }
-
             for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
             {
                 for (int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
@@ -133,16 +111,6 @@ public class ObjectPlacement : MonoBehaviour
         bool isClear = true;
         Vector2 coord;
 
-        if (world.selectedBuildableIndex == 6)
-        {
-            Vector3 rotatedpos = Quaternion.Euler(0, 0,buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
-            Vector2 Vec2 = rotatedpos;
-            if (world.OccupiedCells.ContainsKey((Vector2)(Vector2Int.RoundToInt(Vec2))))
-            {
-                isClear = false;
-            }
-        }
-
         for (int i = 0; i < buildings.AllBuildings[world.selectedBuildableIndex].size; i++)
         {
             for (int j = 0; j < buildings.AllBuildings[world.selectedBuildableIndex].size; j++)
@@ -161,16 +129,14 @@ public class ObjectPlacement : MonoBehaviour
                 }
             }
         }
-        //default color is green
+
         Color col = new Color(0.5f, 1, 0.8f);
         if (!isClear)
         {
-            //set color to red
             col = new Color(1f, 0.5f, 0.5f);
         }
         else if (!world.inv.CheckRemoveItem(buildings.AllBuildings[world.selectedBuildableIndex].cost, buildings.AllBuildings[world.selectedBuildableIndex].count + 1))
         {
-            //set color to yellow
             col = new Color(1f, 1f, 0.5f);
         }
         return col;
@@ -215,7 +181,7 @@ public class ObjectPlacement : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        if (Input.GetMouseButtonDown(0) && !isTouch && !FindObjectOfType<Controls>().areSelectedBuildings)
+        if (Input.GetMouseButtonDown(0) && !isTouch)
         {
             testToPlace();
         }
@@ -223,17 +189,15 @@ public class ObjectPlacement : MonoBehaviour
 
     private void Update()
     {
+        
 
-
-        if (world == null)
+        if (world != null)
         {
-            return;
-        }
             if (world.selectedBuildableIndex != LastBuildableIndex)
             {
                 ResetSprite();
             }
-            if(Input.GetKeyDown(RotateKey) && SpriteGhost != null)
+            if(Input.GetKeyDown(KeyCode.R) && SpriteGhost != null)
             {
                 if(Input.GetKey(KeyCode.LeftShift))
                 {
@@ -251,7 +215,7 @@ public class ObjectPlacement : MonoBehaviour
             {
                 SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", GetColor());
             }
-        
+        }
     }
     public void ResetSprite()
     {
@@ -264,9 +228,6 @@ public class ObjectPlacement : MonoBehaviour
     
     void placeObject()
     {
-
-
-
         Vector3 Transposition = gameObject.transform.position;
         if (buildings.AllBuildings[world.selectedBuildableIndex].size % 2 == 0) Transposition += new Vector3(0.5f, 0.5f, 0f);
 
@@ -285,12 +246,6 @@ public class ObjectPlacement : MonoBehaviour
             {
                 world.OccupiedCells[new Vector2(gameObject.transform.position.x + i, gameObject.transform.position.y + j)] = instancedObj;
             }
-        }
-
-        if (world.selectedBuildableIndex == 6)
-        {
-            Vector3 rotatedpos = Quaternion.Euler(0, 0, buildings.AllBuildings[6].rotation) * new Vector3(-3, 0, 0) + transform.position;
-            world.OccupiedCells.Add((Vector2)Vector2Int.RoundToInt((Vector2)rotatedpos), instancedObj);
         }
     }
 }

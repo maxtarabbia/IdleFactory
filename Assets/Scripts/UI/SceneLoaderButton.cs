@@ -8,8 +8,7 @@ public class SceneLoaderButton : MonoBehaviour
 {
     [SerializeField]
     public string SceneString;
-    public static string SceneToLoad;
-
+    public static string SceneToLoad; 
     private void Start()
     {
         SceneToLoad = SceneString;
@@ -21,15 +20,18 @@ public class SceneLoaderButton : MonoBehaviour
     }
     public void LoadMainScene()
     {
+
+        //print("attempting to Launch: " + SceneToLoad);
         PlayerPrefs.SetString("Level", SceneToLoad);
+
         SceneManager.LoadScene("LoadingScene");
+
     }
     public void NewGame()
     {
         PlayerPrefs.SetInt("Seed", new System.Random().Next(9999));
         string path = Application.persistentDataPath + "/Saves";
-        if(System.IO.File.Exists(path + "/Save1.dat"))
-            System.IO.File.Delete(path + "/Save1.dat");
+        System.IO.File.Delete(path + "/Save1.dat");
         LoadMainScene();
     }
 }

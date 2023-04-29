@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 public class Belt : MonoBehaviour
 {
@@ -16,11 +15,10 @@ public class Belt : MonoBehaviour
 
     TickEvents tickEvents;
 
-    SpriteRenderer spriteSR;
 
     public Sprite[] BeltRotations;
     int BeltRotationState = 0;
-    float justAdded;
+
     float timeSinceFixed;
     bool canOutput;
     // Start is called before the first frame update
@@ -30,7 +28,6 @@ public class Belt : MonoBehaviour
         pos = transform.position;
         //x is ID
         //y is time spent on belt
-        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Belt, gameObject);
 
         if (sprite == null)
         {
@@ -39,9 +36,8 @@ public class Belt : MonoBehaviour
             sprite.transform.parent = gameObject.transform;
             sprite.transform.eulerAngles = (Vector3.zero);
         }
-        spriteSR = sprite.AddComponent<SpriteRenderer>();
-        spriteSR.sortingLayerName = "Buildings";
-        spriteSR.sortingOrder = 1;
+        sprite.AddComponent<SpriteRenderer>();
+        sprite.GetComponent<SpriteRenderer>().sortingLayerName = "Particles";
         if(itemID == Vector2.zero)
             itemID = new Vector2(-1, 0);
         UpdateBeltInput();
@@ -51,12 +47,11 @@ public class Belt : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
-        FindObjectOfType<StateSaveLoad>().LateSave();
+         
     }
 
     public void UpdateAdjacentBelts()
     {
-        Profiler.BeginSample("UpdateAdjacentBelts");
         GameObject[] cells = new GameObject[4];
         world.OccupiedCells.TryGetValue(pos + new Vector2(0, 1), out cells[0]);
         world.OccupiedCells.TryGetValue(pos + new Vector2(0, -1), out cells[1]);
@@ -68,13 +63,12 @@ public class Belt : MonoBehaviour
             if (cell != null)
             {
                 Belt belt;
-                if (cell.TryGetComponent(out belt))
+                if (cell.TryGetComponent<Belt>(out belt))
                 {
-                    belt.UpdateBeltInput();
+                    cell.GetComponent<Belt>().UpdateBeltInput();
                 }
             }
         }
-        Profiler.EndSample();
     }
 
     // Update is called once per frame
@@ -85,7 +79,6 @@ public class Belt : MonoBehaviour
     }
     public void UpdateBeltInput()
     {
-        Profiler.BeginSample("UpdateBeltInput");
         Vector2 Offset = Vector2.zero;
         switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
@@ -123,11 +116,11 @@ public class Belt : MonoBehaviour
         bool rightOcc = false;
 
         if (rearObj != null)
-            rearOcc = rearObj.GetComponent<Belt>() != null || rearObj.GetComponent<Splitter>() != null || rearObj.GetComponent<UnderGroundBelt>() != null;
+            rearOcc = rearObj.GetComponent<Belt>() != null || rearObj.GetComponent<Splitter>() != null;
         if (leftObj != null)
-            leftOcc = leftObj.GetComponent<Belt>() != null || leftObj.GetComponent<Splitter>() != null || leftObj.GetComponent<UnderGroundBelt>() != null;
-        if (rightObj != null)
-            rightOcc = rightObj.GetComponent<Belt>() != null || rightObj.GetComponent<Splitter>() != null || rightObj.GetComponent<UnderGroundBelt>() != null;
+            leftOcc = leftObj.GetComponent<Belt>() != null || leftObj.GetComponent<Splitter>() != null;
+        if(rightObj != null)
+            rightOcc = rightObj.GetComponent<Belt>() != null || rightObj.GetComponent<Splitter>() != null;
 
         if (rearOcc && rearObj.GetComponent<Belt>() != null)
             rearOcc = rearObj.GetComponent<Belt>().outputCoord == pos;
@@ -135,13 +128,6 @@ public class Belt : MonoBehaviour
             leftOcc = leftObj.GetComponent<Belt>().outputCoord == pos;
         if (rightOcc && rightObj.GetComponent<Belt>() != null)
             rightOcc = rightObj.GetComponent<Belt>().outputCoord == pos;
-
-        if(rearOcc && rearObj.GetComponent<UnderGroundBelt>() != null)
-            rearOcc = rearObj.GetComponent<UnderGroundBelt>().OutputCoord == pos;
-        if (leftOcc && leftObj.GetComponent<UnderGroundBelt>() != null)
-            leftOcc = leftObj.GetComponent<UnderGroundBelt>().OutputCoord == pos;
-        if (rightOcc && rightObj.GetComponent<UnderGroundBelt>() != null)
-            rightOcc = rightObj.GetComponent<UnderGroundBelt>().OutputCoord == pos;
 
 
         if (!rearOcc && (leftOcc ^ rightOcc))
@@ -163,20 +149,15 @@ public class Belt : MonoBehaviour
             BeltRotationState = 0;
         }
 
-        Profiler.EndSample();
+
+    }
+    private void FixedUpdate()
+    {
     }
     void OnTick()
     {
-        if(justAdded == Time.fixedTime)
-        {
-            timeSinceFixed = 0;
-            justAdded += 0.01f;
-            return;
-        }
-        Profiler.BeginSample("Belt Tick Logic");
         UpdateSpritePositions(true);
         timeSinceFixed = 0;
-        Profiler.EndSample();
     }
     void SetSpritePos(float Offset)
     {
@@ -195,12 +176,12 @@ public class Belt : MonoBehaviour
 
                 break;
             case 1:
-                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.7f, 0);
+                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
                 yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) / timeTotravel), 0, 0.5f);
 
                 break;
             case 2:
-                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.7f, 0);
+                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
                 yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) / timeTotravel), 0, 0.5f) * -1;
 
                 break;
@@ -210,30 +191,47 @@ public class Belt : MonoBehaviour
     }
     public void UpdateSpritePositions(bool moveForward)
     {
-        Profiler.BeginSample("Move Forward");
         //progress forward
         if (itemID.x != -1)
         {
             if (moveForward)
                 itemID.y += Time.fixedDeltaTime;
-            spriteSR.sprite = world.items[(int)itemID.x].sprite;
+            sprite.GetComponent<SpriteRenderer>().sprite = world.items[(int)itemID.x].sprite;
 
-            SetSpritePos(0);
+            float xVal = 0;
+            float yVal = 0;
+
+
+            switch (BeltRotationState)
+            {
+                case 0:
+                    xVal = 0.5f - (itemID.y / timeTotravel);
+                    yVal = 0;
+
+                    break;
+                case 1:
+                    xVal = Mathf.Clamp((0.5f - (itemID.y / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
+                    yVal = Mathf.Clamp(0.5f - (itemID.y / timeTotravel), 0, 0.5f);
+
+                    break;
+                case 2:
+                    xVal = Mathf.Clamp((0.5f - (itemID.y / timeTotravel) - 0.2f) * 0.7f, -0.5f, 0);
+                    yVal = Mathf.Clamp(0.5f - (itemID.y / timeTotravel), 0, 0.5f) * -1;
+
+                    break;
+            }
+            sprite.transform.localPosition = new Vector3(xVal, yVal, itemID.y);
 
 
         }
-        Profiler.EndSample();
-        Profiler.BeginSample("Check For Output");
+
         //check to output
         if (itemID.y >= timeTotravel)
         {
-            Profiler.BeginSample("Check Output Spot");
-            bool outBool = OutputItem((int) itemID.x);
-            Profiler.EndSample();
-            if (outBool)
+            if (OutputItem((int)itemID.x))
             {
                 timeSinceFixed = 0;
-                spriteSR.sprite = null;
+                sprite.GetComponent<SpriteRenderer>().sprite = null;
                 itemID = new Vector2(-1, 0);
                 canOutput= true;
             }
@@ -243,91 +241,82 @@ public class Belt : MonoBehaviour
                 itemID.y = timeTotravel;
             }
         }
-        Profiler.EndSample();
     }
     public bool inputItem(int initemID, float time)
     {
-        if (itemID.x == -1)
+            if (itemID.x == -1)
             {
-                justAdded = Time.fixedTime;
-                //itemID.y = time * timeTotravel;
-                itemID.y = time;
+                itemID.y = time * timeTotravel;
                 itemID.x = initemID;
                 UpdateSpritePositions(false);
-                
+
+
                 return true;
 
             }
         return false;
     }
-    public bool inputItem(int inItem, Vector2Int inPos)
-    {
-        Vector2Int relativepos = inPos - Vector2Int.RoundToInt(pos);
-        float spot = 0;
-        Vector2Int outputpos = new Vector2Int(-1,0);
-        switch(gameObject.transform.rotation.eulerAngles.z)
-        {
-            case 0:
-                outputpos = new Vector2Int(-1, 0);
-                break;
-            case 90:
-                outputpos = new Vector2Int(0, -1);
-                break;
-            case 180:
-                outputpos = new Vector2Int(1, 0);
-                break;
-            case 270:
-                outputpos = new Vector2Int(0, 1);
-                break;
-        }
-
-        if (relativepos == outputpos)
-        {
-            spot = 0.9f;
-        }
-        if (inputItem(inItem, spot))
-        {
-            return true;
-        }
-        return false;
-    }
-    public bool inputItem(int inItem, Vector2Int inPos, float Offset)
-    {
-        Vector2Int relativepos = inPos - Vector2Int.RoundToInt(pos);
-        Vector2Int outputpos = new Vector2Int(-1, 0);
-        switch (gameObject.transform.rotation.eulerAngles.z)
-        {
-            case 0:
-                outputpos = new Vector2Int(-1, 0);
-                break;
-            case 90:
-                outputpos = new Vector2Int(0, -1);
-                break;
-            case 180:
-                outputpos = new Vector2Int(1, 0);
-                break;
-            case 270:
-                outputpos = new Vector2Int(0, 1);
-                break;
-        }
-
-        if (relativepos == outputpos)
-        {
-            Offset = 0.9f;
-        }
-        if (inputItem(inItem, Offset))
-        {
-            return true;
-        }
-        return false;
-    }
     bool OutputItem(int initemID)
     {
-        GameObject OutputObj;
 
-        if (world.OccupiedCells.TryGetValue(outputCoord, out OutputObj))
-            return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos), itemID.y - timeTotravel);
-        
+        GameObject cellObj;
+        world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
+        if (cellObj != null)
+        {
+            Belt beltscript = cellObj.GetComponent<Belt>();
+            Refinery refineryScript= cellObj.GetComponent<Refinery>();
+            Splitter splitter = cellObj.GetComponent<Splitter>();
+            Core core = cellObj.GetComponent<Core>();
+            Assembler assembler = cellObj.GetComponent<Assembler>();
+            if (assembler != null)
+            {
+                if (assembler.InputItem(initemID, 1, pos))
+                {
+                    return true;
+                }
+            }
+            if (beltscript != null)
+            {
+                float spot = itemID.y - timeTotravel;
+                spot /= timeTotravel;
+                if(Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 90 || Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 270)
+                {
+                    spot = itemID.y-timeTotravel;
+                    spot/= timeTotravel;
+                }
+                else if(Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 180)
+                {
+                    spot= 0.9f;
+                }
+                if (beltscript.inputItem(initemID, spot))
+                {
+                  return true;
+                }
+            }
+            else if (refineryScript != null)
+            {
+                if (refineryScript.InputItem(initemID, 1, pos))
+                {
+                    return true;
+                }
+            }
+            else if (splitter != null)
+            {
+                if (Mathf.Abs(cellObj.transform.rotation.eulerAngles.z - gameObject.transform.rotation.eulerAngles.z) == 0)
+                {
+                    if (splitter.inputItem(initemID,0))
+                    {
+                        return true;
+                    }
+                }
+
+            }
+            else if (core != null)
+            {
+                core.InputItem(initemID);
+                return true;
+            }
+        }
         return false;
 
     }
@@ -337,12 +326,7 @@ public class Belt : MonoBehaviour
         FixRotations();
         UpdateBeltInput();
         UpdateAdjacentBelts();
-        try
-        {
-            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
-        }
-        catch { }
-        SetDR();
+         
     }
     public void RotateCCW()
     {
@@ -350,20 +334,12 @@ public class Belt : MonoBehaviour
         FixRotations();
         UpdateBeltInput();
         UpdateAdjacentBelts();
-        try
-        {
-            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
-        }
-        catch { }
-        SetDR();
-
+         
     }
     public void DeleteThis()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem(builds.AllBuildings[1].cost[0].x, Mathf.Clamp(builds.AllBuildings[2].count - 2, 1, int.MaxValue));
-        world.inv.AddItem((int)itemID.x, 1);
-
+        world.inv.AddItem((int)builds.AllBuildings[1].cost[0].x, (int)builds.AllBuildings[1].cost[0].y);
 
         world.OccupiedCells.Remove(pos);
 
@@ -371,36 +347,38 @@ public class Belt : MonoBehaviour
          
         Destroy(gameObject);
     }
-    public GameObject RecipeDisplay;
-    float timeHovering;
     private void OnMouseOver()
     {
-        SetDR();
-
-    }
-    void SetDR()
-    {
-        timeHovering += Time.deltaTime;
-        if (timeHovering < 1)
-            return;
-
-        if (GetComponentInChildren<DisplayRecipes>() != null)
-            return;
-
-        GameObject rec = Instantiate(RecipeDisplay, transform);
-        rec.transform.rotation = Quaternion.identity;
-        rec.transform.position = new Vector3(3, 2, -0.01f) + gameObject.transform.position;
-        rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Belt;
-    }
-    private void OnMouseExit()
-    {
-        timeHovering = 0;
-        try
+        /*
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+            gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
+            FixRotations();
+            UpdateBeltInput();
+            UpdateAdjacentBelts();
+             
         }
-        catch { }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
+            FixRotations();
+            UpdateBeltInput();
+            UpdateAdjacentBelts();
+             
+        }
+        if (Input.GetKey(KeyCode.Delete))
+        {
+            Buildings builds = FindObjectOfType<Buildings>();
+            world.inv.AddItem((int)builds.AllBuildings[1].cost[0].x, (int)builds.AllBuildings[1].cost[0].y);
 
+            world.OccupiedCells.Remove(pos);
+
+            builds.AllBuildings[1].count--;
+             
+            Destroy(gameObject);
+
+        }
+        */
     }
     void FixRotations()
     {

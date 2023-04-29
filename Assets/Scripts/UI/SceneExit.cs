@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
@@ -12,27 +11,13 @@ public class SceneExit : MonoBehaviour
     SpriteRenderer LbSR;
     int Phase = 0;
     AsyncOperation asyncLoad;
-
-    StateSaveLoad SSL;
-
-    public TextMeshProUGUI textMeshProUGUI;
-    int Minutes;
-    int Hours;
     // Start is called before the first frame update
     void Awake()
     {
-        
         SetLBMaterial();
         PlayerPrefs.SetInt("isLoaded", 0);
         DontDestroyOnLoad(transform.gameObject);
         SceneToLoad = PlayerPrefs.GetString("Level", "MainScene");
-    }
-    void SetMinHours(int ticks)
-    {
-        int seconds = Mathf.RoundToInt(SSL.totalTicks * Time.fixedDeltaTime);
-        Minutes = (seconds / 60)%60;
-        Hours = (seconds / 60) / 60;
-        textMeshProUGUI.text = "Simulating " + Hours + ":" + Minutes.ToString().PadLeft(2,'0');
     }
     bool SetCam()
     {
@@ -85,14 +70,9 @@ public class SceneExit : MonoBehaviour
         }
         if (SceneToLoad == "MainScene")
         { 
-            if(SSL == null)
-            {
-                SSL = FindObjectOfType<StateSaveLoad>();
-            }
+            StateSaveLoad SSL = FindObjectOfType<StateSaveLoad>();
             if (FindObjectOfType<WorldGeneration>())
             {
-                if(textMeshProUGUI.text == "")
-                    SetMinHours((int)SSL.totalTicks);
                 if (SSL.ticksToJam > 0)
                 {
                     progress = 1f - (float)SSL.ticksToJam / SSL.totalTicks;

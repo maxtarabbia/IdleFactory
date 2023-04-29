@@ -10,45 +10,25 @@ public class MenuButtons : MonoBehaviour
     public UnityEvent OnClick;
     SpriteRenderer SR;
 
-    AudioManager AudioManager;
-    public bool playclick = true;
-
-    public bool isGrayedOut = false;
     void Start()
     {
-        if(isGrayedOut)
-            setToClicked();
-        AudioManager = (AudioManager == null) ? FindObjectOfType<AudioManager>() : AudioManager;
         SR = GetComponent<SpriteRenderer>();
         setToDefault();
     }
     private void OnMouseEnter()
     {
-        if (isGrayedOut)
-            return;
-        AudioManager = (AudioManager == null) ? FindObjectOfType<AudioManager>() : AudioManager;
-        AudioManager.PlayHover();
         setToHovered();
     }
     private void OnMouseExit()
     {
-        if (isGrayedOut)
-            return;
         setToDefault();
     }
     private void OnMouseDown()
     {
-        if (isGrayedOut)
-            return;
         setToClicked();
     }
     private void OnMouseUp()
     {
-        if (isGrayedOut)
-            return;
-        AudioManager = FindObjectOfType<AudioManager>();
-        if (playclick)
-            AudioManager.PlayPlay();
         setToHovered();
         OnClick?.Invoke();
     }
@@ -66,19 +46,8 @@ public class MenuButtons : MonoBehaviour
     }
     void setToDefault()
     {
-        SR.material.SetColor("_MainColor", new Color(0.7f, 0.7f, 0.7f));
+        SR.material.SetColor("_MainColor", new Color(0.6f, 0.6f, 0.6f));
         SR.material.SetColor("_OutlineColor", new Color(0.2f, 0.2f, 0.2f));
         SR.material.SetFloat("_ShadowDist", 0.03f);
-    }
-    public void updateGraying()
-    {
-        if (isGrayedOut)
-        {
-            setToClicked();
-        }
-        else
-        {
-            setToDefault();
-        }
     }
 }
