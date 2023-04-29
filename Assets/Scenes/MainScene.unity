@@ -888,7 +888,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1166204805
+--- !u!224 &1167266351
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1145,7 +1145,7 @@ MonoBehaviour:
     type: 3}
   OrePrefab: {fileID: 4149706894383282587, guid: e4f3d4dee813b414990c37c688573968,
     type: 3}
-  isTouch: 1
+  isTouch: 0
 --- !u!114 &1298894906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1745,10 +1745,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-
-  m_fontSize: 42.71
-  m_fontSizeBase: 42.71
-
+  m_fontSize: 5.05
+  m_fontSizeBase: 5.05
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
