@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Profiling;
+using UnityEngine.UIElements;
 
 public class Refinery : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class Refinery : MonoBehaviour
     public Inventory inputInv;
     public Inventory outputInv;
 
+    AudioSource AS;
 
     [SerializeField]
     public Recipes recipies;
@@ -24,6 +27,14 @@ public class Refinery : MonoBehaviour
     Vector2Int inputCoord = new Vector2Int();
     Vector2Int outFromCoord = new Vector2Int();
 
+    ResourceStats stats;
+    
+    bool isSmelting;
+    float smeltAnimationSpeed;
+
+    Vector3 basePos;
+    Transform[] transforms;
+
     TickEvents tickEvents;
 
     public float RProgress;
@@ -31,14 +42,23 @@ public class Refinery : MonoBehaviour
 
     bool isJammed = false;
 
-    public int inCount;
-    public int outCount;
+    public GameObject RecipeDisplay;
+    float timeHovering;
+
+    public GameObject RefBase;
+    public GameObject RefElements;
+    public GameObject SmokeStack;
+
+    public GameObject RedX;
+    float blinkingTimer;
+
     [Serializable]
     public struct Recipes
     {
         public RefineryRecipe[] values;
         public int selectedRecipe;
     }
+
     [Serializable]
     public struct RefineryRecipe
     {
@@ -51,6 +71,11 @@ public class Refinery : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        stats = FindObjectOfType<ResourceStats>();
+        AS = GetComponent<AudioSource>();
+        transforms = GetComponentsInChildren<Transform>();
+        basePos = transforms[1].localPosition + new Vector3(0, 0.6f, 0);
+
         if (File.Exists(recipepath + saveExtention))
         {
             recipies = (Recipes)JsonUtility.FromJson(System.IO.File.ReadAllText(recipepath + saveExtention), typeof(Recipes));
@@ -67,6 +92,8 @@ public class Refinery : MonoBehaviour
         if (outputInv == null || outputInv.items.Length == 0)
             outputInv = new Inventory(1);
 
+        FindObjectOfType<Skins>().Setskin(Skin.SkinType.Refinery, gameObject);
+
         inputInv.maxStackSize = 10;
         outputInv.maxStackSize = 10;
         SetOutput();
@@ -75,15 +102,45 @@ public class Refinery : MonoBehaviour
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
+        FindObjectOfType<StateSaveLoad>().Save();
+        SetDR();
+    }
+    private void Update()
+    {
+        SmeltingAnimation();
+        if (isSmelting)
+        {
+            AS.volume += Time.deltaTime;
+            if(AS.volume > 1)
+                AS.volume = 1;
+            smeltAnimationSpeed += Time.deltaTime;
+            if(smeltAnimationSpeed > 1)
+                smeltAnimationSpeed = 1;
+        }
+        else
+        {
+            UpdateRedX();
+            AS.volume -= Time.deltaTime;
+            if (AS.volume < 0)
+                AS.volume = 0;
+            smeltAnimationSpeed -= Time.deltaTime;
+            if (smeltAnimationSpeed < 0)
+                smeltAnimationSpeed = 0;
+        }
 
     }
-
     void FixedUpdate()
     {
         // OnTick();
     }
     void SetOutput()
     {
+        /*
+         inputCoord = pos + new Vector2Int(2, 1);
+         inputCoord = pos + new Vector2Int(0, 2);
+         inputCoord = pos + new Vector2Int(-1, 0);
+         inputCoord = pos + new Vector2Int(1, -1);
+         */
         switch ((int)gameObject.transform.rotation.eulerAngles.z)
         {
             case 0:
@@ -108,96 +165,147 @@ public class Refinery : MonoBehaviour
                 break;
         }
     }
+    void UpdateSound()
+    {
+        if (isSmelting)
+        {
+            if (!AS.isPlaying)
+            {
+                AS.time = (float)new System.Random().NextDouble() * AS.clip.length;
+                AS.Play();
+            }
+        }
+    }
     void OnTick()
     {
-        inCount = inputInv.items[0].count;
-        outCount = outputInv.items[0].count;
 
+        Profiler.BeginSample("Refinery Tick Logic");
 
         if (inputInv.items[0].ID == -1 || inputInv.items[0].count < recipies.values[recipies.selectedRecipe].inCount)
+        {
+            isSmelting = false;
+            Profiler.EndSample();
+            UpdateSound();
             return;
+        }
         if (!isJammed)
+        {
+            isSmelting = true;
             RProgress += Time.fixedDeltaTime;
+        }
         if (RProgress >= RTime)
         {
+            Profiler.BeginSample("AttemptSmelt");
             RefreshRecipe();
             AttemptSmelt();
+            Profiler.EndSample();
         }
         if (outputInv.items[0].count > 0)
         {
+            Profiler.BeginSample("AttemptOutput");
             if (OutputItem())
             {
                 outputInv.RemoveItem(new int2[] { new int2(outputInv.items[0].ID, 1) }, 1.0f);
             }
+            Profiler.EndSample();
         }
+        Profiler.EndSample();
+        UpdateSound();
+    }
+    void SmeltingAnimation()
+    {
+        float speed = Mathf.Sqrt(smeltAnimationSpeed);
+        transforms[4].localPosition = basePos + (Vector3)Ocsillation(45, 0.005f,0.2f) * speed;
+        transforms[2].localPosition = basePos + (Vector3)Ocsillation(7, 0.01f, 0.2f) * speed;
+        transforms[3].localPosition = basePos + (Vector3)Ocsillation(12,0.01f, 0.2f) * speed;
+    }
+    Vector2 Ocsillation(int seed, float Strength, float speed)
+    {
+        return new Vector2(Mathf.Sin(speed * Time.frameCount + (seed * 1.2154f) + pos.x * (seed * 5.2154f)),
+                           Mathf.Sin(speed * Time.frameCount + (seed * 2.2154f) + pos.y * (seed * 3.2154f))) * Strength;
     }
     void AttemptSmelt()
     {
         int outID = recipies.values[recipies.selectedRecipe].outputItemID;
         if (outputInv.AddItem(outID, recipies.values[recipies.selectedRecipe].outCount))
         {
-
+            stats.Additem(outID, recipies.values[recipies.selectedRecipe].outCount);
             inputInv.RemoveItem(new int2[] { new int2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
             RProgress -= RTime;
         }
         else
         {
+            isSmelting= false;
             RProgress = RTime;
         }
     }
     private void OnMouseOver()
     {
-        /*
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
-            SetOutput();
-            FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-             
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
-            SetOutput();
-            FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-             
-        }
-        if (Input.GetKey(KeyCode.Delete))
-        {
-            Buildings builds = FindObjectOfType<Buildings>();
-            world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, (int)builds.AllBuildings[2].cost[0].y);
-            world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, (int)builds.AllBuildings[2].cost[1].y);
 
-            world.OccupiedCells.Remove(pos);
-            world.OccupiedCells.Remove(pos + new Vector2(0, 1));
-            world.OccupiedCells.Remove(pos + new Vector2(1, 0));
-            world.OccupiedCells.Remove(pos + new Vector2(1, 1));
+        SetDR();
+    }
+    void SetDR()
+    {
 
-            builds.AllBuildings[2].count--;
-             
-            Destroy(gameObject);
+        RedX.transform.rotation = Quaternion.identity;
+        RedX.transform.position = gameObject.transform.position + new Vector3(0.5f, 0.5f, -0.001f);
+
+        timeHovering += Time.deltaTime;
+        if (timeHovering < 1)
+            return;
+
+        if (GetComponentInChildren<DisplayRecipes>() != null)
+            return;
+
+        GameObject rec = Instantiate(RecipeDisplay, transform);
+        rec.transform.rotation = Quaternion.identity;
+        rec.transform.position = new Vector3(3, 3, -0.01f) + gameObject.transform.position;
+        rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Refinery;
+
+
+    }
+    private void OnMouseExit()
+    {
+        timeHovering = 0;
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
         }
-        */
+        catch { }
     }
     public void RotateCW()
     {
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
+        SetDR();
     }
     public void RotateCCW()
     {
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         SetOutput();
         FindObjectOfType<Buildings>().AllBuildings[2].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
-
+        try
+        {
+            Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
+        }
+        catch { }
+        SetDR();
     }
     public void Delete()
     {
         Buildings builds = FindObjectOfType<Buildings>();
-        world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, (int)builds.AllBuildings[2].cost[0].y);
-        world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, (int)builds.AllBuildings[2].cost[1].y);
+        world.inv.AddItem((int)builds.AllBuildings[2].cost[0].x, Mathf.Clamp(builds.AllBuildings[2].count - 2, 1, int.MaxValue));
+        world.inv.AddItem((int)builds.AllBuildings[2].cost[1].x, Mathf.Clamp(builds.AllBuildings[2].count - 2, 1, int.MaxValue));
+
+        world.inv.AddItem(inputInv.items[0].ID, inputInv.items[0].count);
+        world.inv.AddItem(outputInv.items[0].ID, outputInv.items[0].count);
+
 
         world.OccupiedCells.Remove(pos);
         world.OccupiedCells.Remove(pos + new Vector2(0, 1));
@@ -212,6 +320,12 @@ public class Refinery : MonoBehaviour
     {
         int itemID = outputInv.items[0].ID;
 
+        GameObject OutputObj;
+        world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
+
+        if (OutputObj != null)
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, itemID, Vector2Int.RoundToInt(outFromCoord));
+        /*
         GameObject cellObj = null;
         world.OccupiedCells.TryGetValue(outputCoord, out cellObj);
         if (cellObj != null)
@@ -255,6 +369,7 @@ public class Refinery : MonoBehaviour
                 return true;
             }
         }
+        */
         return false;
     }
     public bool InputItem(int ID, int count, Vector2 inPos)
@@ -279,6 +394,24 @@ public class Refinery : MonoBehaviour
     private void OnDestroy()
     {
         tickEvents.MyEvent -= OnTick;
+    }
+    void UpdateRedX()
+    {
+        float rate = 1;
+        if(isJammed)
+        {
+            blinkingTimer += Time.deltaTime;
+            if(blinkingTimer > rate)
+                blinkingTimer= 0;
+            if(blinkingTimer > rate/2)
+            {
+                RedX.GetComponent<SpriteRenderer>().color = Color.clear;
+            }
+            else
+            {
+                RedX.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+        }
     }
     void RefreshRecipe()
     {

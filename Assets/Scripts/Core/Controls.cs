@@ -9,21 +9,23 @@ public class Controls : MonoBehaviour
     WorldGeneration world;
     public Image UIsprite;
     public TextMeshProUGUI UIText;
-    Buildings buildings;
+    
     public GameObject PauseMenu;
     public GameObject InventoryMenu;
+
+    public bool areSelectedBuildings;
+    TickEvents events;
     // Start is called before the first frame update
     void Start()
     {
+        events = GetComponent<TickEvents>();
         world = FindObjectOfType<WorldGeneration>();
-        //UIsprite = GameObject.Find("InventoryDisplay").GetComponent<Image>();
-        //UIText = GameObject.Find("SelectedBuildingText").GetComponent<TextMeshPro>();
-        buildings = FindObjectOfType<Buildings>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        GameObject IM = GameObject.Find("World Inv(Clone)");
         GameObject PM = GameObject.Find("PauseMenu(Clone)");
         if (PM != null)
         {
@@ -57,10 +59,52 @@ public class Controls : MonoBehaviour
         {
             world.setBuildableIndex(5);
         }
+        if (Input.GetKey(KeyCode.Alpha7))
+        {
+            world.setBuildableIndex(6);
+        }
         if (Input.GetKey(KeyCode.F))
         {
-            TickEvents events = GetComponent<TickEvents>();
-            events.TickJam(10);
+            if(Input.GetKey(KeyCode.Alpha1))
+            {
+                events.TickJam(10);
+            }
+            if (Input.GetKey(KeyCode.Alpha2))
+            {
+                events.TickJam(100);
+            }
+            if (Input.GetKey(KeyCode.Alpha3))
+            {
+                events.TickJam(1000);
+            }
+            if (Input.GetKey(KeyCode.Alpha4))
+            {
+                events.TickJam(10000);
+            }
+            if (Input.GetKey(KeyCode.Alpha5))
+            {
+                events.TickJam(500);
+            }
+            if (Input.GetKey(KeyCode.Alpha6))
+            {
+                events.TickJam(600);
+            }
+            if (Input.GetKey(KeyCode.Alpha7))
+            {
+                events.TickJam(700);
+            }
+            if (Input.GetKey(KeyCode.Alpha8))
+            {
+                events.TickJam(800);
+            }
+            if (Input.GetKey(KeyCode.Alpha9))
+            {
+                events.TickJam(900);
+            }
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.KeypadPlus))
+            {
+                world.Currency += 100_000;
+            }
         }
         if(Input.GetKeyDown(KeyCode.K))
         {
@@ -72,11 +116,18 @@ public class Controls : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Instantiate(PauseMenu);
+            if (IM == null)
+            {
+                Instantiate(PauseMenu);
+            }
+            else
+            {
+                Destroy(IM);
+            }
+            return;
         }
         if(Input.GetKeyDown(KeyCode.E))
         {
-            GameObject IM = GameObject.Find("World Inv(Clone)");
             if(IM == null)
             {
                 Instantiate(InventoryMenu);
@@ -86,7 +137,20 @@ public class Controls : MonoBehaviour
                 Destroy(IM);
             }
         }
-
+        if(Input.GetMouseButtonUp(0))
+        {
+            var objs = FindObjectsOfType<hoveringSprites>();
+            areSelectedBuildings = false;
+            foreach (var obj in objs)
+            { 
+                if (obj.isSelected)
+                {
+                    obj.isSelected = false;
+                    obj.Unhover(true);
+                }
+                
+            }
+        }
 
     }
 }

@@ -27,6 +27,8 @@ public class Inventory
 
     public bool AddItem(int ID, int count)
     {
+        if(ID == -1)
+            return true;
         bool foundspot = false;
         foreach(var item in items)
         {
@@ -56,7 +58,26 @@ public class Inventory
     public void SortInv()
     {
         List<ItemStack> sorteditems = items.OrderBy(i => i.ID).ToList();
-        items = sorteditems.ToArray();
+        items = sorteditems.OrderBy(i => i.ID == -1).ToArray();
+        //items = sorteditems.ToArray();
+    }
+    public int ForceRemoveItem(int2 ID)
+    {
+        int itemcount = ID.y;
+        foreach (var item in items)
+        {
+            if (item.ID != ID.x)
+                continue;
+            if (ID.y > item.count)
+            {
+                itemcount = item.count;
+            }
+            item.count -= itemcount;
+            checkvoids();
+            return itemcount;
+        }
+        checkvoids();
+        return 0;
     }
     public bool RemoveItem(int2[] IDs, float multiplier)
     {
@@ -95,6 +116,14 @@ public class Inventory
         }
         checkvoids();
         return foundall;
+    }
+    public int GetCount(int ID)
+    {
+       foreach(ItemStack item in items)
+        {
+            if(item.ID == ID) return item.count;
+        }
+       return 0;
     }
     public bool CheckRemoveItem(int2[] IDs, float multiplier)
     {
