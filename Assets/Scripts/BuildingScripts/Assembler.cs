@@ -94,6 +94,7 @@ public class Assembler : MonoBehaviour
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
         FindObjectOfType<StateSaveLoad>().Save();
+        SetDR();
     }
 
     void Update()
@@ -229,6 +230,10 @@ public class Assembler : MonoBehaviour
     }
     void SetDR()
     {
+
+        RedX.transform.rotation = Quaternion.identity;
+        RedX.transform.position = gameObject.transform.position + new Vector3(0.5f, 0.5f, -0.001f);
+
         timeHovering += Time.deltaTime;
         if (timeHovering < 1)
             return;
@@ -240,6 +245,8 @@ public class Assembler : MonoBehaviour
         rec.transform.rotation = Quaternion.identity;
         rec.transform.position = new Vector3(3, 3, -0.01f) + gameObject.transform.position;
         rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Assembler;
+
+
     }
     private void OnMouseExit()
     {

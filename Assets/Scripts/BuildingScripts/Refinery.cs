@@ -103,7 +103,7 @@ public class Refinery : MonoBehaviour
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
         FindObjectOfType<StateSaveLoad>().Save();
-
+        SetDR();
     }
     private void Update()
     {
@@ -246,6 +246,10 @@ public class Refinery : MonoBehaviour
     }
     void SetDR()
     {
+
+        RedX.transform.rotation = Quaternion.identity;
+        RedX.transform.position = gameObject.transform.position + new Vector3(0.5f, 0.5f, -0.001f);
+
         timeHovering += Time.deltaTime;
         if (timeHovering < 1)
             return;
@@ -257,6 +261,8 @@ public class Refinery : MonoBehaviour
         rec.transform.rotation = Quaternion.identity;
         rec.transform.position = new Vector3(3, 3, -0.01f) + gameObject.transform.position;
         rec.GetComponent<DisplayRecipes>().type = DisplayRecipes.BuildingType.Refinery;
+
+
     }
     private void OnMouseExit()
     {
