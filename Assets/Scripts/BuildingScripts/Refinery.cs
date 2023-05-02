@@ -76,9 +76,11 @@ public class Refinery : MonoBehaviour
         transforms = GetComponentsInChildren<Transform>();
         basePos = transforms[1].localPosition + new Vector3(0, 0.6f, 0);
 
+        print("Attempting to read: " + recipepath + saveExtention);
         if (File.Exists(recipepath + saveExtention))
         {
             recipies = (Recipes)JsonUtility.FromJson(System.IO.File.ReadAllText(recipepath + saveExtention), typeof(Recipes));
+            print("read: " + recipies);
         }
         /*
         Directory.CreateDirectory(recipepath);

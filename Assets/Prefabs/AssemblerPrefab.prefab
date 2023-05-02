@@ -726,7 +726,43 @@ MonoBehaviour:
     maxStackSize: 0
   isJammed: 0
   recipies:
-    values: []
+    values:
+    - inputItemID: -1
+      inCount: 0
+      inputItemID2: 3
+      inCount2: 1
+      outputItemID: 5
+      outCount: 2
+    - inputItemID: 3
+      inCount: 1
+      inputItemID2: -1
+      inCount2: 0
+      outputItemID: 5
+      outCount: 2
+    - inputItemID: 5
+      inCount: 3
+      inputItemID2: 2
+      inCount2: 2
+      outputItemID: 6
+      outCount: 1
+    - inputItemID: 2
+      inCount: 2
+      inputItemID2: 5
+      inCount2: 3
+      outputItemID: 6
+      outCount: 1
+    - inputItemID: 6
+      inCount: 2
+      inputItemID2: 4
+      inCount2: 1
+      outputItemID: 7
+      outCount: 1
+    - inputItemID: 4
+      inCount: 1
+      inputItemID2: 6
+      inCount2: 2
+      outputItemID: 7
+      outCount: 1
     selectedRecipe: 0
   RProgress: 0
   RTime: 1
