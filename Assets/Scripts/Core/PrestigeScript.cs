@@ -49,8 +49,9 @@ public class PrestigeScript : MonoBehaviour
         {
             Destroy(Ores[i]);
         }
-        GameObject.Find("Background").GetComponent<SpriteRenderer>().material.SetFloat("_Hue", world.prestigeState * 168.854f);
-
+        SpriteRenderer BGSR = GameObject.Find("Background").GetComponent<SpriteRenderer>();
+        BGSR.material.SetFloat("_Hue", world.prestigeState * 168.854f);
+        BGSR.material.SetFloat("_Seed", (BGSR.material.GetFloat("_Seed") + 164.847f) % 20000);
         Building[] buildings = world.gameObject.GetComponent<Buildings>().AllBuildings;
         foreach (Building building in buildings)
         {

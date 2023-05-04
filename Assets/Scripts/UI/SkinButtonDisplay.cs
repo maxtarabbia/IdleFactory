@@ -11,6 +11,8 @@ public class SkinButtonDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (FindObjectOfType<Skins>() == null)
+            return;
         skins = FindObjectOfType<Skins>().allSkins.Where(obj => obj.type == skinType).ToArray();
         for(int i =0; i <skins.Length; i++)
         {

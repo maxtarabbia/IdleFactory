@@ -105,6 +105,10 @@ public class Controls : MonoBehaviour
             {
                 world.Currency += 100_000;
             }
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.KeypadPlus) && Input.GetKey(KeyCode.LeftShift))
+            {
+                world.Currency += 100_000_000;
+            }
         }
         if(Input.GetKeyDown(KeyCode.K))
         {
