@@ -17,7 +17,6 @@ public class Miner : MonoBehaviour
 
     public bool hasRotated = false;
 
-    VisualEffect effect;
     WorldGeneration world;
 
     GameObject OutputObj;
@@ -28,7 +27,6 @@ public class Miner : MonoBehaviour
     Transform[] transforms;
 
     AudioSource AS;
-    float timesinceplayed;
 
     public float miningProgress;
     public float secondsPerItem = 4;
@@ -45,7 +43,9 @@ public class Miner : MonoBehaviour
     public GameObject Hopper;
     public GameObject Drill;
 
-    public Sprite[] OreSprites;
+    public ParticleSystem oreUIPS;
+
+    public Material[] Oremats;
     //Start is called before the first frame update
     void Awake()
     {
@@ -71,7 +71,6 @@ public class Miner : MonoBehaviour
 
         FindObjectOfType<Skins>().Setskin(Skin.SkinType.Miner, gameObject);
 
-        effect = GetComponent<VisualEffect>();
 
         secondsPerItem = world.speedstates.MinerInfo.speed;
 
@@ -170,12 +169,17 @@ public class Miner : MonoBehaviour
         OutputObj = null;
         gameObject.transform.Rotate(new Vector3(0f, 0f, -90f));
         FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
+        UpdateEffectRotation();
         hasRotated= true;
         try
         {
             Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
         }
         catch { }
+    }
+    void UpdateEffectRotation()
+    {
+        
     }
     public void RotateCCW()
     {
@@ -187,6 +191,7 @@ public class Miner : MonoBehaviour
         OutputObj = null;
         gameObject.transform.Rotate(new Vector3(0f, 0f, 90f));
         hasRotated = true;
+        UpdateEffectRotation();
         FindObjectOfType<Buildings>().AllBuildings[0].rotation = (int)gameObject.transform.rotation.eulerAngles.z;
     }
     public void Delete()
@@ -288,9 +293,11 @@ public class Miner : MonoBehaviour
                     { 
                     world.inv.AddItem(0, 1);
                     
-                    effect.SetTexture("spriteTex", OreSprites[0].texture);
-                    if (PlayerPrefs.GetInt("isLoaded") == 1)
-                        effect.Play();
+                    GetComponent<ParticleSystemRenderer>().material = Oremats[0];
+                        if (PlayerPrefs.GetInt("isLoaded") == 1)
+                        {
+                            oreUIPS.Play(false);
+                        }
                     }
                 }
                 break;
@@ -302,10 +309,11 @@ public class Miner : MonoBehaviour
                     if (!inv.AddItem(1, 1))
                     {
                         world.inv.AddItem(1, 1);
-                        
-                        effect.SetTexture("spriteTex", OreSprites[1].texture);
+                        GetComponent<ParticleSystemRenderer>().material = Oremats[1];
                         if (PlayerPrefs.GetInt("isLoaded") == 1)
-                            effect.Play();
+                        {
+                            oreUIPS.Play(false);
+                        }
                     }
                 }
                 break;

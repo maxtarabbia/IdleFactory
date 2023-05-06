@@ -61,6 +61,10 @@ public class ItemIconSeller : MonoBehaviour
             buttons[i].GetComponent<ItemSellButton>().count = (int)Mathf.Pow(10, i);
         }
     }
+    public void UpdateValue()
+    {
+        Value.text = "Value:\n" + IntLib.IntToString(world.items[ID].value * world.prestigeState);
+    }
     private void OnMouseDown()
     {
         if (buttons == null)

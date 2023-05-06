@@ -35,6 +35,10 @@ public class PrestigeScript : MonoBehaviour
         List<GameObject> Buildings = GameObject.Find("Buildings").GetComponentsInChildren<Transform>().Select(x => x.gameObject).ToList();
         List<GameObject> Ores = GameObject.Find("Ores").GetComponentsInChildren<Transform>().Select(x => x.gameObject).ToList();
 
+        foreach(ItemIconSeller iis in FindObjectsOfType<ItemIconSeller>())
+        {
+            iis.UpdateValue();
+        }
         world.Initialize(50);
 
         Buildings.RemoveRange(0, 1);
