@@ -5,8 +5,12 @@ using UnityEngine;
 public class PauseButton : MonoBehaviour
 {
     public GameObject PauseMenu;
-    private void OnMouseDown()
+    private void OnMouseUp()
     {
         Instantiate(PauseMenu);
+    }
+    public void DisplayeMenu()
+    {
+        //Instantiate(PauseMenu);
     }
 }

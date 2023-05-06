@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.UIElements;
@@ -40,8 +41,12 @@ public class StateSaveLoad : MonoBehaviour
     {
         buildings = GetComponent<Buildings>();
         world = GetComponent<WorldGeneration>();
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+        {
+            
+        }
         path = Application.persistentDataPath + path;
-        if(File.Exists(path + "/Save1.dat"))
+        if (File.Exists(path + "/Save1.dat"))
         {
             Load();
         }
@@ -97,6 +102,10 @@ public class StateSaveLoad : MonoBehaviour
         Profiler.BeginSample("Writing to path");
         Directory.CreateDirectory(path);
         System.IO.File.WriteAllText(path + "/Save1.dat", stringdata);
+        PlayerPrefs.Save();
+        SaveNext = false;
+        Debug.Log("DebugLog: Saved Game to: " + path);
+
         Profiler.EndSample();
     }
     public SaveData SerializeBuilding(GameObject[] go)
