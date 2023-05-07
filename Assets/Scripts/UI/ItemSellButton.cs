@@ -18,7 +18,8 @@ public class ItemSellButton : MonoBehaviour
     public void Sell()
     {
         int SellCount = world.inv.ForceRemoveItem(new int2(ID,count));
-        world.Currency += (SellCount * world.items[ID].value * world.prestigeState);
+        long value = SellCount * world.items[ID].value * world.prestigeState;
+        world.Currency += (value); ;
         world.GetComponent<StateSaveLoad>().Save();
     }
 }

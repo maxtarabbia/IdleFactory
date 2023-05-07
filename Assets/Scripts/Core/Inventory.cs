@@ -157,6 +157,14 @@ public class Inventory
             }
         }
     }
+    public void Clear()
+    {
+        foreach(ItemStack item in items)
+        {
+            item.ID = -1;
+            item.count = 0;
+        }
+    }
 }
 [System.Serializable]
 public class ItemStack

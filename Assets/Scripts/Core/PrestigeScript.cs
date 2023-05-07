@@ -27,7 +27,7 @@ public class PrestigeScript : MonoBehaviour
             return;
         }
 
-        world.Currency -= PrestigeCost;
+        world.Currency = 0;
 
         world.oreMap = new Dictionary<Vector2, Cell>();
         world.OccupiedCells = new Dictionary<Vector2, GameObject>();
@@ -61,6 +61,7 @@ public class PrestigeScript : MonoBehaviour
         {
             building.count = 0;
         }
+        world.inv.Clear();
         world.inv.AddItem(0,20);
         world.speedstates = world.defaultSpeeds;
         SpeedWarpButton[] SWBs = FindObjectsOfType<SpeedWarpButton>();
