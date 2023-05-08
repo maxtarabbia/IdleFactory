@@ -59,9 +59,6 @@ public class WorldGeneration : MonoBehaviour
         {
             Seed = PlayerPrefs.GetInt("Seed");
         }
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-        Screen.orientation = ScreenOrientation.LandscapeRight;
-        Screen.orientation = ScreenOrientation.AutoRotation;
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
 
@@ -247,7 +244,6 @@ public class WorldGeneration : MonoBehaviour
     }
     void Update()
     {
-        Screen.orientation = ScreenOrientation.AutoRotation;
         if(UICanvas == null)
         {
             UICanvas = FindObjectOfType<Canvas>();
