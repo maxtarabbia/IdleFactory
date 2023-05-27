@@ -13,9 +13,12 @@ public class SceneLoaderButton : MonoBehaviour
     private void Start()
     {
         SceneToLoad = SceneString;
-        
+
+        Screen.orientation = ScreenOrientation.LandscapeRight;
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
+
+        Screen.orientation = ScreenOrientation.AutoRotation;
     }
     public void LoadMainScene()
     {

@@ -173,7 +173,7 @@ public class WorldGeneration : MonoBehaviour
                 }
             }
         }
-        /*
+        
         List<Cell> keys = oreMap.Values.ToList();
         List<bool> bools = keys.Select(obj => obj.setToDelete).ToList();
         List<GameObject> GOs = keys.Select(obj => obj.gameobject.gameObject).ToList();
@@ -188,7 +188,7 @@ public class WorldGeneration : MonoBehaviour
             }
         }
         Profiler.EndSample();
-        */
+        
         Profiler.EndSample();
     }
     public void SetDefaultCell(Vector2 position)

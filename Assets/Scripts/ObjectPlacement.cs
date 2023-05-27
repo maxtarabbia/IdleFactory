@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using CustomConsole;
 
 public class ObjectPlacement : MonoBehaviour
 {
@@ -168,20 +169,29 @@ public class ObjectPlacement : MonoBehaviour
     }
     private void OnMouseUp()
     {
-        if (isTouch && Input.touches.Length > 0)
+
+    }
+    private void OnMouseOver()
+    {
+        if (isTouch && Input.touches.Length == 1)
         {
             if (cammove.distanceMoved < 0.5f && cammove.timeMoving < 0.3f && Input.touches[0].phase == TouchPhase.Ended)
             {
+
                 if (FindObjectOfType<Controls>().areSelectedBuildings)
                 {
                     FindObjectOfType<Controls>().Unselect();
                 }
                 else
                 {
+                    //Console.Print("Attempting to place at: " + (Vector2)gameObject.transform.position);
                     testToPlace();
                 }
             }
-            
+            else
+            {
+                //Console.Print(cammove.distanceMoved + "\n" + cammove.timeMoving + "\n" + Input.touches[0].phase);
+            }
 
         }
     }
@@ -195,17 +205,19 @@ public class ObjectPlacement : MonoBehaviour
 
     private void Update()
     {
-
-
         if (world == null)
         {
             return;
         }
-            if (world.selectedBuildableIndex != LastBuildableIndex)
+
+       
+
+
+        if (world.selectedBuildableIndex != LastBuildableIndex)
             {
                 ResetSprite();
             }
-            if(Input.GetKeyDown(RotateKey) && SpriteGhost != null)
+        if(Input.GetKeyDown(RotateKey) && SpriteGhost != null)
             {
                 if(Input.GetKey(KeyCode.LeftShift))
                 {
@@ -219,7 +231,7 @@ public class ObjectPlacement : MonoBehaviour
                 buildings.AllBuildings[world.selectedBuildableIndex].rotation = (int)SpriteGhost.transform.rotation.eulerAngles.z;
                 ResetSprite();
             }
-            if(Time.frameCount % 5 == 0 && SpriteGhost != null)
+        if(Time.frameCount % 5 == 0 && SpriteGhost != null)
             {
                 SpriteGhost.GetComponent<SpriteRenderer>().material.SetColor("_Color", GetColor());
             }

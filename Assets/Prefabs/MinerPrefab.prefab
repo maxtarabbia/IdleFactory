@@ -5457,7 +5457,7 @@ MonoBehaviour:
   TextBox: {fileID: 1265148677971555076}
   strings:
   - Miners output from the hopper
-  - Use R to rotate clockwise and Shift + R to rotate counterclockwise
+  - Tap to rotate!
   - Miners will automatically output to the global inventory if they can't output
     from their hopper
   - Now mine some iron to create more miners and mine copper to build the next building

@@ -198,7 +198,7 @@ public class Assembler : MonoBehaviour
             }
             else
             {
-
+                isJammed = true;
             }
         }
         UpdateSound();

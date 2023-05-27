@@ -32,6 +32,8 @@ public class Camera_Movement : MonoBehaviour
 
     bool isTouch;
 
+    Vector2 touchStartingPos;
+
     void Start()
     {
         Up = Enum.Parse<KeyCode>(PlayerPrefs.GetString("MoveUp","W"));
@@ -61,11 +63,14 @@ public class Camera_Movement : MonoBehaviour
             frameOffset = Vector3.zero;
             if(Input.touches.Length == 1)
             {
-                frameOffset = Input.touches[0].deltaPosition * -0.11f * cam.orthographicSize;
+                if(touchStartingPos != Vector2.zero)
+                    frameOffset = -0.11f * cam.orthographicSize * (Input.touches[0].position - touchStartingPos);
+                touchStartingPos = Input.touches[0].position;
             }
             if(Input.touchCount == 0)
             {
-                timeMoving= 0f;
+                touchStartingPos = Vector2.zero;
+                timeMoving = 0f;
                 distanceMoved = 0f;
             }
             else
@@ -137,6 +142,10 @@ public class Camera_Movement : MonoBehaviour
         {
             if(Input.touches.Length == 2)
             {
+                touchStartingPos = Vector2.zero;
+                timeMoving = 0f;
+                distanceMoved = 0f;
+
                 if (pinchDist != -1)
                 {
                     float newPinchDist = Vector2.Distance(Input.touches[0].position, Input.touches[1].position);
