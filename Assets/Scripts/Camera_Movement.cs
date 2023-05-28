@@ -66,16 +66,13 @@ public class Camera_Movement : MonoBehaviour
                 if(touchStartingPos != Vector2.zero)
                     frameOffset = -0.11f * cam.orthographicSize * (Input.touches[0].position - touchStartingPos);
                 touchStartingPos = Input.touches[0].position;
+                timeMoving += Time.deltaTime;
             }
-            if(Input.touchCount == 0)
+            else
             {
                 touchStartingPos = Vector2.zero;
                 timeMoving = 0f;
                 distanceMoved = 0f;
-            }
-            else
-            {
-                timeMoving += Time.deltaTime;
             }
         }
         else
