@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class TutorialState : MonoBehaviour
 {
+    float timeSinceEnd;
     public enum State
     {
         Miner,
@@ -52,7 +54,17 @@ public class TutorialState : MonoBehaviour
                 break;
             case State.Done:
                 textMeshProUGUI.text = "You have completed the base tutorial!";
+                timeSinceEnd = 0;
                 break;
+        }
+    }
+    private void Update()
+    {
+         if(currentState == State.Done)
+        {
+            timeSinceEnd += Time.deltaTime;
+            if (timeSinceEnd > 5)
+                textMeshProUGUI.text = string.Empty;
         }
     }
 }

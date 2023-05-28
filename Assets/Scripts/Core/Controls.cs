@@ -15,6 +15,8 @@ public class Controls : MonoBehaviour
 
     public bool areSelectedBuildings;
     TickEvents events;
+
+    GameObject[] UIElements;
     // Start is called before the first frame update
     void Start()
     {
@@ -108,6 +110,17 @@ public class Controls : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.KeypadPlus) && Input.GetKey(KeyCode.LeftShift))
             {
                 world.Currency += 100_000_000;
+            }
+            if(Input.GetKeyDown(KeyCode.U))
+            {
+                if(UIElements == null)
+                {
+                    UIElements = GameObject.FindGameObjectsWithTag("UI");
+                }
+                foreach (GameObject go in UIElements)
+                {
+                    go.SetActive(!go.activeSelf);
+                }
             }
         }
         if(Input.GetKeyDown(KeyCode.K))
