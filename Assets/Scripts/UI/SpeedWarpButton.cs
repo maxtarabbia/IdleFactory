@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SpeedWarpButton : MonoBehaviour
 {
 
     public TextMeshPro CostText;
-    int CurrentCost = 1;
+    long CurrentCost = 1;
     WorldGeneration world;
     public BuildingType selectedbuild;
 
@@ -64,7 +65,7 @@ public class SpeedWarpButton : MonoBehaviour
             miner.secondsPerItem = refinfo.speed;
         }
         world.Currency -= CurrentCost;
-        CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));
+        CurrentCost = (long)(math.round(refinfo.costScale * CurrentCost));
         refinfo.cost = CurrentCost;
         CostText.text = "$" +IntLib.IntToString(CurrentCost);
         FindObjectOfType<StateSaveLoad>().Save();
@@ -92,7 +93,7 @@ public class SpeedWarpButton : MonoBehaviour
             assembler.RTime = refinfo.speed;
         }
         world.Currency -= CurrentCost;
-        CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));
+        CurrentCost = (long)(math.round(refinfo.costScale * CurrentCost));
         refinfo.cost = CurrentCost;
         CostText.text = "$" + IntLib.IntToString(CurrentCost);
         FindObjectOfType<StateSaveLoad>().Save();
@@ -127,7 +128,7 @@ public class SpeedWarpButton : MonoBehaviour
         }
 
         world.Currency -= CurrentCost;
-        CurrentCost = (Mathf.RoundToInt(refinfo.costScale * CurrentCost));
+        CurrentCost = (long)(math.round(refinfo.costScale * CurrentCost));
         CostText.text = "$" + IntLib.IntToString(CurrentCost);
         refinfo.cost = CurrentCost;
         print("Belt speed set to:" + 1 / refinfo.speed);

@@ -13,7 +13,7 @@ public struct SpeedStates
 public struct speedinfo
 {
     public float speed;
-    public int cost;
+    public long cost;
     public float speedScale;
-    public float costScale;
+    public double costScale;
 }

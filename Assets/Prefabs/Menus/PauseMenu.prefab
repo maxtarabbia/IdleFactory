@@ -299,8 +299,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  hoversound: {fileID: 0}
-  pressedSound: {fileID: 0}
+  playclick: 1
+  isGrayedOut: 0
 --- !u!114 &5519733175139566598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,8 +478,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  hoversound: {fileID: 0}
-  pressedSound: {fileID: 0}
+  playclick: 1
+  isGrayedOut: 0
 --- !u!114 &3623579660470353278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,7 +520,7 @@ Transform:
   m_GameObject: {fileID: 3446484558764122906}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.2}
-  m_LocalScale: {x: 3000, y: 3000, z: 3000}
+  m_LocalScale: {x: 30000, y: 30000, z: 30000}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5373712334213647626}
@@ -684,6 +684,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -1158774963
@@ -1269,5 +1270,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  hoversound: {fileID: 0}
-  pressedSound: {fileID: 0}
+  playclick: 1
+  isGrayedOut: 0
