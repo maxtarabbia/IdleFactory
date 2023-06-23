@@ -46,7 +46,7 @@ public class StateSaveLoad : MonoBehaviour
             
         }
         path = Application.persistentDataPath + path;
-        if (File.Exists(path + "/Save1.dat"))
+        if (File.Exists(path + "/Save.dat"))
         {
             Load();
         }
@@ -101,7 +101,7 @@ public class StateSaveLoad : MonoBehaviour
 
         Profiler.BeginSample("Writing to path");
         Directory.CreateDirectory(path);
-        System.IO.File.WriteAllText(path + "/Save1.dat", stringdata);
+        System.IO.File.WriteAllText(path + "/Save.dat", stringdata);
         PlayerPrefs.Save();
         SaveNext = false;
         Debug.Log("DebugLog: Saved Game to: " + path);
@@ -213,7 +213,7 @@ public class StateSaveLoad : MonoBehaviour
     public void Load()
     {
         saveData = GetComponent<SaveData>();
-        saveData.LoadFromJson(System.IO.File.ReadAllText(path + "/Save1.dat"));
+        saveData.LoadFromJson(System.IO.File.ReadAllText(path + "/Save.dat"));
 
         if (saveData.minerdata == null)
         {
@@ -420,6 +420,6 @@ public class StateSaveLoad : MonoBehaviour
     }
     public void DeleteSave()
     {
-        System.IO.File.Delete(path + "/Save1.dat");
+        System.IO.File.Delete(path + "/Save.dat");
     }
 }

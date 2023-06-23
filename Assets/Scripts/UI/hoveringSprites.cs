@@ -193,7 +193,7 @@ public class hoveringSprites : MonoBehaviour
             DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);
             if (timeHeld > 0.5f)
             {
-                Delete?.Invoke();
+                DeleteObj();
                 SSL.LateSave();
             }
         }
@@ -236,7 +236,7 @@ public class hoveringSprites : MonoBehaviour
             DeletingBarMaterial.SetFloat("_Value", timeHeld / 0.5f);   
             if (timeHeld > 0.5f)
             {
-                Delete?.Invoke();
+                DeleteObj();
                 FindObjectOfType<Controls>().areSelectedBuildings = false;
                 SSL.LateSave();
             }
@@ -249,6 +249,11 @@ public class hoveringSprites : MonoBehaviour
                 timeHeld = 0;
             }
         }
+    }
+    void DeleteObj()
+    {
+        Delete?.Invoke();
+        FindObjectOfType<SaveData>().hasDeconstructed = true;
     }
     private void OnMouseOver()
     {

@@ -49,9 +49,37 @@ public class ResourceStats : MonoBehaviour
             {
                 createdItemsTotal.Add(createdItemsThisTick[i]);
             }
+            
         }
+
+        for (int j = 0; j < createdItemsTotal.Count; j++)
+        {
+            ProgressStats(createdItemsTotal[j].x, createdItemsTotal[j].y);
+        }
+
         createdItemsThisTick.Clear();
         CheckForAchievements();
+    }
+    void ProgressStats(int ItemID, int Count)
+    {
+        switch(ItemID)
+        {
+            case 0:
+                SteamAchievements.SetStat("IronStat", Count);
+            break;
+            case 1:
+                SteamAchievements.SetStat("CopperStat", Count);
+                break;
+            case 4:
+                SteamAchievements.SetStat("SteelStat", Count);
+                break;
+            case 6:
+                SteamAchievements.SetStat("CircuitsStat", Count);
+                break;
+            case 7:
+                SteamAchievements.SetStat("SteelStat", Count);
+                break;
+        }
     }
     private void Update()
     {
@@ -75,9 +103,15 @@ public class ResourceStats : MonoBehaviour
                         achievementText += "\n" + world.GetComponent<Skins>().allSkins[achievement.UnlockSkinID[j]].name + " has been unlocked!";
                     }
 
+                    SteamAchievements.AchievementReached(achievement.SteamApiName);
+
                     TMPGUI.text = achievementText;
                     TMPGUI.color = new Color(1f, 1f, 1f, 1f);
                     print(achievement.name + " has been achieved!");
+
+                    
+
+
                 }
             }
         }
@@ -116,6 +150,7 @@ public class Achievement
     public int ItemID;
     public int ItemCount;
     public bool hasBeenAchieved;
+    public string SteamApiName;
     public List<int> UnlockSkinID = new List<int>();
 }
 

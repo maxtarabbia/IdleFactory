@@ -677,6 +677,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 1
+  timeToHold: 2
 --- !u!114 &321189559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1159,6 +1161,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &502765940
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1362,6 +1366,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &683268260
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1839,6 +1845,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!1 &966608089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1910,7 +1918,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Discord
+  m_text: 'Github
 
 '
   m_isRightToLeft: 0
@@ -2414,6 +2422,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &1474180607
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2524,7 +2534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a664f25a84d859048ae5762b81fb7ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: https://discord.gg/s8DS2PPX9T
+  url: https://github.com/maxtarabbia/IdleFactory
 --- !u!1 &1602932471
 GameObject:
   m_ObjectHideFlags: 0

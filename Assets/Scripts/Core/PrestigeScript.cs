@@ -27,6 +27,10 @@ public class PrestigeScript : MonoBehaviour
             return;
         }
 
+        SteamAchievements.AchievementReached("Prestige");
+        if (!FindObjectOfType<SaveData>().hasDeconstructed)
+            SteamAchievements.AchievementReached("HardPrestige");
+
         world.Currency = 0;
 
         world.oreMap = new Dictionary<Vector2, Cell>();
@@ -69,6 +73,8 @@ public class PrestigeScript : MonoBehaviour
         {
             swb.Initialize();
         }
+
+        FindObjectOfType<SaveData>().hasDeconstructed = false;
 
         button.isGrayedOut = world.Currency < PrestigeCost;
         button.updateGraying();

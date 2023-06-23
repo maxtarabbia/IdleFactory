@@ -7,6 +7,7 @@ using UnityEngine.PlayerLoop;
 public class TutorialState : MonoBehaviour
 {
     float timeSinceEnd;
+    public bool isoverRide = false;
     public enum State
     {
         Miner,
@@ -60,7 +61,7 @@ public class TutorialState : MonoBehaviour
     }
     private void Update()
     {
-         if(currentState == State.Done)
+        if(currentState == State.Done && !isoverRide)
         {
             timeSinceEnd += Time.deltaTime;
             if (timeSinceEnd > 5)

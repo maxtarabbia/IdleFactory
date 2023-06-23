@@ -173,7 +173,7 @@ MonoBehaviour:
   HoverSource: {fileID: 1325680001}
   PlaySource: {fileID: 609427733}
   isUnloaded: 0
-  mixerGroup: {fileID: 0}
+  mixerGroup: {fileID: 24300002, guid: acab48b66793fc34eaa9f50b9766e598, type: 2}
   audioParams: []
 --- !u!1 &232368673
 GameObject:
@@ -1333,6 +1333,7 @@ MonoBehaviour:
   worldinv:
     items: []
     maxStackSize: 0
+  hasDeconstructed: 0
 --- !u!114 &1298894911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1352,12 +1353,32 @@ MonoBehaviour:
     ItemID: 0
     ItemCount: 1000000
     hasBeenAchieved: 0
-    UnlockSkinID: 0400000006000000080000000a000000
+    SteamApiName: Iron
+    UnlockSkinID: 0400000006000000
   - name: Million Copper
     ItemID: 1
     ItemCount: 1000000
     hasBeenAchieved: 0
-    UnlockSkinID: 0500000007000000090000000b000000
+    SteamApiName: Copper
+    UnlockSkinID: 0500000007000000
+  - name: Lots of Steel
+    ItemID: 4
+    ItemCount: 10000
+    hasBeenAchieved: 0
+    SteamApiName: Steel
+    UnlockSkinID: 0800000009000000
+  - name: Thousand Circuits
+    ItemID: 6
+    ItemCount: 1000
+    hasBeenAchieved: 0
+    SteamApiName: Circuit
+    UnlockSkinID: 0b000000
+  - name: Motors!
+    ItemID: 7
+    ItemCount: 1000
+    hasBeenAchieved: 0
+    SteamApiName: Motor
+    UnlockSkinID: 0a000000
   TMPGUI: {fileID: 1167266352}
 --- !u!114 &1298894912
 MonoBehaviour:
@@ -2367,6 +2388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44146209c00596444b1b05a07c666552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isoverRide: 0
   currentState: 0
   isTutorialActive: 0
   textMeshProUGUI: {fileID: 1985949604}

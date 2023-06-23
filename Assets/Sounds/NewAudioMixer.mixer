@@ -14,6 +14,22 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!244 &-8830153714207714153
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 4d4164c90036d1f4186d9c36ff536fbc
+  m_EffectName: Lowpass Simple
+  m_MixLevel: bfb049fa438d5e749bdeb045b321439c
+  m_Parameters:
+  - m_ParameterName: Cutoff freq
+    m_GUID: ffaa16aa7de4a29459f6cbdf77b898c2
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-5997592935585155071
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -135,6 +151,8 @@ AudioMixerController:
     name: MusicVol
   - guid: cf95e1af53db12e4ba5801f2d1c8f99f
     name: SoundVol
+  - guid: ffaa16aa7de4a29459f6cbdf77b898c2
+    name: SFXLowPass
   - guid: 2c6e943dbcf27464887b8ba3f2f51096
     name: UIVol
   m_AudioMixerGroupViews:
@@ -228,6 +246,7 @@ AudioMixerSnapshotController:
     11c1e82ab835be54d91ebbbed513a576: 0.025578512
     8d0ece7a6ee633045aa829214d43e6f1: 0.757
     64d5d09a95de53c4283ce64700d3b1ab: 10.8
+    ffaa16aa7de4a29459f6cbdf77b898c2: 1000
     5fa94c3b657f81d4c928270d8a8ad7c5: 9916
     cc77fc3baaf4d2c498e208465205e35a: 3
     5b58d78beebee3c4aa7d0b6ea29cf95e: 1512
@@ -284,6 +303,7 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: -5704946888123690194}
+  - {fileID: -8830153714207714153}
   m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0

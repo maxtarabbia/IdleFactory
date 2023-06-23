@@ -14,6 +14,10 @@ public class MenuButtons : MonoBehaviour
     public bool playclick = true;
 
     public bool isGrayedOut = false;
+
+    public bool holdConfirmation = false;
+    public float timeToHold;
+    float timeHeld;
     void Start()
     {
         if(isGrayedOut)
@@ -35,12 +39,20 @@ public class MenuButtons : MonoBehaviour
         if (isGrayedOut)
             return;
         setToDefault();
+        if (holdConfirmation)
+        {
+            SR.material.SetFloat("_RotationProg", timeHeld / timeToHold);
+            timeHeld = 0;
+        }
     }
     private void OnMouseDown()
     {
         if (isGrayedOut)
             return;
-        setToClicked();
+        if(holdConfirmation)
+            timeHeld = 0.001f;
+        else
+            setToClicked();
     }
     private void OnMouseUp()
     {
@@ -50,7 +62,30 @@ public class MenuButtons : MonoBehaviour
         if (playclick)
             AudioManager.PlayPlay();
         setToHovered();
-        OnClick?.Invoke();
+        if (!holdConfirmation)
+        {
+            OnClick?.Invoke();
+        }
+        else
+        {
+            timeHeld = 0;
+            SR.material.SetFloat("_RotationProg", timeHeld / timeToHold);
+        }
+    }
+    private void OnMouseOver()
+    {
+        if (!holdConfirmation)
+            return;
+        if (timeHeld > 0)
+        {
+            timeHeld += Time.deltaTime;
+            SR.material.SetFloat("_RotationProg", timeHeld / timeToHold);
+        }
+        if(timeHeld >= timeToHold)
+        {
+            setToClicked();
+            OnClick?.Invoke();
+        }
     }
     void setToHovered()
     {

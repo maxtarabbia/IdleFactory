@@ -28,6 +28,8 @@ public class SaveData : MonoBehaviour
 
     public Inventory worldinv;
 
+    public bool hasDeconstructed;
+
     public string SaveIntoJson()
     {
 
@@ -58,6 +60,7 @@ public class SaveData : MonoBehaviour
 
         datatoSave.speedstates= speedstates;
         
+        datatoSave.hasDeconstructed = hasDeconstructed;
 
         string savedString = string.Empty;
 
@@ -97,6 +100,7 @@ public class SaveData : MonoBehaviour
         CamCoord= savedData.CamCoord;
         worldinv = savedData.worldinv;
         Currency = savedData.Currency;
+        hasDeconstructed = savedData.hasDeconstructed;
         worldinv.PopulateItemIDs();
     }
 }
@@ -128,6 +132,8 @@ public struct DatatoSave
 
     [SerializeField]
     public Inventory worldinv;
+
+    public bool hasDeconstructed;
 }
 [System.Serializable]
 public class MinerData

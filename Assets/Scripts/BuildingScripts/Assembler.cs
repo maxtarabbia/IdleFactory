@@ -95,6 +95,7 @@ public class Assembler : MonoBehaviour
         tickEvents.MyEvent += OnTick;
         FindObjectOfType<StateSaveLoad>().Save();
         SetDR();
+        SetRecipe();
     }
 
     void Update()
@@ -226,7 +227,21 @@ public class Assembler : MonoBehaviour
     private void OnMouseOver()
     {
         SetDR();
-        
+        /*
+        TutorialState TS = FindObjectOfType<TutorialState>();
+        TS.textMeshProUGUI.text = DebugString();
+        TS.isoverRide = true;
+        */
+        }
+    string DebugString()
+    {
+        string o = inputInv.items[0].ID.ToString() + ":" + inputInv.items[0].count.ToString();
+        o += "\n" + inputInv2.items[0].ID.ToString() + ":" + inputInv2.items[0].count.ToString();
+        o += "\n" + outputInv.items[0].ID.ToString() + ":" + outputInv.items[0].count.ToString();
+        o += "\n" + recipies.selectedRecipe;
+
+
+        return o;
     }
     void SetDR()
     {
@@ -256,7 +271,6 @@ public class Assembler : MonoBehaviour
             Destroy(GetComponentInChildren<DisplayRecipes>().gameObject);
         }
         catch { }
-        
     }
     void UpdateRedX()
     {

@@ -59,6 +59,7 @@ Material:
     - _OutlineDepth: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RotationProg: 0
     - _ShadowDist: 0.02
     m_Colors:
     - _MainColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 0}

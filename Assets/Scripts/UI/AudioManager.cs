@@ -22,6 +22,7 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(this);
         SceneManager.sceneUnloaded += OnSceneUnload;
 
+        mixerGroup.audioMixer.SetFloat("SFXLowPass", 100);
 
         for(int i = 0; i < audioParams.Length; i++)
         {
@@ -44,8 +45,10 @@ public class AudioManager : MonoBehaviour
     }
     private void Update()
     {
-
-
+        if(PlayerPrefs.GetInt("isLoaded") == 1)
+        {
+            mixerGroup.audioMixer.SetFloat("SFXLowPass", 22000);
+        }
         if (!isUnloaded)
             return;
         if (!HoverSource.isPlaying && !PlaySource.isPlaying)
