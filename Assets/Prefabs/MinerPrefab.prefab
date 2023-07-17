@@ -5693,7 +5693,7 @@ MonoBehaviour:
   coveredTileID: 
   hasRotated: 0
   miningProgress: 0
-  secondsPerItem: 4
+  secondsPerItem: 8
   Frame: {fileID: 6432214006276148771}
   Hopper: {fileID: 1218354525639471260}
   Drill: {fileID: 2769195005133678721}

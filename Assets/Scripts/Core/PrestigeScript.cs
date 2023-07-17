@@ -76,6 +76,8 @@ public class PrestigeScript : MonoBehaviour
 
         FindObjectOfType<SaveData>().hasDeconstructed = false;
 
+        FindObjectOfType<StateSaveLoad>().Save();
+
         button.isGrayedOut = world.Currency < PrestigeCost;
         button.updateGraying();
     }

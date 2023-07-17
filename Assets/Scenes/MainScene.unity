@@ -1093,15 +1093,15 @@ MonoBehaviour:
   - ID: 4
     name: Steel Ingot
     sprite: {fileID: 21300000, guid: b296c80bcb4356542a75fb43ac91c077, type: 3}
-    value: 20
+    value: 60
   - ID: 5
     name: Copper Wire
     sprite: {fileID: 21300000, guid: d40ef36820c2a7e418908410dc6aaeb9, type: 3}
-    value: 10
+    value: 15
   - ID: 6
     name: Circuit
     sprite: {fileID: 21300000, guid: 8291b923c9a8fb24bb91d91570b3e5b9, type: 3}
-    value: 100
+    value: 150
   - ID: 7
     name: Motor
     sprite: {fileID: 21300000, guid: e13a7eae13f70cd4393e15deff89dcf3, type: 3}
@@ -1117,12 +1117,12 @@ MonoBehaviour:
   CamSize: {x: 0, y: 0}
   speedstates:
     MinerInfo:
-      speed: 2
+      speed: 4
       cost: 10
       speedScale: 1.05
       costScale: 1.5
     RefineryInfo:
-      speed: 4
+      speed: 8
       cost: 10
       speedScale: 1.05
       costScale: 1.1
@@ -1133,12 +1133,12 @@ MonoBehaviour:
       costScale: 1.1
   defaultSpeeds:
     MinerInfo:
-      speed: 3
+      speed: 4
       cost: 10
       speedScale: 1.05
       costScale: 1.1
     RefineryInfo:
-      speed: 4
+      speed: 8
       cost: 10
       speedScale: 1.05
       costScale: 1.1

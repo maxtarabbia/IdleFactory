@@ -22,7 +22,7 @@ public static class SteamAchievements
         if(CurrentStat < amount)
             SteamUserStats.SetStat(Statname,amount);
 
-
+        SteamUserStats.StoreStats();
         return true;
     }
     public static bool AchievementReached(string AchName)
@@ -37,6 +37,7 @@ public static class SteamAchievements
         if (!isCompleted)
             SteamUserStats.SetAchievement(AchName);
 
+        SteamUserStats.StoreStats();
         return true;
     }
 
