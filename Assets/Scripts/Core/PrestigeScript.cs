@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 public class PrestigeScript : MonoBehaviour
 {
-    public TextMeshPro CostText;
+    public TextMeshPro ButtonText;
     public long PrestigeCost;
     WorldGeneration world;
     MenuButtons button;
@@ -15,7 +15,7 @@ public class PrestigeScript : MonoBehaviour
     void Start()
     {
         world = FindObjectOfType<WorldGeneration>();
-        CostText.text = "$" + IntLib.IntToString(PrestigeCost);
+        ButtonText.text = "$" + IntLib.IntToString(PrestigeCost) + "\n(+100%)";
         button =GetComponent<MenuButtons>();
         button.isGrayedOut = world.Currency < PrestigeCost;
         button.updateGraying();
@@ -71,7 +71,7 @@ public class PrestigeScript : MonoBehaviour
         SpeedWarpButton[] SWBs = FindObjectsOfType<SpeedWarpButton>();
         foreach(SpeedWarpButton swb in SWBs) 
         {
-            swb.Initialize();
+            swb.UpdatePrices();
         }
 
         FindObjectOfType<SaveData>().hasDeconstructed = false;

@@ -131,7 +131,7 @@ public class StateSaveLoad : MonoBehaviour
                 minerdat.Position = miner.pos;
                 minerdat.Rotation = Mathf.RoundToInt(miner.gameObject.transform.eulerAngles.z);
                 minerdat.Progress = miner.miningProgress;
-                minerdat.Speed = miner.secondsPerItem;
+                minerdat.Speed = miner.Speed;
                 minerData.Add(minerdat);
             }
             else if(thisObj.TryGetComponent(out Belt belt))
@@ -141,7 +141,7 @@ public class StateSaveLoad : MonoBehaviour
                 beltdat.Rotation = Mathf.RoundToInt(belt.gameObject.transform.eulerAngles.z);
                 beltdat.Progress = belt.itemID.y;
                 beltdat.itemID = Mathf.RoundToInt(belt.itemID.x);
-                beltdat.Speed = belt.timeTotravel;
+                beltdat.Speed = belt.Speed;
                 beltData.Add(beltdat);
             }
             else if (thisObj.TryGetComponent(out Refinery refinery))
@@ -152,7 +152,7 @@ public class StateSaveLoad : MonoBehaviour
                 refinerydat.inv1 = refinery.inputInv;
                 refinerydat.inv2 = refinery.outputInv;
                 refinerydat.Progress = refinery.RProgress;
-                refinerydat.Speed = refinery.RTime;
+                refinerydat.Speed = refinery.Speed;
                 refineryData.Add(refinerydat);
             }
             else if (thisObj.TryGetComponent(out Splitter splitter))
@@ -162,7 +162,7 @@ public class StateSaveLoad : MonoBehaviour
                 splitterdat.Rotation = Mathf.RoundToInt(splitter.gameObject.transform.eulerAngles.z);
                 splitterdat.Progress = splitter.itemsID[0].y;
                 splitterdat.itemID = Mathf.RoundToInt(splitter.itemsID[0].x);
-                splitterdat.Speed = splitter.timeTotravel;
+                splitterdat.Speed = splitter.Speed;
                 splitterData.Add(splitterdat);
             }
             else if(thisObj.TryGetComponent(out Core core))
@@ -179,7 +179,7 @@ public class StateSaveLoad : MonoBehaviour
                     Rotation = Mathf.RoundToInt(underGroundBelt.gameObject.transform.eulerAngles.z),
                     Progress = underGroundBelt.itemID.y,
                     itemID = Mathf.RoundToInt(underGroundBelt.itemID.x),
-                    Speed = underGroundBelt.timeTotravel
+                    Speed = underGroundBelt.Speed
                 };
                 UBdata.Add(UBdat);
             }
@@ -192,7 +192,7 @@ public class StateSaveLoad : MonoBehaviour
                     inv1 = assembler.inputInv,
                     inv2 = assembler.outputInv,
                     Progress = assembler.RProgress,
-                    Speed = assembler.RTime
+                    Speed = assembler.Speed
                 };
                 assemblerData.Add(assemblerdat);
             }
@@ -233,7 +233,7 @@ public class StateSaveLoad : MonoBehaviour
         foreach (MinerData minerData in saveData.minerdata)
         {
             GameObject newMiner = PlaceObjectManual(minerData.Position, 0, minerData.Rotation);
-            newMiner.GetComponent<Miner>().secondsPerItem = minerData.Speed;
+            newMiner.GetComponent<Miner>().Speed = minerData.Speed;
             newMiner.GetComponent<Miner>().miningProgress = minerData.Progress;
         }
         foreach (UBData UBdata in saveData.UBdata)
@@ -241,7 +241,7 @@ public class StateSaveLoad : MonoBehaviour
             GameObject newUGBelt = PlaceObjectManual(UBdata.Position, 6, UBdata.Rotation);
             newUGBelt.GetComponent<UnderGroundBelt>().itemID.x = UBdata.itemID;
             newUGBelt.GetComponent<UnderGroundBelt>().itemID.y = UBdata.Progress;
-            newUGBelt.GetComponent<UnderGroundBelt>().timeTotravel = UBdata.Speed;
+            newUGBelt.GetComponent<UnderGroundBelt>().Speed = UBdata.Speed;
             newUGBelt.GetComponent<UnderGroundBelt>().world = world;
         }
         foreach (BeltData beltData in saveData.beltdata)
@@ -249,7 +249,7 @@ public class StateSaveLoad : MonoBehaviour
             GameObject newBelt = PlaceObjectManual(beltData.Position, 1, beltData.Rotation);
             newBelt.GetComponent<Belt>().itemID.x = beltData.itemID;
             newBelt.GetComponent<Belt>().itemID.y = beltData.Progress;
-            newBelt.GetComponent<Belt>().timeTotravel = beltData.Speed;
+            newBelt.GetComponent<Belt>().Speed = beltData.Speed;
             newBelt.GetComponent<Belt>().world = world;
         }
         foreach (SplitterData splitterData in saveData.splitterdata)
@@ -257,7 +257,7 @@ public class StateSaveLoad : MonoBehaviour
             GameObject newSplitter = PlaceObjectManual(splitterData.Position,3, splitterData.Rotation);
             newSplitter.GetComponent<Splitter>().itemsID[0].x = splitterData.itemID;
             newSplitter.GetComponent<Splitter>().itemsID[0].y = splitterData.Progress;
-            newSplitter.GetComponent<Splitter>().timeTotravel = splitterData.Speed;
+            newSplitter.GetComponent<Splitter>().Speed = splitterData.Speed;
             newSplitter.GetComponent<Splitter>().world = world;
 
         }
@@ -267,7 +267,7 @@ public class StateSaveLoad : MonoBehaviour
             newRefinery.GetComponent<Refinery>().RProgress = refineryData.Progress;
             newRefinery.GetComponent<Refinery>().inputInv = refineryData.inv1;
             newRefinery.GetComponent<Refinery>().outputInv = refineryData.inv2;
-            newRefinery.GetComponent<Refinery>().RTime = refineryData.Speed;
+            newRefinery.GetComponent<Refinery>().Speed = refineryData.Speed;
 
         }
         foreach (CoreData coreData in saveData.coredata)
@@ -280,7 +280,7 @@ public class StateSaveLoad : MonoBehaviour
             newAssembler.GetComponent<Assembler>().RProgress = assemblerData.Progress;
             newAssembler.GetComponent<Assembler>().inputInv = assemblerData.inv1;
             newAssembler.GetComponent<Assembler>().outputInv = assemblerData.inv2;
-            newAssembler.GetComponent<Assembler>().RTime = assemblerData.Speed;
+            newAssembler.GetComponent<Assembler>().Speed = assemblerData.Speed;
 
         }
         FindObjectOfType<Camera>().transform.position = new Vector3(saveData.CamCoord.x, saveData.CamCoord.y, -10);

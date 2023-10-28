@@ -39,7 +39,9 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _OutlineDepth: 0.01
+    - _Bevel: 0.025
+    - _OutlineDepth: 0.007
+    - _ShadowDist: 0.01
     m_Colors:
-    - _Size: {r: 0.095, g: 0.08, b: 0, a: 0}
+    - _Size: {r: 0.09, g: 0.05, b: 0, a: 0}
   m_BuildTextureStacks: []

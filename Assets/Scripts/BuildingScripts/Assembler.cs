@@ -41,7 +41,7 @@ public class Assembler : MonoBehaviour
     TickEvents tickEvents;
 
     public float RProgress;
-    public float RTime = 1;
+    public float Speed = 1;
 
     public GameObject RecipeDisplay;
     float timeHovering;
@@ -89,7 +89,7 @@ public class Assembler : MonoBehaviour
         outputInv.maxStackSize = 10;
         SetOutput();
 
-        RTime = world.speedstates.RefineryInfo.speed;
+        Speed = world.speedstates.RefineryInfo.speed;
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
@@ -117,7 +117,7 @@ public class Assembler : MonoBehaviour
             animationStrength -= Time.deltaTime * MaxStrength;
         }
         animationStrength = Mathf.Clamp(animationStrength, 0, MaxStrength);
-        transform.localPosition = startingPos + new Vector3(math.sin(Time.time*50/RTime), math.cos(Time.time*50/RTime),0) * animationStrength * .2f;
+        transform.localPosition = startingPos + new Vector3(math.sin(Time.time*50*Speed), math.cos(Time.time*50*Speed),0) * animationStrength * .2f;
     }
     void UpdateSound()
     {
@@ -187,7 +187,7 @@ public class Assembler : MonoBehaviour
         if(!isJammed)
             RProgress += Time.fixedDeltaTime;
         isAssembling = true;
-        if (RProgress >= RTime)
+        if (RProgress >= 1/Speed)
         {
             AttemptBuild();
         }
@@ -216,12 +216,12 @@ public class Assembler : MonoBehaviour
             stats.Additem(outID, recipies.values[recipies.selectedRecipe].outCount);
             inputInv2.RemoveItem(new int2[] { new int2(recipies.values[recipies.selectedRecipe].inputItemID2, recipies.values[recipies.selectedRecipe].inCount2) }, 1f);
             inputInv.RemoveItem(new int2[] { new int2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
-            RProgress -= RTime;
+            RProgress -= 1 / Speed;
         }
         else
         {
             isAssembling = false;
-            RProgress = RTime;
+            RProgress =1/Speed;
         }
     }
     private void OnMouseOver()

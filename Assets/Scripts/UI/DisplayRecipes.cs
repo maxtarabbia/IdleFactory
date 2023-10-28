@@ -23,7 +23,7 @@ public class DisplayRecipes : MonoBehaviour
         world = FindObjectOfType<WorldGeneration>();
         if(type == BuildingType.Refinery)
         {
-            TMP.text = "Speed: " + IntLib.RoundToString(1 / world.speedstates.RefineryInfo.speed);
+            TMP.text = "Speed: " + IntLib.RoundToString(world.speedstates.RefineryInfo.speed);
             Refinery assembler = GetComponentInParent<Refinery>();
             Refinery.Recipes rec = assembler.recipies;
             for (int i = 0; i < rec.values.Length; i ++)
@@ -41,7 +41,7 @@ public class DisplayRecipes : MonoBehaviour
         }
         else if(type == BuildingType.Assembler)
         {
-            TMP.text = "Speed: " + IntLib.RoundToString(1 / world.speedstates.RefineryInfo.speed);
+            TMP.text = "Speed: " + IntLib.RoundToString(world.speedstates.RefineryInfo.speed);
             Assembler assembler = GetComponentInParent<Assembler>();
             Assembler.Recipes rec = assembler.recipies;
             for (int i = 0; i < rec.values.Length; i += 2)
@@ -62,13 +62,13 @@ public class DisplayRecipes : MonoBehaviour
         {
             TMP.gameObject.transform.localPosition = new Vector3(0, 0,-0.0001f);
             GetComponent<SpriteRenderer>().material.SetVector("_Size", new Vector2(0.33f, 0.15f));
-            TMP.text = "Speed: " + IntLib.RoundToString(1/world.speedstates.MinerInfo.speed);
+            TMP.text = "Speed: " + IntLib.RoundToString(world.speedstates.MinerInfo.speed);
         }
         else if(type == BuildingType.Belt)
         {
             GetComponent<SpriteRenderer>().material.SetVector("_Size", new Vector2(0.33f, 0.15f));
             TMP.gameObject.transform.localPosition = new Vector3(0, 0, -0.0001f);
-            TMP.text = "Speed: " + IntLib.RoundToString(1/world.speedstates.BeltInfo.speed);
+            TMP.text = "Speed: " + IntLib.RoundToString(world.speedstates.BeltInfo.speed);
         }
     }
     Sprite getSprite(int ID)

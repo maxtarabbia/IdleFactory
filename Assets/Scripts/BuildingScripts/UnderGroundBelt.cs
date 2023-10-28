@@ -7,7 +7,7 @@ public class UnderGroundBelt : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
-    public float timeTotravel = 1f;
+    public float Speed = 1f;
     public Vector2 itemID;
 
     public Vector2 OutputCoord = new Vector2();
@@ -51,7 +51,7 @@ public class UnderGroundBelt : MonoBehaviour
         UpdateBeltInput();
         UpdateAdjacentBelts();
 
-        timeTotravel = world.speedstates.BeltInfo.speed;
+        Speed = world.speedstates.BeltInfo.speed;
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
@@ -138,18 +138,18 @@ public class UnderGroundBelt : MonoBehaviour
     float GetXVal(float Offset, out float size)
     {
         float xVal;
-        if ((itemID.y + Offset) >= timeTotravel && !canOutput)
+        if ((itemID.y + Offset) >= 1 / Speed && !canOutput)
         {
-            Offset = timeTotravel - itemID.y;
+            Offset = 1 / Speed - itemID.y;
         }
-        size = Mathf.Abs(0.5f - ((itemID.y + Offset) / timeTotravel)) * 2;
-        if ((itemID.y + Offset) / timeTotravel > 0.5f)
+        size = Mathf.Abs(0.5f - ((itemID.y + Offset) * Speed)) * 2;
+        if ((itemID.y + Offset) * Speed > 0.5f)
         {
-            xVal = 0.5f - ((itemID.y + Offset) / timeTotravel) - distance;
+            xVal = 0.5f - ((itemID.y + Offset) * Speed) - distance;
         }
         else
         {
-            xVal = 0.5f - ((itemID.y + Offset) / timeTotravel);
+            xVal = 0.5f - ((itemID.y + Offset) * Speed);
         }
         size = Mathf.Clamp01(size);
         return xVal;
@@ -174,7 +174,7 @@ public class UnderGroundBelt : MonoBehaviour
         }
 
         //check to output
-        if (itemID.y >= timeTotravel)
+        if (itemID.y >= 1 / Speed)
         {
             if (OutputItem((int)itemID.x))
             {
@@ -186,7 +186,7 @@ public class UnderGroundBelt : MonoBehaviour
             else
             {
                 canOutput = false;
-                itemID.y = timeTotravel;
+                itemID.y = 1 / Speed;
             }
         }
     }
@@ -276,7 +276,7 @@ public class UnderGroundBelt : MonoBehaviour
         world.OccupiedCells.TryGetValue(OutputCoord, out OutputObj);
 
         if (OutputObj != null)
-            return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos + outFrom), itemID.y - timeTotravel);
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos + outFrom), itemID.y - 1 / Speed);
         /*
         if(!world.OccupiedCells.TryGetValue(outputCoord, out OutputObj))
             return false;

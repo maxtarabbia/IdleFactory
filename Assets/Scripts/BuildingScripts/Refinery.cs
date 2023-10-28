@@ -38,7 +38,7 @@ public class Refinery : MonoBehaviour
     TickEvents tickEvents;
 
     public float RProgress;
-    public float RTime = 1;
+    public float Speed = 1;
 
     bool isJammed = false;
 
@@ -100,7 +100,7 @@ public class Refinery : MonoBehaviour
         outputInv.maxStackSize = 10;
         SetOutput();
 
-        RTime = world.speedstates.RefineryInfo.speed;
+        Speed = world.speedstates.RefineryInfo.speed;
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
@@ -195,7 +195,7 @@ public class Refinery : MonoBehaviour
             isSmelting = true;
             RProgress += Time.fixedDeltaTime;
         }
-        if (RProgress >= RTime)
+        if (RProgress >= 1/ Speed)
         {
             Profiler.BeginSample("AttemptSmelt");
             RefreshRecipe();
@@ -233,12 +233,12 @@ public class Refinery : MonoBehaviour
         {
             stats.Additem(outID, recipies.values[recipies.selectedRecipe].outCount);
             inputInv.RemoveItem(new int2[] { new int2(inputInv.items[0].ID, recipies.values[recipies.selectedRecipe].inCount) }, 1.0f);
-            RProgress -= RTime;
+            RProgress -= 1/Speed;
         }
         else
         {
             isSmelting= false;
-            RProgress = RTime;
+            RProgress = 1/Speed;
         }
     }
     private void OnMouseOver()

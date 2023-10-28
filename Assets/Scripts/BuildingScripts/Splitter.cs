@@ -9,7 +9,7 @@ public class Splitter : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
-    public float timeTotravel = 2f;
+    public float Speed = 1f;
 
     public Vector2[] itemsID;
 
@@ -63,7 +63,7 @@ public class Splitter : MonoBehaviour
             itemsID[i] = new Vector2(-1, 0);
         }
 
-        timeTotravel = world.speedstates.BeltInfo.speed;
+        Speed = world.speedstates.BeltInfo.speed;
 
         FixOutputs();
 
@@ -78,9 +78,9 @@ public class Splitter : MonoBehaviour
         for (int i = 0; i < sprites.Length; i++)
         {
             curOffset = Offset;
-            if ((itemsID[i].y + Offset) >= timeTotravel && !canOutput[i])
+            if ((itemsID[i].y + Offset) >= 1 / Speed && !canOutput[i])
             {
-                curOffset = timeTotravel - itemsID[i].y;
+                curOffset = 1 / Speed - itemsID[i].y;
             }
             Vector2 Vec2 = GetPosition(curOffset, i);
             sprites[i].transform.localPosition = new Vector3(Vec2.x, Vec2.y, (itemsID[i].y + curOffset));
@@ -139,11 +139,11 @@ public class Splitter : MonoBehaviour
         Vector2 output = new Vector2();
         Vector2 Dir = (LocalPos[index]) / 2;
 
-        float factor = ((itemsID[index].y + Offset) / timeTotravel);
+        float factor = ((itemsID[index].y + Offset) * Speed);
         output.x = 0.5f - factor;
         output.y = 0;
 
-        if ((itemsID[index].y + Offset) / timeTotravel > 0.5)
+        if ((itemsID[index].y + Offset) * Speed > 0.5)
             {
                 output.x = 0f;
                 output = Vector2.LerpUnclamped(output, Dir,(factor - 0.5f) * 2f);
@@ -173,13 +173,13 @@ public class Splitter : MonoBehaviour
                 if (moveForward)
                     itemsID[i].y += Time.fixedDeltaTime;
                 SRs[i].sprite = spriteAssets[(int)itemsID[i].x];
-                sprites[i].transform.localPosition = new Vector2(0.5f - (itemsID[i].y / timeTotravel), 0);
+                sprites[i].transform.localPosition = new Vector2(0.5f - (itemsID[i].y * Speed), 0);
             }
             else
             {
                 SRs[i].sprite = null;
             }
-            if (itemsID[i].y >= timeTotravel)
+            if (itemsID[i].y >= 1/Speed)
             {
                 if (OutputItem((int)itemsID[i].x,i))
                 {
@@ -190,7 +190,7 @@ public class Splitter : MonoBehaviour
                 }
                 else
                 {
-                    itemsID[i].y = timeTotravel;
+                    itemsID[i].y = 1/Speed;
                     canOutput[i] = false;
                 }
             }
@@ -278,7 +278,7 @@ public class Splitter : MonoBehaviour
         world.OccupiedCells.TryGetValue(outputCoord, out OutputObj);
         if (OutputObj != null)
         {
-            return ItemReceiver.CanObjectAcceptItem(OutputObj, itemID, Vector2Int.RoundToInt(pos), this.itemsID[i].y - timeTotravel);
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, itemID, Vector2Int.RoundToInt(pos), this.itemsID[i].y - 1 / Speed);
         }
         return false;
     }

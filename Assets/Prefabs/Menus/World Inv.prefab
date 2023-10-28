@@ -28,12 +28,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534407628327188618}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1, y: -0.2584, z: -0.01}
+  m_LocalPosition: {x: 0.1, y: -0.29, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 586886288348337383}
   - {fileID: 3572887301115597267}
+  - {fileID: 586886288348337383}
   m_Father: {fileID: 7539025394550019084}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -119,6 +119,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &8107530977641924334
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -176,7 +178,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c4f63f0d1e9344f9eafb75cef81414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CostText: {fileID: 3733357158847554157}
+  LabelText: {fileID: 3733357158847554157}
+  ButtonText: {fileID: 3993564223297956966}
   selectedbuild: 1
 --- !u!1 &1014948220717433351
 GameObject:
@@ -424,7 +427,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1969450870797959193}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3, y: -0.2584, z: -0.01}
+  m_LocalPosition: {x: 0.3, y: -0.29, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -515,6 +518,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &2701832289769985391
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -572,7 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 051b4322e43db9143880f4a4bd8aa464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CostText: {fileID: 1216266002210992962}
+  ButtonText: {fileID: 2060446405003470784}
   PrestigeCost: 1000000
 --- !u!1 &2168489592120419885
 GameObject:
@@ -610,8 +615,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.13}
-  m_SizeDelta: {x: 2.41, y: 1.2}
+  m_AnchoredPosition: {x: 0, y: 0.1085}
+  m_SizeDelta: {x: 2.61, y: 1.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &3237160694291474046
 MeshRenderer:
@@ -703,8 +708,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4
-  m_fontSizeBase: 4
+  m_fontSize: 3.2
+  m_fontSizeBase: 3.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -788,12 +793,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3145148688406700023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.3, y: -0.2584, z: -0.01}
+  m_LocalPosition: {x: -0.3, y: -0.29, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 583073479897680230}
   - {fileID: 6071922875267737724}
+  - {fileID: 583073479897680230}
   m_Father: {fileID: 7539025394550019084}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -879,6 +884,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &7635583707805318088
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -936,7 +943,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c4f63f0d1e9344f9eafb75cef81414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CostText: {fileID: 3369327354531006179}
+  LabelText: {fileID: 3369327354531006179}
+  ButtonText: {fileID: 2526154753476268771}
   selectedbuild: 0
 --- !u!1 &3414555686668087359
 GameObject:
@@ -974,8 +982,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.13}
-  m_SizeDelta: {x: 2.41, y: 1.2}
+  m_AnchoredPosition: {x: 0, y: 0.1085}
+  m_SizeDelta: {x: 2.61, y: 1.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &494472885185761697
 MeshRenderer:
@@ -1039,7 +1047,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Text
+  m_text: 'Miner Speed
+
+    Level 2 (+25%)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a39be6695a7baf47a966c3355855a07, type: 2}
   m_sharedMaterial: {fileID: -5530275386899717260, guid: 8a39be6695a7baf47a966c3355855a07,
@@ -1067,8 +1077,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4
-  m_fontSizeBase: 4
+  m_fontSize: 3.2
+  m_fontSizeBase: 3.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1377,7 +1387,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Prestige (+100% Material Value)
+  m_text: '$100000
+
+    (+100%)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a39be6695a7baf47a966c3355855a07, type: 2}
   m_sharedMaterial: {fileID: -5530275386899717260, guid: 8a39be6695a7baf47a966c3355855a07,
@@ -1405,8 +1417,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3.32
-  m_fontSizeBase: 3.32
+  m_fontSize: 3.5
+  m_fontSizeBase: 3.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1498,8 +1510,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.13}
-  m_SizeDelta: {x: 2.41, y: 1.2}
+  m_AnchoredPosition: {x: 0, y: 0.1085}
+  m_SizeDelta: {x: 2.61, y: 1.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &1674741475536299406
 MeshRenderer:
@@ -1563,7 +1575,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Text
+  m_text: Prestige to increase Sell Value
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a39be6695a7baf47a966c3355855a07, type: 2}
   m_sharedMaterial: {fileID: -5530275386899717260, guid: 8a39be6695a7baf47a966c3355855a07,
@@ -1591,8 +1603,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4
-  m_fontSizeBase: 4
+  m_fontSize: 3.2
+  m_fontSizeBase: 3.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1777,8 +1789,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4.44
-  m_fontSizeBase: 4.44
+  m_fontSize: 3.5
+  m_fontSizeBase: 3.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1862,12 +1874,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7240050537874535953}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: -0.2584, z: -0.01}
+  m_LocalPosition: {x: -0.1, y: -0.29, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1833107384821255030}
   - {fileID: 2047059396768612678}
+  - {fileID: 1833107384821255030}
   m_Father: {fileID: 7539025394550019084}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1953,6 +1965,8 @@ MonoBehaviour:
         m_CallState: 2
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &1560284909026766975
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2010,7 +2024,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c4f63f0d1e9344f9eafb75cef81414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CostText: {fileID: 5207529151155583635}
+  LabelText: {fileID: 5207529151155583635}
+  ButtonText: {fileID: 338061673810035606}
   selectedbuild: 2
 --- !u!1 &7457564266630045992
 GameObject:
@@ -2141,8 +2156,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4.44
-  m_fontSizeBase: 4.44
+  m_fontSize: 3.5
+  m_fontSizeBase: 3.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2234,8 +2249,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.13}
-  m_SizeDelta: {x: 2.41, y: 1.2}
+  m_AnchoredPosition: {x: 0, y: 0.1085}
+  m_SizeDelta: {x: 2.61, y: 1.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2467937208117526084
 MeshRenderer:
@@ -2327,8 +2342,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4
-  m_fontSizeBase: 4
+  m_fontSize: 3.2
+  m_fontSizeBase: 3.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2420,7 +2435,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.0006837845}
+  m_AnchoredPosition: {x: 0.0025, y: -0.0048}
   m_SizeDelta: {x: 2.64, y: 1.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7347676228173420269
@@ -2485,7 +2500,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: miner speed +5%
+  m_text: '$1000
+
+    (+5%)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a39be6695a7baf47a966c3355855a07, type: 2}
   m_sharedMaterial: {fileID: -5530275386899717260, guid: 8a39be6695a7baf47a966c3355855a07,
@@ -2513,8 +2530,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4.44
-  m_fontSizeBase: 4.44
+  m_fontSize: 3.5
+  m_fontSizeBase: 3.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

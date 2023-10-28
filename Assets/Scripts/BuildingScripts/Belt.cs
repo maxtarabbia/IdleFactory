@@ -7,7 +7,7 @@ public class Belt : MonoBehaviour
 {
     public WorldGeneration world;
     Vector2 pos;
-    public float timeTotravel = 1f;
+    public float Speed = 1f;
     public Vector2 itemID;
 
     Vector2 outputCoord = new Vector2();
@@ -47,7 +47,7 @@ public class Belt : MonoBehaviour
         UpdateBeltInput();
         UpdateAdjacentBelts();
 
-        timeTotravel = world.speedstates.BeltInfo.speed;
+        Speed = world.speedstates.BeltInfo.speed;
 
         tickEvents = world.GetComponent<TickEvents>();
         tickEvents.MyEvent += OnTick;
@@ -183,25 +183,25 @@ public class Belt : MonoBehaviour
         float xVal = 0;
         float yVal = 0;
 
-        if ((itemID.y + Offset) >= timeTotravel && !canOutput)
+        if ((itemID.y + Offset) >= 1/ Speed && !canOutput)
         {
-            Offset = timeTotravel - itemID.y;
+            Offset = 1 / Speed - itemID.y;
         }
         switch (BeltRotationState)
         {
             case 0:
-                xVal = 0.5f - ((itemID.y + Offset) / timeTotravel);
+                xVal = 0.5f - ((itemID.y + Offset) * Speed);
                 yVal = 0;
 
                 break;
             case 1:
-                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.7f, 0);
-                yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) / timeTotravel), 0, 0.5f);
+                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) *Speed) - 0.2f) * 0.7f, -0.7f, 0);
+                yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) * Speed), 0, 0.5f);
 
                 break;
             case 2:
-                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) / timeTotravel) - 0.2f) * 0.7f, -0.7f, 0);
-                yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) / timeTotravel), 0, 0.5f) * -1;
+                xVal = Mathf.Clamp((0.5f - ((itemID.y + Offset) * Speed) - 0.2f) * 0.7f, -0.7f, 0);
+                yVal = Mathf.Clamp(0.5f - ((itemID.y + Offset) * Speed), 0, 0.5f) * -1;
 
                 break;
         }
@@ -225,7 +225,7 @@ public class Belt : MonoBehaviour
         Profiler.EndSample();
         Profiler.BeginSample("Check For Output");
         //check to output
-        if (itemID.y >= timeTotravel)
+        if (itemID.y >= 1 / Speed)
         {
             Profiler.BeginSample("Check Output Spot");
             bool outBool = OutputItem((int) itemID.x);
@@ -240,7 +240,7 @@ public class Belt : MonoBehaviour
             else
             {
                 canOutput = false;
-                itemID.y = timeTotravel;
+                itemID.y = 1 / Speed;
             }
         }
         Profiler.EndSample();
@@ -326,7 +326,7 @@ public class Belt : MonoBehaviour
         GameObject OutputObj;
 
         if (world.OccupiedCells.TryGetValue(outputCoord, out OutputObj))
-            return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos), itemID.y - timeTotravel);
+            return ItemReceiver.CanObjectAcceptItem(OutputObj, initemID, Vector2Int.RoundToInt(pos), itemID.y - 1 / Speed);
         
         return false;
 
