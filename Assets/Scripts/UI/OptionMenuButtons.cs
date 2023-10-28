@@ -45,7 +45,7 @@ public class OptionMenuButtons : MonoBehaviour
         Destroy(Skins);
         AudioSliders = Instantiate(AudioSliderPrefab, transform);
         AudioSliders.transform.localScale *= 0.08f;
-        AudioSliders.transform.localPosition = new Vector3(-0.05f, -0.06f, -0.01f);
+        AudioSliders.transform.localPosition = new Vector3(-0.05f, -0.06f, -0.2f);
     }
     public void AddSkinOptions()
     {

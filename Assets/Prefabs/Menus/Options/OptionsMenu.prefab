@@ -118,6 +118,8 @@ MonoBehaviour:
         m_CallState: 1
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &7733732636114028711
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -602,7 +604,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 1
+  m_PlaneDistance: 0.8
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -784,6 +786,8 @@ MonoBehaviour:
         m_CallState: 1
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &891344735152675517
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -960,6 +964,8 @@ MonoBehaviour:
         m_CallState: 1
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &5453659504074249393
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1136,6 +1142,8 @@ MonoBehaviour:
         m_CallState: 1
   playclick: 1
   isGrayedOut: 0
+  holdConfirmation: 0
+  timeToHold: 0
 --- !u!61 &4637504551407781199
 BoxCollider2D:
   m_ObjectHideFlags: 0

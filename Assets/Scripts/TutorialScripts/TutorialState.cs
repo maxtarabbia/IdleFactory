@@ -42,7 +42,7 @@ public class TutorialState : MonoBehaviour
                 textMeshProUGUI.text = "Place a refinery. The cost is displayed in the top left next to the item quantities";
                 break;
             case State.Splitter:
-                textMeshProUGUI.text = "Refine a few iron ingot and belt them into a HUB. then place a splitter\nYou can hold CTRL and hover over buildings to select multiple and delete them all at once.";
+                textMeshProUGUI.text = "Refine a few iron ingot and belt them into a Core. then place a splitter\nYou can hold CTRL and hover over buildings to select multiple and delete them all at once.";
                 break;
             case State.Assembler:
                 textMeshProUGUI.text = "You'll need some steel and copper ingots to make assemblers. once you've refined some steel by running iron ingots through a refinery, place an assembler";
