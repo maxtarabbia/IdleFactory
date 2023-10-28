@@ -92,11 +92,13 @@ public class WorldGeneration : MonoBehaviour
             inv.AddItem(3, 5000);
             inv.AddItem(4, 5000);
             inv.AddItem(5, 5000);
+            inv.AddItem(6, 5000);
+            inv.AddItem(7, 5000);
             Currency = 100000000;
         }
         else
         {
-            inv.AddItem(0, 20);
+            inv.AddItem(0, 50);
         }
     }
     public void Initialize(int size)
