@@ -65,8 +65,7 @@ public class PrestigeScript : MonoBehaviour
         {
             building.count = 0;
         }
-        world.inv.Clear();
-        world.inv.AddItem(0,20);
+        world.SetInventory();
         world.speedstates = world.defaultSpeeds;
         SpeedWarpButton[] SWBs = FindObjectsOfType<SpeedWarpButton>();
         foreach(SpeedWarpButton swb in SWBs) 
