@@ -18,17 +18,17 @@ public class SliderBar: MonoBehaviour
         if (!PlayerPrefs.HasKey(AudioVariable))
         {
             group.audioMixer.GetFloat(AudioVariable, out value);
-            value = math.remap(-80, 10, 0, 3, value);
+            value = Mathf.Pow(math.remap(-80, 0, 0, 1,value), 2);
         }
         else
         {
             value = PlayerPrefs.GetFloat(AudioVariable);
-            group.audioMixer.SetFloat(AudioVariable, math.remap(0, 3, -80, 10, value));
+            group.audioMixer.SetFloat(AudioVariable, math.remap(0, 1, -80, 0, Mathf.Sqrt(value)));
         }
     }
     public void UpdatePos()
     {
-        group.audioMixer.SetFloat(AudioVariable, math.remap(0,3,-80,10,value));
+        group.audioMixer.SetFloat(AudioVariable, math.remap(0,1,-80,0,Mathf.Sqrt(value)));
     }
     private void OnDestroy()
     {

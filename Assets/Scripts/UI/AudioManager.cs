@@ -28,7 +28,7 @@ public class AudioManager : MonoBehaviour
         {
             if (!PlayerPrefs.HasKey(audioParams[i]))
                 continue;
-            mixerGroup.audioMixer.SetFloat(audioParams[i], math.remap(0, 3, -80, 10, PlayerPrefs.GetFloat(audioParams[i], 0f)));
+            mixerGroup.audioMixer.SetFloat(audioParams[i], math.clamp(math.remap(0, 1, -80, 0,Mathf.Sqrt(PlayerPrefs.GetFloat(audioParams[i], 0f))),-80,0));
         }
     }
     public void PlayHover()
